@@ -21,16 +21,16 @@
     <div class="collapse navbar-collapse nav-buttons" id="navbarScroll">
       <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
       <li class="nav-item">
-          <a class="nav-link" href="#">Home</a>
+          <a class="nav-link" href="index.php">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Brands</a>
+          <a class="nav-link" href="#brandings">Brands</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Market</a>
+          <a class="nav-link" href="market.php">Market</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Contact</a>
+          <a class="nav-link" href="#footer">Contact</a>
         </li>
        
 </div>
@@ -46,17 +46,17 @@
         <h5>WELCOME TO LAPTOPHAVEN</h5>
         <h1>Find your Second Hand Choices Here</h1>
         <p>We offer the best prices and auctions</p>
-        <button>Find Now</button>
+        <a class="nav-link" href="market.php"> <button>Find Now</button> </a>
       </div>
     </section>
     <!-----------------------------End of HOME text-------------------------------->
     <!-----------------------------Start of BRANDS text-------------------------------->
-    <section id="brand">
+    <section id="brands">
       <div class="row">
         <img class="img-fluid col-lg-3 col-md-6 col-sm-12" src="assets/images/Asus.jpg"/>
         <img class="img-fluid col-lg-3 col-md-6 col-sm-12" src="assets/images/MSI.jpg"/>
         <img class="img-fluid col-lg-3 col-md-6 col-sm-12" src="assets/images/Lenovo.jpg"/>
-        <img class="img-fluid col-lg-3 col-md-6 col-sm-12" src="assets/images/Gigabyte.jpg"/>
+        <img id = "brandings" class="img-fluid col-lg-3 col-md-6 col-sm-12" src="assets/images/Gigabyte.jpg"/>
         <img class="img-fluid col-lg-3 col-md-6 col-sm-12" src="assets/images/Dell.jpg"/>
         <img class="img-fluid col-lg-3 col-md-6 col-sm-12" src="assets/images/HP.jpg"/>
         <img class="img-fluid col-lg-3 col-md-6 col-sm-12" src="assets/images/Acer.jpg"/>
@@ -65,7 +65,7 @@
   </section>
    <!-----------------------------Start of Footer text-------------------------------->
    <footer class="mt-5 py-5" style="background-color: gray; padding: 50px 0;">
-  <div class="container">
+  <div id="footer" class="container">
     <div class="row">
       <div class="col-lg-3 col-md-6 col-sm-12">
         <img src="assets/images/Logo.webp" width="100" height="100"/>
@@ -91,7 +91,7 @@
           <p>123 Lipa City Batangas</p>
         </div>
         <div>
-          <h6 class="text-uppercase">Romero</h6>
+          <h6 id="footer" class="text-uppercase">Romero</h6>
           <p>123 Lipa City Batangas</p>
         </div>
       </div>
