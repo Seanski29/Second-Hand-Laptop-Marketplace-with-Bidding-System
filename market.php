@@ -27,10 +27,7 @@
           <a class="nav-link" href="#">Brands</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Pricing</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Auction</a>
+          <a class="nav-link" href="#">Market</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Contact</a>

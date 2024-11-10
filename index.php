@@ -20,17 +20,14 @@
     </button>
     <div class="collapse navbar-collapse nav-buttons" id="navbarScroll">
       <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
-        <li class="nav-item">
+      <li class="nav-item">
           <a class="nav-link" href="#">Home</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Brands</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Pricing</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Auction</a>
+          <a class="nav-link" href="#">Market</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Contact</a>
