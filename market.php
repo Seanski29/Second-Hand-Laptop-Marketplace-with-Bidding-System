@@ -41,7 +41,7 @@
 </nav>   
     <!-----------------------------END OF NAVBAR--------------------------------> 
     <!-----------------------------START OF market--------------------------------> 
-    <section id="brand" class="container py-5">
+    <section id="brand" class="container px-20 py-5">
     <div class="row">
   <!-- Grid Item 1 -->
   <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
@@ -49,11 +49,10 @@
   <img class="card-img-top product-image" alt="Product Image" src="assets/images/ASUS ROG STRIX.jpg"/>
     <div class="product-details">
       <h3 class="product-title">ASUS ROG STRIX</h3>
-      <p class="product-price">Price: $100</p>
       <p class="product-description">This product is in excellent condition.</p>
       <p class="starting-price">Starting Price: $50</p>
       <p class="highest-bid">Highest Bid: $75</p>
-      <button class="btn btn-primary d-block mx-auto">Enter Bid</button>
+      <button class="btn btn-primary" style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); margin-top: 1000px;">Enter Bid</button>
     </div>
   </div>
   </div>
@@ -64,11 +63,10 @@
   <img class="card-img-top product-image" alt="Product Image" src="assets/images/ASUS ROG ZEPHYRUS.jfif"/>
     <div class="product-details">
       <h3 class="product-title">ASUS ROG ZEPHYRUS</h3>
-      <p class="product-price">Price: $150</p>
       <p class="product-description">This product is in excellent condition.</p>
       <p class="starting-price">Starting Price: $80</p>
       <p class="highest-bid">Highest Bid: $120</p>
-      <button class="btn btn-primary d-block mx-auto">Enter Bid</button>
+      <button class="btn btn-primary" style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); margin-top: 1000px;">Enter Bid</button>
     </div>
   </div>
   </div>
@@ -79,11 +77,10 @@
   <img class="card-img-top product-image" alt="Product Image" src="assets/images/GIGABYTE AORUS 15 2023.jfif"/>
     <div class="product-details">
       <h3 class="product-title">GIGABYTE AORUS 15 2023</h3>
-      <p class="product-price">Price: $150</p>
       <p class="product-description">This product is in excellent condition.</p>
       <p class="starting-price">Starting Price: $80</p>
       <p class="highest-bid">Highest Bid: $120</p>
-      <button class="btn btn-primary d-block mx-auto">Enter Bid</button>
+      <button class="btn btn-primary" style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); margin-top: 1000px;">Enter Bid</button>
     </div>
   </div>
   </div>
@@ -94,11 +91,10 @@
   <img class="card-img-top product-image" alt="Product Image" src="assets/images/GIGABYTE G6 2023.jpg"/>
     <div class="product-details">
       <h3 class="product-title">GIGABYTE G6 2023</h3>
-      <p class="product-price">Price: $150</p>
       <p class="product-description">This product is in excellent condition.</p>
       <p class="starting-price">Starting Price: $80</p>
       <p class="highest-bid">Highest Bid: $120</p>
-      <button class="btn btn-primary d-block mx-auto">Enter Bid</button>
+      <button class="btn btn-primary" style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); margin-top: 1000px;">Enter Bid</button>
     </div>
   </div>
 </div>
@@ -109,11 +105,10 @@
   <img class="card-img-top product-image" alt="Product Image" src="assets/images/LENOVO LEGION PRO 5i GEN 9.jpg"/>
     <div class="product-details">
       <h3 class="product-title">LENOVO LEGION PRO 5i GEN 9</h3>
-      <p class="product-price">Price: $150</p>
       <p class="product-description">This product is in excellent condition.</p>
       <p class="starting-price">Starting Price: $80</p>
       <p class="highest-bid">Highest Bid: $120</p>
-      <button class="btn btn-primary d-block mx-auto">Enter Bid</button>
+      <button class="btn btn-primary" style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); margin-top: 1000px;">Enter Bid</button>
     </div>
   </div>
 </div>
@@ -125,11 +120,10 @@
   <img class="card-img-top product-image" alt="Product Image" src="assets/images/LENOVO ThinkPad E14 G5.jfif"/>
     <div class="product-details">
       <h3 class="product-title">LENOVO ThinkPad E14 G5</h3>
-      <p class="product-price">Price: $150</p>
       <p class="product-description">This product is in excellent condition.</p>
       <p class="starting-price">Starting Price: $80</p>
       <p class="highest-bid">Highest Bid: $120</p>
-      <button class="btn btn-primary d-block mx-auto">Enter Bid</button>
+      <button class="btn btn-primary" style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); margin-top: 1000px;">Enter Bid</button>
     </div>
   </div>
 </div>
@@ -140,11 +134,10 @@
   <img class="card-img-top product-image" alt="Product Image" src="assets/images/MSI STEALTH A16 AI+.jpg"/>
     <div class="product-details">
       <h3 class="product-title">MSI STEALTH A16 AI+</h3>
-      <p class="product-price">Price: $150</p>
       <p class="product-description">This product is in excellent condition.</p>
       <p class="starting-price">Starting Price: $80</p>
       <p class="highest-bid">Highest Bid: $120</p>
-      <button class="btn btn-primary d-block mx-auto">Enter Bid</button>
+      <button class="btn btn-primary" style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); margin-top: 1000px;">Enter Bid</button>
     </div>
   </div>
 </div>
@@ -155,11 +148,10 @@
   <img class="card-img-top product-image" alt="Product Image" src="assets/images/MSI TITAN 18 HX A14V.jpg"/>
     <div class="product-details">
       <h3 class="product-title">MSI TITAN 18 HX A14V</h3>
-      <p class="product-price">Price: $150</p>
       <p class="product-description">This product is in excellent condition.</p>
       <p class="starting-price">Starting Price: $80</p>
       <p class="highest-bid">Highest Bid: $120</p>
-      <button class="btn btn-primary d-block mx-bottom">Enter Bid</button>
+      <button class="btn btn-primary" style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); margin-top: 1000px;">Enter Bid</button>
     </div>
   </div>
   </div>
