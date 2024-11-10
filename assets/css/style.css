@@ -6,6 +6,7 @@
     margin:0;
     padding:0;
     box-sizing: border-box;
+    
 }
 
 body{
@@ -67,13 +68,14 @@ button:hover{
     left: 0;
 }
 
-.navbar-light .navbar-nav .nav-link{
+.navbar-dark .navbar-nav .nav-link{
     padding: 0 20px;
     color:black;
     transition: 0.4 ease;
 }
 
 #home{
+    color: blue;
     text-emphasis-color: red;
     text-align: center;
     text-size-adjust: 50;
@@ -101,3 +103,13 @@ button:hover{
     align-items: center;
     gap: 10px;
 }
+
+brand{
+    text-align: center;
+    text-size-adjust: 50;
+
+}
+
+
+
+

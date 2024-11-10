@@ -54,28 +54,60 @@
     </section>
     <!-----------------------------End of HOME text-------------------------------->
     <!-----------------------------Start of BRANDS text-------------------------------->
-    <h3>Brands</h3>
-    <section id="brand" class="containter">
+    <section id="brand">
       <div class="row">
-        <img class="img-fluid col-lg-3 col-md-6 col-sm-12" src="assets/imgages/Asus.jpeg"/>
-        <img class="img-fluid col-lg-3 col-md-6 col-sm-12" src="assets/imgages/MSI.jpeg"/>
-        <img class="img-fluid col-lg-3 col-md-6 col-sm-12" src="assets/imgages/Lenovo.jpeg"/>
-        <img class="img-fluid col-lg-3 col-md-6 col-sm-12" src="assets/imgages/Gigabyte.jpeg"/>
-        <img class="img-fluid col-lg-3 col-md-6 col-sm-12" src="assets/imgages/Dell.jpeg"/>
-        <img class="img-fluid col-lg-3 col-md-6 col-sm-12" src="assets/imgages/HP.jpeg"/>
-        <img class="img-fluid col-lg-3 col-md-6 col-sm-12" src="assets/imgages/Acer.jpeg"/>
-        <img class="img-fluid col-lg-3 col-md-6 col-sm-12" src="assets/imgages/Razer.jpeg"/>
-        <img class="img-fluid col-lg-3 col-md-6 col-sm-12" src="assets/imgages/Others.jpeg"/>
+        <img class="img-fluid col-lg-3 col-md-6 col-sm-12" src="assets/images/Asus.jpg"/>
+        <img class="img-fluid col-lg-3 col-md-6 col-sm-12" src="assets/images/MSI.jpg"/>
+        <img class="img-fluid col-lg-3 col-md-6 col-sm-12" src="assets/images/Lenovo.jpg"/>
+        <img class="img-fluid col-lg-3 col-md-6 col-sm-12" src="assets/images/Gigabyte.jpg"/>
+        <img class="img-fluid col-lg-3 col-md-6 col-sm-12" src="assets/images/Dell.jpg"/>
+        <img class="img-fluid col-lg-3 col-md-6 col-sm-12" src="assets/images/HP.jpg"/>
+        <img class="img-fluid col-lg-3 col-md-6 col-sm-12" src="assets/images/Acer.jpg"/>
+        <img class="img-fluid col-lg-3 col-md-6 col-sm-12" src="assets/images/Razer.png"/>
       </div>
   </section>
-  <h3>Deals</h3>
-    <section id="deals" class="w-100">
-      <div class="row p-0 m-0">
-        <div class="one col-lg-4 col-md-12 col-sm-12 p-0">
-          <img class="img-fluid>
+   <!-----------------------------Start of Footer text-------------------------------->
+   <footer class="mt-5 py-5" style="background-color: gray; padding: 50px 0;">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-3 col-md-6 col-sm-12">
+        <img src="assets/images/Logo.webp" width="100" height="100"/>
+        <p class="pt-3">We are happy that you chose LaptopHaven for your second hand laptop hunting!</p>
+      </div>
+      <div class="col-lg-3 col-md-6 col-sm-12">
+        <h5 class="pb-2">Categories</h5>
+        <ul class="text-uppercase">
+          <li><a href="#">Budget-Friendly</a></li>
+          <li><a href="#">Low-End</a></li>
+          <li><a href="#">Mid-End</a></li>
+          <li><a href="#">High-End</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-3 col-md-6 col-sm-12">
+        <h5 class="pb-2">Contact us</h5>
+        <div>
+          <h6 class="text-uppercase">Andor</h6>
+          <p>123 Lipa City Batangas</p>
+        </div>
+        <div>
+          <h6 class="text-uppercase">Del Rosario</h6>
+          <p>123 Lipa City Batangas</p>
+        </div>
+        <div>
+          <h6 class="text-uppercase">Romero</h6>
+          <p>123 Lipa City Batangas</p>
         </div>
       </div>
+    </div>
+  </div>
+</footer>
+
+
+
+ 
+ 
 
     </section>
+     <!-----------------------------End of Footer text-------------------------------->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </html>
