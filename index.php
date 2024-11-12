@@ -61,11 +61,11 @@
     <!----------------------------- END OF BRANDS SECTION ------------------------------>
 
     <!----------------------------- START OF FOOTER ----------------------------->
-    <footer class="mt-5 py-5" style="background-color: gray; padding: 50px 0;">
+    <footer class="mt-5 py-5" style="background-color: gray; padding: 30px 0;">
         <div id="footer" class="container">
             <div class="row">
                 <div class="col-lg-3 col-md-6 col-sm-12">
-                    <img src="assets/images/Logo.webp" width="100" height="100" />
+                    <img src="assets/images/Logo.webp" width="70" height="100" margin="center" />
                     <p class="pt-3">We are happy that you chose LaptopHaven for your second hand laptop hunting!</p>
                 </div>
                 <div class="col-lg-3 col-md-6 col-sm-12">

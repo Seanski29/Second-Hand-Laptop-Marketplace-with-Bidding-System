@@ -8,7 +8,6 @@
 body {
     font-family: 'Poppins', sans-serif;
     margin: auto;
-    background-color: #f5f5f5;
 }
 
 /* HEADING STYLES */
@@ -69,10 +68,9 @@ button:hover {
 /* NAVIGATION STYLES */
 .navbar {
     font-size: 20px;
-    padding-top: 1rem !important;
-    padding-bottom: 1rem !important;
+    padding: 1rem 0;
+    position: sticky;
     top: 0;
-    left: 0;
 }
 
 .navbar-dark .navbar-nav .nav-link {
@@ -81,20 +79,16 @@ button:hover {
     transition: 0.4s ease;
 }
 
-.nav-button {
-    margin-top: 50%;
-}
-
 /* HOME SECTION */
 #home {
     color: red;
     text-align: center;
-    background-image: url('../images/Background.png');
+    background: url('../images/Background.png') center/cover no-repeat;
     width: 100%;
     height: 100vh;
-    background-size: cover;
-    background-position: center;
     display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* LAYOUT STYLES */
@@ -108,14 +102,13 @@ button:hover {
 
 .container-fluid {
     display: flex;
-    flex-direction: row;
     justify-content: center;
     align-items: center;
     gap: 10px;
 }
 
 /* BRAND STYLES */
-brand {
+.brand {
     text-align: center;
 }
 
@@ -138,8 +131,65 @@ brand {
     border-radius: 8px;
 }
 
-/* MISC STYLES */
+/* EMPHASIS STYLES */
 .text-emphasis-color {
     color: red;
 }
 
+/* CART SECTION STYLES */
+.cart .table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.cart .product-info {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 3px;
+}
+
+.cart th {
+    text-align: left;
+    padding: 5px 10px;
+    color: #fff;
+    background-color: #007bff;
+}
+
+.cart td a {
+    color: blue;
+}
+
+.cart .remove-btn {
+    color: #0056b3;
+    text-decoration: none;
+    font-size: 15px;
+}
+
+.cart .edit-btn {
+    color: black;
+    text-decoration: none;
+    font-size: 20px;
+}
+
+/* LOGIN FORM STYLES */
+.login-form {
+    width: 50%;
+    margin: 20px auto;
+    text-align: center;
+    padding: 20px;
+    border-top: 1px solid #007bff;
+}
+
+.login-form .input {
+    width: 50%;
+    margin: 10px auto;
+}
+
+#login-btn {
+    background-color: red;
+    color: #fff;
+}
+
+.registered-url {
+    color: green;
+}
