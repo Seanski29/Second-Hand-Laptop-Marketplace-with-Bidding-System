@@ -81,15 +81,32 @@ button:hover {
 
 /* HOME SECTION */
 #home {
-    color: red;
+    color: black;
     text-align: center;
-    background: url('../images/Background.png') center/cover no-repeat;
+    background-image: url('../images/Background.png');
     width: 100%;
     height: 100vh;
+    background-size: cover;
+    background-position: center;
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
 }
+
+.home-text {
+    background: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    color: black;
+    z-index: 1; /* Ensure text is on top */
+}
+
+#home h5, #home h1, #home p {
+    background: transparent !important;
+    margin: 0;
+    padding: 0;
+}
+
 
 /* LAYOUT STYLES */
 .container {
@@ -192,4 +209,47 @@ button:hover {
 
 .registered-url {
     color: green;
+}
+
+/* REGISTER FORM STYLES */
+.register-form {
+    width: 50%;
+    margin: 20px auto;
+    text-align: center;
+    padding: 20px;
+    border-top: 1px solid #007bff;
+}
+
+.register .input {
+    width: 50%;
+    margin: 10px auto;
+}
+
+#register-btn {
+    background-color: red;
+    color: #fff;
+}
+
+.registered-url {
+    color: green;
+}
+
+#account-form{
+    width: 50%;
+    margin: 35px auto;
+    text-align: center;
+    padding: 20px;
+}
+
+#account-form .input{
+    margin: 5px auto;
+}
+
+#account-form #change-password-btn{
+    color: red;
+    background-color: #0056b3;
+}
+
+#account-form #orders-btn #logout-btn{
+    color: red;
 }
