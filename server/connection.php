@@ -1,9 +1,4 @@
 <?php
-mysqli_connect("localhost","root","acpfinalproj")
+$conn = mysqli_connect("localhost","root","","php_project"/*"acpfinalproj"*/)
             or die("Couldn't connect to the datbase")
-
-
-
-
-
 ?>

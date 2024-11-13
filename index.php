@@ -21,7 +21,7 @@
             <ul class="navbar-nav me-auto">
                 <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="#brandings">Brands</a></li>
-                <li class="nav-item"><a class="nav-link" href="market.html">Market</a></li>
+                <li class="nav-item"><a class="nav-link" href="market.php">Market</a></li>
                 <li class="nav-item"><a class="nav-link" href="#sell.html">Sell</a></li>
                 <li class="nav-item"><a class="nav-link" href="#footer">Contact</a></li>
             </ul>
@@ -39,7 +39,7 @@
             <h5>WELCOME TO LAPTOPHAVEN</h5>
             <h1>Find Your Second-Hand Choices Here</h1>
             <p>We offer the best prices and auctions</p>
-            <a href="market.html">
+            <a href="market.php">
                 <button class="btn btn-primary">Find Now</button>
             </a>
         </div>
