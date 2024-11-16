@@ -9,7 +9,6 @@ if(isset($_GET['product_id'])){
     
     $product = $stmt->get_result();
 } 
-//If Wala nahanap
 else {
     header('Location: market.php');
 }   
