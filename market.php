@@ -43,13 +43,13 @@
             <!-- Products -->
             <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
                 <div class="card h-100 d-flex flex-column">
-                    <img class="card-img-top product-image" alt="ASUS ROG STRIX" src="assets/images/<?php echo $row['product_image'] ?>"/>
+                    <img class="card-img-top product-image" alt="LAPTOP" src="assets/images/<?php echo $row['product_image'] ?>"/>
                     <div class="card-body d-flex flex-column">
                         <h3 class="product-title"><?php echo $row['product_name'] ?></h3>
                         <p class="product-description"><?php echo $row['product_description'] ?></p>
                         <p class="starting-price">Starting Price: $<?php echo $row['starting_price'] ?></p>
                         <p class="highest-bid">Highest Bid: $<?php echo $row['highest_bid'] ?></p>
-                        <button class="btn btn-primary w-100 mt-auto">Enter Bid</button>
+                        <a href="<?php echo "bid.php?product_id=" . $row['product_id'];?>"><button class="btn btn-primary w-100 mt-auto">Enter Bid</button></a>
                     </div>
                 </div>
             </div>
