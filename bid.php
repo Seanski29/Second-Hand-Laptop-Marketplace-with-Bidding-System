@@ -1,3 +1,22 @@
+<?php
+require_once('server/connection.php');
+if(isset($_GET['product_id'])){
+
+    $product_id = $_GET['product_id'];
+    $stmt = $conn->prepare("SELECT * FROM products where product_id = ? limit 1");
+    $stmt->bind_param('i', $product_id);
+    $stmt->execute();
+    
+    $product = $stmt->get_result();
+} 
+//No product id found
+else {
+    header('Location: market.php');
+}   
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,7 +38,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarScroll">
             <ul class="navbar-nav me-auto">
-                <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="#brandings">Brands</a></li>
                 <li class="nav-item"><a class="nav-link" href="market.php">Market</a></li>
                 <li class="nav-item"><a class="nav-link" href="#sell.html">Sell</a></li>
@@ -49,22 +68,25 @@
             <tr>
                 <td>
                     <div class="d-flex align-items-center">
-                        <img src="assets/images/ASUS ROG STRIX.jpg" class="img-thumbnail me-3" alt="ASUS ROG STRIX" style="width: 100px;">
+                        <?php while ($row = $product->fetch_assoc()){ ?>
+                        <img src="assets/images/<?php echo $row['product_image'];?>" class="img-thumbnail me-3" alt="ASUS ROG STRIX" style="width: 100px;">
                         <div>
-                            <p>ASUS ROG STRIX</p>
-                            <small>PHP 22,000</small>
+                            <p> <?php echo $row['product_name'];?></p>
+                            <p> <?php echo $row['product_description'];?></p>
+                            <small>USD <?php echo $row['starting_price'];?></small>
                             <br>
                             <a href="#" class="text-danger">Remove</a>
                         </div>
                     </div>
                 </td>
-                <td><span>PHP</span> <span class="product-price">22,000</span></td>
+                <td><span>USD</span> <span class="product-price"><?php echo $row['highest_bid'];?></span></td>
                 <td>
                     <input type="number" class="form-control" value="1">
                     <button class="btn btn-primary mt-2">BID</button>
                 </td>
             </tr>
         </tbody>
+         <?php } ?>
     </table>
 </section>
 
