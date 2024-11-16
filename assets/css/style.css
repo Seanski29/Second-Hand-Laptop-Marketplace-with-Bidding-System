@@ -71,6 +71,8 @@ button:hover {
     padding: 1rem 0;
     position: sticky;
     top: 0;
+    z-index: 1000; 
+    background-color: white; 
 }
 
 .navbar-dark .navbar-nav .nav-link {

@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Market</title>
-    <script src="https://unpkg.com/sweetalert2@7.8.2/dist/sweetalert2.all.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="assets/css/style.css"/>
+    <script src="assets/js/alert.js"></script>
 </head>
 <body>
 
@@ -24,7 +25,7 @@
                 <li class="nav-item"><a class="nav-link" href="#brandings">Brands</a></li>
                 <li class="nav-item"><a class="nav-link" href="market.php">Market</a></li>
                 <li class="nav-item"><a class="nav-link" href="#sell.html">Sell</a></li>
-                <li class="nav-item"><a class="nav-link" href="#footer">Contact</a></li>
+                <li class="nav-item"><a class="nav-link" href="about us.html">About us</a></li>
             </ul>
             <form class="d-flex">
                 <input class="form-control me-2" type="search" placeholder="Search">
@@ -33,7 +34,6 @@
         </div>
     </div>
 </nav>
-
 
     <!-- START OF MARKET SECTION -->
     <section id="brand" class="container py-5">
@@ -59,17 +59,17 @@
     </section>
     <!-- END OF MARKET SECTION -->
 
-    <!-- START OF FOOTER -->
+    <!-- FOOTER -->
     <footer class="mt-5 py-5 bg-dark text-white">
-        <div id="footer" class="container">
+        <div class="container">
             <div class="row">
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <img src="assets/images/Logo.webp" width="100" height="100"/>
-                    <p class="pt-3">We are happy that you chose LaptopHaven for your second hand laptop hunting!</p>
+                <div class="col-lg-3 col-md-6 col-sm-12 text-center">
+                    <img src="assets/images/Logo.webp" alt="LaptopHaven Logo" width="70" height="100">
+                    <p class="pt-3">We are happy that you chose LaptopHaven for your second-hand laptop hunting!</p>
                 </div>
                 <div class="col-lg-3 col-md-6 col-sm-12">
-                    <h5 class="pb-2">Categories</h5>
-                    <ul class="text-uppercase">
+                    <h5>Categories</h5>
+                    <ul class="list-unstyled">
                         <li><a href="#">Budget-Friendly</a></li>
                         <li><a href="#">Low-End</a></li>
                         <li><a href="#">Mid-End</a></li>
@@ -77,16 +77,25 @@
                     </ul>
                 </div>
                 <div class="col-lg-3 col-md-6 col-sm-12">
-                    <h5 class="pb-2">Contact us</h5>
-                    <div><h6>Andor</h6><p>123 Lipa City Batangas</p></div>
-                    <div><h6>Del Rosario</h6><p>123 Lipa City Batangas</p></div>
-                    <div><h6>Romero</h6><p>123 Lipa City Batangas</p></div>
+                    <h5>Contact Us</h5>
+                    <div>
+                        <h6>Andor</h6>
+                        <p>123 Lipa City Batangas</p>
+                    </div>
+                    <div>
+                        <h6>Del Rosario</h6>
+                        <p>123 Lipa City Batangas</p>
+                    </div>
+                    <div>
+                        <h6>Romero</h6>
+                        <p>123 Lipa City Batangas</p>
+                    </div>
                 </div>
             </div>
         </div>
     </footer>
-    <!-- END OF FOOTER -->
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
