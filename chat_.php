@@ -1,13 +1,13 @@
 <?php
 session_start();
-include('server/connection.php'); // Include your database connection file
+include('server/connection.php');//Isasasma database conection
 
-// Check if user is logged in
+//To check if logged in(mmya ilalagaya)
 if (!isset($_SESSION['user_id'])) {
     die("You must be logged in to view this page.");
 }
 
-$user_id = $_SESSION['user_id']; // Assuming you have user_id stored in session
+$user_id = $_SESSION['user_id']; // may user ID
 
 // Check if receiver_id (seller_id) is passed as a query parameter
 if (!isset($_GET['receiver_id'])) {

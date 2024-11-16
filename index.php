@@ -51,7 +51,7 @@
     <section id="brands" class="py-5">
         <div class="container">
             <div class="row g-3">
-                <div class="col-lg-3 col-md-6 col-sm-12">
+                <div id="brandings" class="col-lg-3 col-md-6 col-sm-12">
                     <img class="img-fluid" src="assets/images/Asus.jpg" alt="Asus">
                 </div>
                 <div class="col-lg-3 col-md-6 col-sm-12">
@@ -61,7 +61,7 @@
                     <img class="img-fluid" src="assets/images/Lenovo.jpg" alt="Lenovo">
                 </div>
                 <div class="col-lg-3 col-md-6 col-sm-12">
-                    <img id="brandings" class="img-fluid" src="assets/images/Gigabyte.jpg" alt="Gigabyte">
+                    <img class="img-fluid" src="assets/images/Gigabyte.jpg" alt="Gigabyte">
                 </div>
                 <div class="col-lg-3 col-md-6 col-sm-12">
                     <img class="img-fluid" src="assets/images/Dell.jpg" alt="Dell">
