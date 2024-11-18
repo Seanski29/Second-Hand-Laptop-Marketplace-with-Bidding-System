@@ -56,7 +56,6 @@ else {
 <!-- BID SECTION -->
 <section class="container my-5 py-5">
     <h2 class="font-weight-bold">Bidding Section</h2>
-
     <table class="table mt-5">
         <thead>
             <tr>
