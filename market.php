@@ -25,6 +25,7 @@
                 <li class="nav-item"><a class="nav-link" href="market.php">Market</a></li>
                 <li class="nav-item"><a class="nav-link" href="#sell.html">Sell</a></li>
                 <li class="nav-item"><a class="nav-link" href="#footer">Contact</a></li>
+                <li class="nav-item"><a class="nav-link" href="about us.html">About Us</a></li>
             </ul>
             <form class="d-flex">
                 <input class="form-control me-2" type="search" placeholder="Search">

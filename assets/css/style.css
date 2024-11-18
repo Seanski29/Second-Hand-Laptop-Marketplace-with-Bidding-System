@@ -253,3 +253,77 @@ button:hover {
 #account-form #orders-btn #logout-btn{
     color: red;
 }
+
+.learnmore {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: auto; 
+    background-image: url('../images/aboutusbg.jpg');
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    font-size: 30px;
+}
+
+.us, .mission {
+    text-align: center; /* Center the text */
+    color: white; /* Ensure the text color is white */
+    margin: 0 auto; /* Center the heading by auto margins */
+    padding: 20px 0; /* Add some vertical padding for spacing */
+}
+
+.team{padding-top: 70px;
+    text-align: center;
+    color: white;}
+
+.happen{text-align: center;
+    color: white;}
+
+    .contributors img {
+        width: 150px; 
+        height: 150px; 
+        object-fit: cover;
+        border-radius: 50%; 
+        margin: 5px;
+    }
+            
+   .contributors {
+    display: flex; /* Use flexbox for layout */
+    justify-content: center; /* Center the containers */
+    align-items: stretch; /* Make all containers the same height */
+    gap: 10px; /* Space between containers */
+}
+            
+   .contributors-container {
+    flex: 1; /* Allow containers to grow equally */
+    background-color: #333;
+    padding: 30px;
+    margin: 10px;
+    text-align: center;
+    color: white;
+    font-size: medium;
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    min-height: 300px; /* Set a minimum height to ensure uniformity */
+}
+            
+    .contributors-container h3{color: white;}
+            
+    .contributors-container ul {
+    list-style: square;
+    margin: 5px;
+    text-align: justify;
+    overflow: hidden; /* Prevent overflow */
+}
+            
+    .underline{width: 50%;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 1px;
+        background-color: white;}
