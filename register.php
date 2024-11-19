@@ -1,9 +1,37 @@
+<?php
+session_start();
+require_once 'server/connection.php';
+require_once 'server/crud.php';
+
+// Check if the form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $database = new Database();
+    $db = $database->getConnection();
+
+    $user = new User($db);
+    $user->user_name = htmlspecialchars(trim($_POST['name']));
+    $user->user_email = htmlspecialchars(trim($_POST['email']));
+    $user->user_password = htmlspecialchars(trim($_POST['password']));
+
+    // Create the user
+    if ($user->create()) {
+        echo "
+        <script>
+            alert('Registration successful!');
+            window.location.href = 'login.php';  // Redirect to login page after successful registration
+        </script>";
+    } else {
+        echo "<script>alert('Error! Please try again.');</script>";
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>register</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="assets/css/style.css"/>
@@ -35,27 +63,36 @@
     </div>
 </nav>
 
-<!-- LOGIN SECTION -->
+
+<!-- Register SECTION -->
 <section class="my-5 py-5">
     <div class="container text-center mt-3 pt-5">
-        <h2 class="font-weight-bold">Login</h2>
+        <h2 class="font-weight-bold">Register</h2>
         <hr class="mx-auto">
     </div>
     <div class="mx-auto container">
-        <form id="login-form">
+        <div class="mb-3">
+            <label for="register-name" class="form-label">Name</label>
+            <input type="email" class="form-control" id="register-name" name="name" placeholder="Name" required>
+        </div>
+        <form id="register-form">
             <div class="mb-3">
-                <label for="login-email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="login-email" name="email" placeholder="Email" required>
+                <label for="register-email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="register-email" name="email" placeholder="Email" required>
             </div>
             <div class="mb-3">
-                <label for="login-password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="login-password" name="password" placeholder="Password" required>
+                <label for="register-password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="register-password" name="password" placeholder="Password" required>
+            </div>
+            <div class="mb-3">
+                <label for="register-password" class="form-label">Confirm Password</label>
+                <input type="password" class="form-control" id="Confirm-password" name="confirm-password" placeholder="Confirm-Password" required>
             </div>
             <div class="mb-3">
                 <button type="submit" class="btn btn-primary" id="login-btn">Login</button>
             </div>
             <div class="mb-3">
-                <a href="register.html" class="btn btn-link">Don't have an account? Register now!</a>
+                <a href="login.html" class="btn btn-link">Do you have an account? Login!</a>
             </div>
         </form>
     </div>
@@ -100,4 +137,3 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-
