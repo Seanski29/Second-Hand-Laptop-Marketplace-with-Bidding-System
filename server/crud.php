@@ -52,27 +52,40 @@ class User {
 
     
     public function login() {
-        
-        $query = "SELECT user_password FROM " . $this->table_name . " WHERE user_email = :email LIMIT 1";
-
+        // SQL query to get the user's password from the database using the email
+        $query = "SELECT user_id, user_name, user_password FROM " . $this->table_name . " WHERE user_email = :email LIMIT 1";
+    
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":email", $this->user_email);
-
+    
         try {
-           
-            if ($stmt->execute()) {
-                $row = $stmt->fetch(PDO::FETCH_ASSOC);
-              
+            // Execute the query
+            $stmt->execute();
+    
+            // Fetch the user data
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+            // Check if row is valid (i.e., it's an array and not false)
+            if ($row && is_array($row)) {
+                // The user exists, now verify the password
                 if (password_verify($this->user_password, $row['user_password'])) {
-                    return true;
+                    // If password matches, set user session data
+                    $this->user_name = $row['user_name'];  // Store the user's name from the db
+                    return true; // Successfully logged in
+                } else {
+                    // Password does not match
+                    return false; // Invalid credentials
                 }
+            } else {
+                // User doesn't exist
+                return false; // Invalid credentials (user not found)
             }
         } catch (PDOException $exception) {
-            
+            // Handle exceptions (errors with the database)
             echo "Error: " . $exception->getMessage();
         }
-
-        return false;
+    
+        return false; // Default return false if anything goes wrong
     }
 }
 ?>
