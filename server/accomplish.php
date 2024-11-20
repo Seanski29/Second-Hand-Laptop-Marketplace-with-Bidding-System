@@ -1,6 +1,6 @@
 <?php
-require 'server/connection.php';
-require 'server/crud.php'; // Ensure this file contains the User class
+require 'connection.php';
+require 'crud.php'; // Ensure this file contains the User class
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Create a database connection
@@ -31,19 +31,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <script>
         Swal.fire({
             title: 'Success!',
-            text: 'User was successfully registered!',
-            icon: 'success'
+            text: 'Registration successful!',
+            icon: 'success',
+            confirmButtonText: 'OK'
         }).then((result) => {
             if (result.isConfirmed) {
-                window.location.href = 'index.php'; // Redirect after success
+                window.location.href = 'login.php';  // Redirect to login page after successful registration
             }
         });
         </script>
         </body>
         </html>";
     } else {
-        // If the creation failed, show an error
-        echo "<div class='alert alert-danger mt-3'>Error: Unable to register user. Please try again.</div>";
+        echo "<script>alert('Error! Please try again.');</script>";
     }
 }
 ?>

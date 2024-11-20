@@ -3,34 +3,25 @@ session_start();
 require_once 'server/connection.php';
 require_once 'server/crud.php';
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+// Check if the form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $database = new Database();
     $db = $database->getConnection();
 
     $user = new User($db);
+    $user->user_name = htmlspecialchars(trim($_POST['name']));
     $user->user_email = htmlspecialchars(trim($_POST['email']));
-    $password = $_POST['password'];
+    $user->user_password = htmlspecialchars(trim($_POST['password']));
 
-    // Retrieve user by email
-    $stmt = $user->readByEmail();
-    if ($stmt->rowCount() > 0) {
-        $userData = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        // Verify password
-        if (password_verify($password, $userData['user_password'])) {
-            $_SESSION['user_id'] = $userData['user_id'];
-            $_SESSION['user_name'] = $userData['user_name'];
-
-            echo "
-            <script>
-                alert('Login successful!');
-                window.location.href = 'welcome.php';  // Redirect to a protected page
-            </script>";
-        } else {
-            echo "<script>alert('Invalid password.');</script>";
-        }
+    // Create the user
+    if ($user->create()) {
+        echo "
+        <script>
+            alert('Registration successful!');
+            window.location.href = 'login.php';  // Redirect to login page after successful registration
+        </script>";
     } else {
-        echo "<script>alert('No account found with that email.');</script>";
+        echo "<script>alert('Error! Please try again.');</script>";
     }
 }
 ?>

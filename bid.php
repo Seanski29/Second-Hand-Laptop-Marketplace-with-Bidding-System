@@ -1,19 +1,24 @@
 <?php
-require_once('server/connection.php');
-if(isset($_GET['product_id'])){
+session_start();
+require_once 'server/connection.php';
 
-    $product_id = $_GET['product_id'];
-    $stmt = $conn->prepare("SELECT * FROM products where product_id = ? limit 1");
-    $stmt->bind_param('i', $product_id);
-    $stmt->execute();
-    
-    $product = $stmt->get_result();
-} 
-else {
-    header('Location: market.php');
-}   
+// Check if the product_id is set
+if (!isset($_GET['product_id'])) {
+    die("Product ID is required.");
+}
 
+$product_id = htmlspecialchars(trim($_GET['product_id']));
 
+// Fetch product details
+$query = "SELECT * FROM products WHERE product_id = :product_id";
+$stmt = $conn->prepare($query);
+$stmt->bindParam(':product_id', $product_id);
+$stmt->execute();
+$product = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$product) {
+    die("Product not found.");
+}
 ?>
 
 <!DOCTYPE html>
@@ -69,25 +74,25 @@ else {
             <tr>
                 <td>
                     <div class="d-flex align-items-center">
-                        <?php while ($row = $product->fetch_assoc()){ ?>
-                        <img src="assets/images/<?php echo $row['product_image'];?>" class="img-thumbnail me-3" alt="ASUS ROG STRIX" style="width: 100px;">
+                        <img src="assets/images/<?php echo htmlspecialchars($product['product_image']); ?>" class="img-thumbnail me-3" alt="<?php echo htmlspecialchars($product['product_name']); ?>" style="width: 100px;">
                         <div>
-                            <p> <?php echo $row['product_name'];?></p>
-                            <p> <?php echo $row['product_description'];?></p>
-                            <small>USD <?php echo $row['starting_price'];?></small>
+                            <p><?php echo htmlspecialchars($product['product_name']); ?></p>
+                            <p><?php echo htmlspecialchars($product['product_description']); ?></p>
+                            <small>USD <?php echo htmlspecialchars($product['starting_price']); ?></small>
                             <br>
-                            
                         </div>
                     </div>
                 </td>
-                <td><span>USD</span> <span class="product-price"><?php echo $row['highest_bid'];?></span></td>
+                <td><span>USD</span> <span class="product-price"><?php echo htmlspecialchars($product['highest_bid']); ?></span></td>
                 <td>
-                    <input type="number" class="form-control" value="<?php echo $row['starting_price'];?>">
-                    <button class="btn btn-primary mt-2" onclick="bidinput()">Enter Bid</button>
+                    <form method="POST" action="place_bid.php">
+                        <input type="hidden" name="product_id" value="<?php echo htmlspecialchars($product['product_id']); ?>">
+                        <input type="number" name="bid_amount" class="form-control" value="<?php echo htmlspecialchars($product['starting_price']); ?>" required>
+                        <button type="submit" class="btn btn-primary mt-2">Enter Bid</button>
+                    </form>
                 </td>
             </tr>
         </tbody>
-         <?php } ?>
     </table>
 </section>
 
