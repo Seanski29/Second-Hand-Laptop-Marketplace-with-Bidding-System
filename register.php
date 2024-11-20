@@ -92,7 +92,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <button type="submit" class="btn btn-primary" id="login-btn">Login</button>
             </div>
             <div class="mb-3">
-                <a href="login.html" class="btn btn-link">Do you have an account? Login!</a>
+                <a href="login.php" class="btn btn-link">Do you have an account? Login!</a>
             </div>
         </form>
     </div>

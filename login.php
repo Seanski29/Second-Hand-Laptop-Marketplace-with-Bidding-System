@@ -3,25 +3,30 @@ session_start();
 require_once 'server/connection.php';
 require_once 'server/crud.php';
 
-// Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Create a database connection
     $database = new Database();
     $db = $database->getConnection();
 
+    // Instantiate the User object
     $user = new User($db);
-    $user->user_name = htmlspecialchars(trim($_POST['name']));
+
+    // Clean and assign data from the form
     $user->user_email = htmlspecialchars(trim($_POST['email']));
     $user->user_password = htmlspecialchars(trim($_POST['password']));
 
-    // Create the user
-    if ($user->create()) {
+    // Attempt to login the user
+    if ($user->login()) {
+        // Successfully logged in, store user information in session
+        $_SESSION['user_email'] = $user->user_email;
+        $_SESSION['user_name'] = $user->user_name; // Optionally store the name
         echo "
         <script>
-            alert('Registration successful!');
-            window.location.href = 'login.php';  // Redirect to login page after successful registration
+        alert('Login successful!');
+        window.location.href = 'dashboard.php';  // Redirect to dashboard or homepage
         </script>";
     } else {
-        echo "<script>alert('Error! Please try again.');</script>";
+        echo "<script>alert('Invalid login credentials. Please try again.');</script>";
     }
 }
 ?>
