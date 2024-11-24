@@ -52,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="#brandings">Brands</a></li>
                 <li class="nav-item"><a class="nav-link" href="market.php">Market</a></li>
-                <li class="nav-item"><a class="nav-link" href="#sell.html">Sell</a></li>
+                <li class="nav-item"><a class="nav-link" href="sell.html">Sell</a></li>
                 <li class="nav-item"><a class="nav-link" href="#footer">Contact</a></li>
                 <li class="nav-item"><a class="nav-link" href="about us.html">About Us</a></li>
             </ul>
@@ -64,7 +64,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 </nav>
 
-
 <!-- Register SECTION -->
 <section class="my-5 py-5">
     <div class="container text-center mt-3 pt-5">
@@ -72,11 +71,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <hr class="mx-auto">
     </div>
     <div class="mx-auto container">
-        <div class="mb-3">
-            <label for="register-name" class="form-label">Name</label>
-            <input type="email" class="form-control" id="register-name" name="name" placeholder="Name" required>
-        </div>
-        <form id="register-form">
+        <form id="register-form" method="POST" action="register.php">
+            <div class="mb-3">
+                <label for="register-name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="register-name" name="name" placeholder="Name" required>
+            </div>
             <div class="mb-3">
                 <label for="register-email" class="form-label">Email</label>
                 <input type="email" class="form-control" id="register-email" name="email" placeholder="Email" required>
@@ -86,11 +85,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <input type="password" class="form-control" id="register-password" name="password" placeholder="Password" required>
             </div>
             <div class="mb-3">
-                <label for="register-password" class="form-label">Confirm Password</label>
-                <input type="password" class="form-control" id="Confirm-password" name="confirm-password" placeholder="Confirm-Password" required>
+                <label for="confirm-password" class="form-label">Confirm Password</label>
+                <input type="password" class="form-control" id="confirm-password" name="confirm-password" placeholder="Confirm Password" required>
             </div>
             <div class="mb-3">
-                <button type="submit" class="btn btn-primary" id="login-btn">Login</button>
+                <button type="submit" class="btn btn-primary" id="register-btn">Register</button>
             </div>
             <div class="mb-3">
                 <a href="login.php" class="btn btn-link">Do you have an account? Login!</a>
