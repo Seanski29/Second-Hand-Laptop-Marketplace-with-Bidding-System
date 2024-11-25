@@ -1,24 +1,26 @@
 <?php
+session_set_cookie_params(['samesite' => 'Strict']);  // Ensure cookies are set correctly for localhost
 session_start();
-include('server/connection.php');//Isasasma database conection
 
-//To check if logged in(mmya ilalagaya)
-if (!isset($_SESSION['user_id'])) {
-    die("You must be logged in to view this page.");
+require_once 'server/connection.php';
+
+// Check if the product_id is set
+if (!isset($_GET['product_id'])) {
+    die("Product ID is required.");
 }
 
-$user_id = $_SESSION['user_id']; // may user ID
+$product_id = htmlspecialchars(trim($_GET['product_id']));
 
-// Check if receiver_id (seller_id) is passed as a query parameter
-if (!isset($_GET['receiver_id'])) {
-    die("Receiver ID is required to start a chat.");
+// Fetch product details
+$query = "SELECT * FROM products WHERE product_id = :product_id";
+$stmt = $conn->prepare($query);
+$stmt->bindParam(':product_id', $product_id);
+$stmt->execute();
+$product = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$product) {
+    die("Product not found.");
 }
-
-$receiver_id = $_GET['receiver_id']; // Assuming receiver_id is passed as a query parameter
-
-// Fetch messages between the user and the receiver
-$sql = "SELECT * FROM messages WHERE (sender_id = $user_id AND receiver_id = $receiver_id) OR (sender_id = $receiver_id AND receiver_id = $user_id) ORDER BY timestamp ASC";
-$result = $conn->query($sql);
 ?>
 
 <!DOCTYPE html>
@@ -26,14 +28,15 @@ $result = $conn->query($sql);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat with User</title>
+    <title>Pending Bid</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="assets/css/style.css"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="assets/js/alert.js"></script>
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-    <!-- NAVBAR -->
+
+<!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
         <img src="assets/images/Logo.webp" width="45" height="55" alt="Logo">
@@ -57,25 +60,44 @@ $result = $conn->query($sql);
     </div>
 </nav>
 
-    <div class="container">
-        <h2>Chat with User</h2>
-        <div class="chat-box">
-            <?php while($row = $result->fetch_assoc()): ?>
-                <div class="message">
-                    <strong><?php echo $row['sender_id'] == $user_id ? 'You' : 'User'; ?>:</strong>
-                    <p><?php echo htmlspecialchars($row['message']); ?></p>
-                    <span><?php echo $row['timestamp']; ?></span>
-                </div>
-            <?php endwhile; ?>
-        </div>
-        <form action="send_message.php" method="POST">
-            <input type="hidden" name="sender_id" value="<?php echo $user_id; ?>">
-            <input type="hidden" name="receiver_id" value="<?php echo $receiver_id; ?>">
-            <textarea name="message" class="form-control" placeholder="Type your message here..."></textarea>
-            <button type="submit" class="btn btn-primary mt-2">Send</button>
-        </form>
-    </div>
-    
+<!-- BID SECTION -->
+<section class="container my-5 py-5">
+    <h2 class="font-weight-bold">Bidding Section</h2>
+
+    <table class="table mt-5">
+        <thead>
+            <tr>
+                <th>Chosen Product</th>
+                <th>Highest Bid</th>
+                <th>Your Bid</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img src="assets/images/<?php echo htmlspecialchars($product['product_image']); ?>" class="img-thumbnail me-3" alt="<?php echo htmlspecialchars($product['product_name']); ?>" style="width: 100px;">
+                        <div>
+                            <p><?php echo htmlspecialchars($product['product_name']); ?></p>
+                            <p><?php echo htmlspecialchars($product['product_description']); ?></p>
+                            <small>USD <?php echo htmlspecialchars($product['starting_price']); ?></small>
+                            <br>
+                        </div>
+                    </div>
+                </td>
+                <td><span>USD</span> <span class="product-price"><?php echo htmlspecialchars($product['highest_bid']); ?></span></td>
+                <td>
+                    <form method="POST" action="place_bid.php">
+                        <input type="hidden" name="product_id" value="<?php echo htmlspecialchars($product['product_id']); ?>">
+                        <input type="number" name="bid_amount" class="form-control" value="<?php echo htmlspecialchars($product['starting_price']); ?>" required>
+                        <button type="submit" class="btn btn-primary mt-2">Enter Bid</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
 <!-- FOOTER -->
 <footer class="mt-5 py-5 bg-dark text-white">
         <div class="container">

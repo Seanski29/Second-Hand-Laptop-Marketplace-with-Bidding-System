@@ -1,3 +1,12 @@
+<?php
+session_start();
+if (!isset($_SESSION['user_email'])) {
+    // Redirect to the login page
+    header("Location: login.php");
+    exit(); // Ensure the script stops executing
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

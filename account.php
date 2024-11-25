@@ -1,3 +1,19 @@
+<?php
+session_set_cookie_params(['samesite' => 'Strict']);  // Ensure cookies are set correctly for localhost
+session_start();
+
+if (!isset($_SESSION['user_email'])) {
+    // Redirect to the login page
+    header("Location: login.php");
+    exit(); // Ensure the script stops executing
+}
+
+
+
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

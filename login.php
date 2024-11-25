@@ -21,15 +21,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['user_email'] = $user->user_email;
         $_SESSION['user_name'] = $user->user_name; // Optionally store the name
         echo "
-        <script>
-        alert('Login successful!');
-        window.location.href = 'dashboard.php';  // Redirect to dashboard or homepage
-        </script>";
-    } else {
-        echo "<script>alert('Invalid login credentials. Please try again.');</script>";
+            
+            <script>
+                Swal.fire({
+                    title: 'Welcome!',
+                    text: 'Login successful!',
+                    icon: 'success',
+                    confirmButtonText: 'Go to Home'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '../index.php';  // Redirect to the main page
+                    }
+                });
+            </script>";
+        } else {
+            echo "
+            <script>
+                Swal.fire({
+                    title: 'Invalid Credentials',
+                    text: 'Incorrect email or password. Please try again.',
+                    icon: 'error',
+                    confirmButtonText: 'Try Again'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '../login.php';  // Redirect back to login page
+                    }
+                });
+            </script>";
+        }
     }
-}
 ?>
+
+
 
 
 <!DOCTYPE html>
@@ -86,18 +109,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
 <!-- LOGIN FORM -->
-<div class="container my-5">
+<div class="container my-5 form-group-lg">
     <div class="row justify-content-center">
-        <div class="col-md-6">
+        <div class="col-xs-4">
             <h2 class="text-center">Login</h2>
             <form method="POST" action="server/accomplish.php">
                 <div class="mb-3">
                     <label for="email" class="form-label">Email address</label>
-                    <input type="email" class="form-control" id="email" name="email" required>
+                    <input type="email" class="form-control input-lg" id="email" name="email" required>
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" name="password" required>
+                    <input type="password" class="form-control input-lg" id="password" name="password" required>
                 </div>
                 <button type="submit" name="login" class="btn btn-primary">Login</button>
                 <a href="register.php" class="btn btn-link">Register</a>
