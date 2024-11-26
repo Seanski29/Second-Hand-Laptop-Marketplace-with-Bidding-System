@@ -329,3 +329,148 @@ button:hover {
         margin-right: auto;
         padding: 1px;
         background-color: white;}
+
+    /* Make input boxes longer */
+    .login-form {
+        max-width: 1000px; /* Set a reasonable max-width for the form */
+        margin: 0 auto; /* Center the form */
+    }
+    .form-control {
+        border-radius: 0.375rem; /* Optional: Make the inputs slightly rounded */
+    }
+    /* General styling for the About Us page */
+.about-page {
+    font-family: Arial, sans-serif;
+    color: #333;
+    padding: 20px;
+}
+
+/* Styling for the About Us Section */
+.learnmore {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.us {
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.about-bg img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    margin-bottom: 20px;
+}
+
+.about-text, .mission-text {
+    font-size: 18px;
+    line-height: 1.6;
+    margin: 0 auto;
+    max-width: 900px;
+    padding: 0 20px;
+}
+
+/* Styling for Mission */
+.mission {
+    font-size: 32px;
+    font-weight: bold;
+    margin-top: 40px;
+}
+
+.mission-text {
+    font-size: 18px;
+    line-height: 1.6;
+    margin: 0 auto;
+    max-width: 900px;
+    padding: 0 20px;
+}
+
+/* Styling for Team Section */
+.team {
+    font-size: 32px;
+    font-weight: bold;
+    margin-top: 50px;
+    text-align: center;
+}
+
+.happen {
+    text-align: center;
+    font-size: 18px;
+    font-style: italic;
+}
+
+/* Styling for Contributors */
+contributors {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    margin-top: 30px;
+}
+
+contributors-container {
+    width: 250px;
+    text-align: center;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+}
+
+contributors-container img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+contributors-container h3 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+contributors-container hr.underline {
+    width: 50%;
+    border: 1px solid #ddd;
+    margin: 10px auto;
+}
+
+contributors-container h4 {
+    font-size: 16px;
+    font-weight: normal;
+    margin-top: 10px;
+}
+
+contributors-container ul {
+    text-align: left;
+    margin-top: 10px;
+}
+
+contributors-container li {
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+    contributors {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    contributors-container {
+        width: 80%;
+        margin-bottom: 20px;
+    }
+
+    about-text, mission-text {
+        font-size: 16px;
+        padding: 0 10px;
+    }
+}
+
+    
+

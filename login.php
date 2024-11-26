@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "
         <script>
         alert('Login successful!');
-        window.location.href = 'index.php';  // Redirect to home page after successful login
+        window.location.href = 'dashboard.php';  // Redirect to dashboard or homepage
         </script>";
     } else {
         echo "<script>alert('Invalid login credentials. Please try again.');</script>";
@@ -71,18 +71,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </nav>
 
 <!-- LOGIN FORM -->
-<div class="container my-5">
+<div class="container my-5 form-group-lg">
     <div class="row justify-content-center">
-        <div class="col-md-6">
+        <div class="col-xs-4">
             <h2 class="text-center">Login</h2>
             <form method="POST" action="login.php">
                 <div class="mb-3">
                     <label for="email" class="form-label">Email address</label>
-                    <input type="email" class="form-control" id="email" name="email" required>
+                    <input type="email" class="form-control input-lg" id="email" name="email" required>
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" name="password" required>
+                    <input type="password" class="form-control input-lg" id="password" name="password" required>
                 </div>
                 <button type="submit" name="login" class="btn btn-primary">Login</button>
                 <a href="register.php" class="btn btn-link">Register</a>

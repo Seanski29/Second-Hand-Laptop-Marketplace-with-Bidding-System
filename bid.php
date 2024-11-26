@@ -2,6 +2,11 @@
 session_start();
 require_once 'server/connection.php';
 
+if (!isset($_SESSION['user_email'])) {
+    // Redirect to the login page
+    header("Location: login.php");
+    exit(); // Ensure the script stops executing
+}
 // Check if the product_id is set
 if (!isset($_GET['product_id'])) {
     die("Product ID is required.");
@@ -19,6 +24,28 @@ $product = $stmt->fetch(PDO::FETCH_ASSOC);
 if (!$product) {
     die("Product not found.");
 }
+
+// Check if the user is logged in
+if (!isset($_SESSION['user_id'])) {
+    die("Please log in to view your bids.");
+}
+
+$user_id = $_SESSION['user_id'];
+
+// Fetch pending bids for the logged-in user
+$query = "
+    SELECT b.bid_id, b.bid_amount, b.status, 
+           p.product_name, p.product_image, p.starting_price, p.highest_bid 
+    FROM bids b
+    JOIN products p ON b.product_id = p.product_id
+    WHERE b.user_id = :user_id AND b.status = 'Pending'
+    ORDER BY b.bid_id DESC";
+$stmt = $conn->prepare($query);
+$stmt->bindParam(':user_id', $user_id);
+$stmt->execute();
+$pending_bids = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
 ?>
 
 <!DOCTYPE html>
