@@ -58,7 +58,7 @@ button:hover {
     background-color: #007bff;
     color: #fff;
     font-weight: bold;
-    margin-top: 20px;
+    margin-top: none;
 }
 
 .btn-primary:hover {
@@ -77,9 +77,40 @@ button:hover {
 
 .navbar-dark .navbar-nav .nav-link {
     padding: 0 20px;
-    color: black;
     transition: 0.4s ease;
 }
+/* Style for the Login/Logout/Register buttons */
+.button-navbar {
+    color: black; /* Make the text black */
+    font-size: 1.1rem; /* Ensure the font size is consistent with other navbar items */
+    text-decoration: none; /* Remove underline */
+    padding: 8px 16px; /* Adjust padding for consistency */
+}
+
+/* Optional: Hover effect to add a subtle change when hovered */
+.button-navbar:hover {
+    color: #007bff; /* Change text color on hover */
+    text-decoration: underline; /* Optional: underline on hover for a better visual effect */
+}
+
+/* Navbar item styling (optional: ensure consistency across navbar) */
+.nav-link {
+    font-size: 1.3rem; /* Ensure all navbar items have the same size */
+    padding: 8px 16px; /* Adjust padding if needed */
+    color: black; /* Ensure the text is black by default */
+}
+
+/* Remove underline from links */
+.nav-link {
+    text-decoration: none;
+}
+
+/* Optional: Hover effect for all navbar items */
+.nav-link:hover {
+    color: #007bff; /* Change text color on hover */
+}
+
+
 
 /* HOME SECTION */
 #home {

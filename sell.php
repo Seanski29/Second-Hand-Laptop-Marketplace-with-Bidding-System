@@ -21,8 +21,8 @@ if (!isset($_SESSION['user_email'])) {
 <body>
 
 <!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container-fluid">
+<nav class="navbar navbar-expand-lg bg-body-tertiary bg-dark">
+    <div class="container-fluid bg-light-dark">
         <img src="assets/images/Logo.webp" width="45" height="55" alt="Logo">
         <a class="navbar-brand" href="#">LaptopHaven</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll">
@@ -31,19 +31,24 @@ if (!isset($_SESSION['user_email'])) {
         <div class="collapse navbar-collapse" id="navbarScroll">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="#brandings">Brands</a></li>
                 <li class="nav-item"><a class="nav-link" href="market.php">Market</a></li>
-                <li class="nav-item"><a class="nav-link" href="#sell.html">Sell</a></li>
-                <li class="nav-item"><a class="nav-link" href="#footer">Contact</a></li>
-                <li class="nav-item"><a class="nav-link" href="about us.html">About Us</a></li>
+                <li class="nav-item"><a class="nav-link" href="sell.php">Sell</a></li>
+                <li class="nav-item"><a class="nav-link" href="about us.php">About Us</a></li>
             </ul>
             <form class="d-flex">
+                <?php if ($session->isLoggedIn()): ?>
+                    <a class="button-navbar" href="dashboard.php">Logout</a>
+                <?php else: ?>
+                    <a class="button-navbar" href="login.php">Login</a>
+                <?php endif; ?>
+                <a class="button-navbar" href="register.php">Register</a>
                 <input class="form-control me-2" type="search" placeholder="Search">
-                <button class="btn btn-outline-success" type="submit">Search</button>
+                <button class="btn btn-primary" type="submit">Search</button>
             </form>
         </div>
     </div>
 </nav>
+<!-- NAVBAR -->
 
 
 
@@ -55,42 +60,44 @@ if (!isset($_SESSION['user_email'])) {
 
 
 
-<!-- FOOTER -->
+<!----FOOTER--->
 <footer class="mt-5 py-5 bg-dark text-white">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-3 col-md-6 col-sm-12 text-center">
-                <img src="assets/images/Logo.webp" alt="LaptopHaven Logo" width="70" height="100">
-                <p class="pt-3">We are happy that you chose LaptopHaven for your second-hand laptop hunting!</p>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-12">
-                <h5>Categories</h5>
-                <ul class="list-unstyled">
-                    <li><a href="#">Budget-Friendly</a></li>
-                    <li><a href="#">Low-End</a></li>
-                    <li><a href="#">Mid-End</a></li>
-                    <li><a href="#">High-End</a></li>
-                </ul>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-12">
-                <h5>Contact Us</h5>
-                <div>
-                    <h6>Andor</h6>
-                    <p>123 Lipa City Batangas</p>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 col-sm-12 text-center">
+                    <img src="assets/images/Logo.webp" alt="LaptopHaven Logo" width="70" height="100">
+                    <p class="pt-3">We are happy that you chose LaptopHaven for your second-hand laptop hunting!</p>
                 </div>
-                <div>
-                    <h6>Del Rosario</h6>
-                    <p>123 Lipa City Batangas</p>
+                <div class="col-lg-3 col-md-6 col-sm-12">
+                    <h5>Categories</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#">Budget-Friendly</a></li>
+                        <li><a href="#">Low-End</a></li>
+                        <li><a href="#">Mid-End</a></li>
+                        <li><a href="#">High-End</a></li>
+                    </ul>
                 </div>
-                <div>
-                    <h6>Romero</h6>
-                    <p>123 Lipa City Batangas</p>
+                <div class="col-lg-3 col-md-6 col-sm-12">
+                    <h5>Contact Us</h5>
+                    <div>
+                        <h6> Cedrick Andor</h6>
+                        <p>andorced@gmail.com</p>
+                    </div>
+                    <div>
+                        <h6>Sean Martin Del Rosario</h6>
+                        <p>seanmdelrosariogmail.com</p>
+                    </div>
+                    <div>
+                        <h6>Romero</h6>
+                        <p>miguel_romero@myyahoo.com</p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</footer>
+    </footer>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
