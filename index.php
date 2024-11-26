@@ -1,5 +1,9 @@
+<?php
+require_once 'server/connection.php';
+require_once 'server/session.php';
 
-
+$session = new Session();
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -14,7 +18,7 @@
 </head>
 <body>
 
- <!-- NAVBAR -->
+    <!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
         <img src="assets/images/Logo.webp" width="45" height="55" alt="Logo">
@@ -27,12 +31,16 @@
                 <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="#brandings">Brands</a></li>
                 <li class="nav-item"><a class="nav-link" href="market.php">Market</a></li>
-                <li class="nav-item"><a class="nav-link" href="#sell.html">Sell</a></li>
+                <li class="nav-item"><a class="nav-link" href="sell.html">Sell</a></li>
                 <li class="nav-item"><a class="nav-link" href="#footer">Contact</a></li>
                 <li class="nav-item"><a class="nav-link" href="about us.html">About Us</a></li>
             </ul>
             <form class="d-flex">
-            <li class="nav-item"><a class="nav-link" href="login.php">Login</a></li>
+                <?php if ($session->isLoggedIn()): ?>
+                    <li class="nav-item"><a class="nav-link" href="dashboard.php">Logout</a></li>
+                <?php else: ?>
+                    <li class="nav-item"><a class="nav-link" href="login.php">Login</a></li>
+                <?php endif; ?>
                 <input class="form-control me-2" type="search" placeholder="Search">
                 <button class="btn btn-outline-success" type="submit">Search</button>
             </form>
