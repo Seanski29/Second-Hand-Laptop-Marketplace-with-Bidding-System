@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "
         <script>
         alert('Login successful!');
-        window.location.href = 'index.php';  // Redirect to home page after successful login
+        window.location.href = 'market.php';  // Redirect to home page after successful login
         </script>";
     } else {
         echo "<script>alert('Invalid login credentials. Please try again.');</script>";
