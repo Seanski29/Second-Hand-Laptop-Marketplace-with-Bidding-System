@@ -1,13 +1,10 @@
-<?
-session_start();
-session_set_cookie_params(['samesite' => 'Strict']);
-if (!isset($_SESSION['user_email'])) {
-    // Redirect to the login page
-    header("Location: login.php");
-    exit(); // Ensure the script stops executing
-}
+<?php
+require_once 'server/connection.php';
+require_once 'server/session.php';
 
+$session = new Session();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -34,7 +31,7 @@ if (!isset($_SESSION['user_email'])) {
                 <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="#brandings">Brands</a></li>
                 <li class="nav-item"><a class="nav-link" href="market.php">Market</a></li>
-                <li class="nav-item"><a class="nav-link" href="#sell.html">Sell</a></li>
+                <li class="nav-item"><a class="nav-link" href="sell.html">Sell</a></li>
                 <li class="nav-item"><a class="nav-link" href="#footer">Contact</a></li>
                 <li class="nav-item"><a class="nav-link" href="about us.html">About Us</a></li>
             </ul>
@@ -61,7 +58,11 @@ if (!isset($_SESSION['user_email'])) {
                     <p class="product-description"><?php echo $row['product_description']; ?></p>
                     <p class="starting-price">Starting Price: $<?php echo $row['starting_price']; ?></p>
                     <p class="highest-bid">Highest Bid: $<?php echo $row['highest_bid']; ?></p>
-                    <a href="<?php echo "bid.php?product_id=" . $row['product_id']; ?>"><button class="btn btn-primary w-100 mt-auto">Enter Bid</button></a>
+                    <?php if ($session->isLoggedIn()): ?>
+                        <a href="bid.php?product_id=<?php echo $row['product_id']; ?>"><button class="btn btn-primary w-100 mt-auto">Enter Bid</button></a>
+                    <?php else: ?>
+                        <a href="login.php"><button class="btn btn-primary w-100 mt-auto">Enter Bid</button></a>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -109,4 +110,3 @@ if (!isset($_SESSION['user_email'])) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-
