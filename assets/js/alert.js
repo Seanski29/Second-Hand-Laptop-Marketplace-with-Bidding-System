@@ -19,3 +19,12 @@ function showLoginError() {
         confirmButtonText: 'Try Again'
     });
 }
+
+function loginFirst() {
+    Swal.fire({
+        title: 'Error!',
+        text: 'Please Log in First Before Entering.',
+        icon: 'error',
+        confirmButtonText: 'Try Again'
+    });
+}

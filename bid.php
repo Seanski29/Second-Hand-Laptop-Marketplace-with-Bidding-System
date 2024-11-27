@@ -82,7 +82,8 @@ if (!$product) {
             <p><?php echo htmlspecialchars($product['product_description']); ?></p>
             <p>Starting Price: $<?php echo htmlspecialchars($product['starting_price']); ?></p>
             <p>Highest Bid: $<?php echo htmlspecialchars($product['highest_bid']); ?></p>
-            <form method="POST" action="place_bid.php">
+            <p>Bidding Deadline: <?php echo htmlspecialchars($product['bid_deadline']);?></p>
+            <form method="POST" action="pending_bid.php">
                 <input type="hidden" name="product_id" value="<?php echo $product['product_id']; ?>">
                 <div class="mb-3">
                     <label for="bid_amount" class="form-label">Your Bid</label>

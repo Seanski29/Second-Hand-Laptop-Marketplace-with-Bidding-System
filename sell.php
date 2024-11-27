@@ -1,9 +1,45 @@
 <?php
-session_start();
-if (!isset($_SESSION['user_email'])) {
+require_once 'server/connection.php';
+require_once 'server/crud.php';
+require_once 'server/session.php';
+
+$session = new Session();
+
+if (!$session->isLoggedIn()) {
     // Redirect to the login page
     header("Location: login.php");
     exit(); // Ensure the script stops executing
+}
+
+// Check if the form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $database = new Database();
+    $db = $database->getConnection();
+
+    $product = new products($db); // Assuming the Product class exists and is passed the database connection
+
+// Sanitizing and assigning values from POST data to product object properties
+$product->product_name = htmlspecialchars(trim($_POST['productName']));
+$product->product_description = htmlspecialchars(trim($_POST['productDescription'])); // Corrected
+$product->product_image = htmlspecialchars(trim($_FILEST['productImage'])); // Corrected
+$product->starting_price = htmlspecialchars(trim($_POST['startingPrice']));
+$product->bid_deadline = htmlspecialchars(trim($_POST['biddingDeadline']));
+
+
+// If you're using product_id manually, you can assign it like this (e.g., auto-incrementing database, don't assign product_id directly):
+$product->product_id = null; // or $_POST['product_id'] if it's passed as part of the form (not recommended for user input)
+
+if ($product->sell()) {
+        echo "
+        <script>
+            alert('Submission Complete!');
+            window.location.href = 'market.php';  // Redirect to market page after successful selling
+        </script>";
+    } else {
+        echo "<script>
+        alert('Error! Please try again.');
+            </script>";
+    }
 }
 ?>
 
@@ -49,17 +85,44 @@ if (!isset($_SESSION['user_email'])) {
     </div>
 </nav>
 <!-- NAVBAR -->
+  <!-- SELL PAGE FORM -->
+  <div class="container my-5">
+        <h1 class="text-center mb-4">Sell Your Product</h1>
+        <form method="POST" action="sell.php" enctype="multipart/form-data">
+            <!-- Name of Product -->
+            <div class="mb-3">
+                <label for="productName" class="form-label">Product Name</label>
+                <input type="text" class="form-control" id="productName" name="productName" placeholder="Enter product name" required>
+            </div>
 
+            <!-- Picture of Product -->
+            <div class="mb-3">
+                <label for="productImage" class="form-label">Upload Product Image</label>
+                <input type="file" class="form-control" id="productImage" name="productImage" accept="image/*" required>
+            </div>
 
+            <!-- Description -->
+            <div class="mb-3">
+                <label for="productDescription" class="form-label">Product Description</label>
+                <textarea class="form-control" id="productDescription" name="productDescription" rows="5" placeholder="Provide details about the product" required></textarea>
+            </div>
 
+            <!-- Starting Price -->
+            <div class="mb-3">
+                <label for="startingPrice" class="form-label">Starting Price (USD)</label>
+                <input type="number" class="form-control" id="startingPrice" name="startingPrice" placeholder="Enter starting price" min="0" step="0.01" required>
+            </div>
 
+            <!-- Bidding Deadline -->
+            <div class="mb-3">
+                <label for="biddingDeadline" class="form-label">Bidding Deadline</label>
+                <input type="datetime-local" class="form-control" id="biddingDeadline" name="biddingDeadline" required>
+            </div>
 
-
-
-
-
-
-
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary w-100">Submit Product</button>
+        </form>
+    </div>
 <!----FOOTER--->
 <footer class="mt-5 py-5 bg-dark text-white">
         <div class="container">

@@ -1,8 +1,13 @@
 <?php
-session_set_cookie_params(['samesite' => 'Strict']);  // Ensure cookies are set correctly for localhost
-session_start();
-
+require_once 'server/session.php';
 require_once 'server/connection.php';
+$session = new Session();
+
+if (!$session->isLoggedIn()) {
+    // Redirect to the login page
+    header("Location: login.php");
+    exit(); // Ensure the script stops executing
+}
 
 // Check if the product_id is set
 if (!isset($_GET['product_id'])) {
@@ -67,42 +72,17 @@ if (!$product) {
 <!-- NAVBAR -->
 
 <!-- BID SECTION -->
+
 <section class="container my-5 py-5">
     <h2 class="font-weight-bold">Bidding Section</h2>
-
-    <table class="table mt-5">
-        <thead>
-            <tr>
-                <th>Chosen Product</th>
-                <th>Highest Bid</th>
-                <th>Your Bid</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>
-                    <div class="d-flex align-items-center">
-                        <img src="assets/images/<?php echo htmlspecialchars($product['product_image']); ?>" class="img-thumbnail me-3" alt="<?php echo htmlspecialchars($product['product_name']); ?>" style="width: 100px;">
-                        <div>
-                            <p><?php echo htmlspecialchars($product['product_name']); ?></p>
-                            <p><?php echo htmlspecialchars($product['product_description']); ?></p>
-                            <small>USD <?php echo htmlspecialchars($product['starting_price']); ?></small>
-                            <br>
-                        </div>
-                    </div>
-                </td>
-                <td><span>USD</span> <span class="product-price"><?php echo htmlspecialchars($product['highest_bid']); ?></span></td>
-                <td>
-                    <form method="POST" action="place_bid.php">
-                        <input type="hidden" name="product_id" value="<?php echo htmlspecialchars($product['product_id']); ?>">
-                        <input type="number" name="bid_amount" class="form-control" value="<?php echo htmlspecialchars($product['starting_price']); ?>" required>
-                        <button type="submit" class="btn btn-primary mt-2">Enter Bid</button>
-                    </form>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</section>
+    <div class="row">
+        <div class="col-lg-6">
+            <img src="assets/images/<?php echo htmlspecialchars($product['product_image']); ?>" class="img-fluid" alt="<?php echo htmlspecialchars($product['product_name']); ?>">
+        </div>
+        <div class="col-lg-6">
+            <h3><?php echo htmlspecialchars($product['product_name']); ?></h3>
+            <p><?php echo htmlspecialchars($product['product_description']); ?></p>
+        </div>
 
 <!----FOOTER--->
 <footer class="mt-5 py-5 bg-dark text-white">

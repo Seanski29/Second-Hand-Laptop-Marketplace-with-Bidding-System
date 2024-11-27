@@ -81,6 +81,7 @@ button:hover {
 }
 /* Style for the Login/Logout/Register buttons */
 .button-navbar {
+    display: flex;
     color: black; /* Make the text black */
     font-size: 1.1rem; /* Ensure the font size is consistent with other navbar items */
     text-decoration: none; /* Remove underline */
@@ -259,6 +260,7 @@ button:hover {
 }
 
 #register-btn {
+    display: flex;
     background-color: red;
     color: #fff;
 }

@@ -1,3 +1,9 @@
+<?php
+require_once 'server/connection.php';
+require_once 'server/session.php';
+
+$session = new Session();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

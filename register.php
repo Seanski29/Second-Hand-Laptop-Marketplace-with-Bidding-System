@@ -1,7 +1,7 @@
 <?php
-session_start();
 require_once 'server/connection.php';
-require_once 'server/crud.php';
+require_once 'server/session.php';
+$session = new Session();
 
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -12,7 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user->user_name = htmlspecialchars(trim($_POST['name']));
     $user->user_email = htmlspecialchars(trim($_POST['email']));
     $user->user_password = htmlspecialchars(trim($_POST['password']));
-
+   
     // Create the user
     if ($user->create()) {
         echo "
@@ -21,7 +21,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             window.location.href = 'login.php';  // Redirect to login page after successful registration
         </script>";
     } else {
-        echo "<script>alert('Error! Please try again.');</script>";
+        echo "<script>
+        alert('Error! Please try again.');
+            </script>";
     }
 }
 ?>
