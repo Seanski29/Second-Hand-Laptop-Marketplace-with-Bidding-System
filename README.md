@@ -1,7 +1,6 @@
-# SECOND HAND LAPTOP MARKETPLACE WITH BIDDING SYSTEM
-Short description or tagline.
+<h1> SECOND HAND LAPTOP MARKETPLACE WITH BIDDING SYSTEM </h1>
+Greetings! We are the BSIT | Group 6 of Batangas State University TNEU, here to present our semestral final project for CS121
 
-![Project Logo](link-to-your-logo) <!-- Optional -->
 
 ## Table of Contents
 - [Introduction](#introduction)
