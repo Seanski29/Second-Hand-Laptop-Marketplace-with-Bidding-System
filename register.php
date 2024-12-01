@@ -61,8 +61,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <a class="button-navbar" href="dashboard.php">Logout</a>
                 <?php else: ?>
                     <a class="button-navbar" href="login.php">Login</a>
+                    <a class="button-navbar" href="register.php">Register</a>
                 <?php endif; ?>
-                <a class="button-navbar" href="register.php">Register</a>
+                
                 <input class="form-control me-2" type="search" placeholder="Search">
                 <button class="btn btn-primary" type="submit">Search</button>
             </form>
