@@ -67,6 +67,7 @@ $session = new Session();
                     <p class="product-description"><?php echo $row['product_description']; ?></p>
                     <p class="starting-price">Starting Price: $<?php echo $row['starting_price']; ?></p>
                     <p class="highest-bid">Highest Bid: $<?php echo $row['highest_bid']; ?></p>
+                    <p class="bid_deadline">Bidding Deadline: <?php echo $row['bid_deadline']; ?></p>
                     <a href="<?php echo "bid.php?product_id=" . $row['product_id']; ?>"><button class="btn btn-primary w-100 mt-auto">Enter Bid</button></a>
                 </div>
             </div>
