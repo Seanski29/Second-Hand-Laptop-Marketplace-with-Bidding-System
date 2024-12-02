@@ -56,41 +56,36 @@ if (!$session->isLoggedIn()) {
         <a href="logout.php" class="btn btn-primary">Logout</a>
     </div>
 
-<!----FOOTER--->
+<!-- FOOTER -->
 <footer class="mt-5 py-5 bg-dark text-white">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-3 col-md-6 col-sm-12 text-center">
-                    <img src="assets/images/Logo.webp" alt="LaptopHaven Logo" width="70" height="100">
-                    <p class="pt-3">We are happy that you chose LaptopHaven for your second-hand laptop hunting!</p>
+    <div class="container">
+        <div class="row">
+            <!-- Logo and Description Section -->
+            <div class="col-lg-6 col-md-6 col-sm-12 text-center">
+                <img src="assets/images/Logo.webp" alt="LaptopHaven Logo" width="70" height="100">
+                <p class="pt-3">We are happy that you chose LaptopHaven for your second-hand laptop hunting!</p>
+            </div>
+
+            <!-- Contact Us Section aligned to the right -->
+            <div class="col-lg-6 col-md-6 col-sm-12 text-lg-end text-md-end">
+                <h5>Contact Us</h5>
+                <div>
+                    <h6>Cedrick Andor</h6>
+                    <p>andorced@gmail.com</p>
                 </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <h5>Categories</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#">Budget-Friendly</a></li>
-                        <li><a href="#">Low-End</a></li>
-                        <li><a href="#">Mid-End</a></li>
-                        <li><a href="#">High-End</a></li>
-                    </ul>
+                <div>
+                    <h6>Sean Del Rosario</h6>
+                    <p>seanmdelrosariogmail.com</p>
                 </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <h5>Contact Us</h5>
-                    <div>
-                        <h6> Cedrick Andor</h6>
-                        <p>andorced@gmail.com</p>
-                    </div>
-                    <div>
-                        <h6>Sean Martin Del Rosario</h6>
-                        <p>seanmdelrosariogmail.com</p>
-                    </div>
-                    <div>
-                        <h6>Romero</h6>
-                        <p>miguel_romero@myyahoo.com</p>
-                    </div>
+                <div>
+                    <h6>Miguel Romero</h6>
+                    <p>miguel_romero@myyahoo.com</p>
                 </div>
             </div>
         </div>
-    </footer>
+    </div>
+</footer>
+
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 

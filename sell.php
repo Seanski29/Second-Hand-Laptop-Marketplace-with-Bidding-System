@@ -57,8 +57,8 @@ if ($product->sell()) {
 <body>
 
 <!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg bg-body-tertiary bg-dark">
-    <div class="container-fluid bg-light-dark">
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
         <img src="assets/images/Logo.webp" width="45" height="55" alt="Logo">
         <a class="navbar-brand" href="#">LaptopHaven</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll">
@@ -78,14 +78,15 @@ if ($product->sell()) {
                     <a class="button-navbar" href="login.php">Login</a>
                     <a class="button-navbar" href="register.php">Register</a>
                 <?php endif; ?>
-                
-                <input class="form-control me-2" type="search" placeholder="Search">
-                <button class="btn btn-primary" type="submit">Search</button>
+                </form>
+            <form class="d-flex" method="GET" action="search.php">
+                <input class="form-control me-2" type="search" name="query" placeholder="Search" required>
+                <button class="btn btn-outline-success" type="submit">Search</button>
             </form>
         </div>
     </div>
 </nav>
-<!-- NAVBAR -->
+<!-- END OF NAVBAR -->
   <!-- SELL PAGE FORM -->
   <div class="container my-5">
         <h1 class="text-center mb-4">Sell Your Product</h1>
@@ -124,44 +125,38 @@ if ($product->sell()) {
             <button type="submit" class="btn btn-primary w-100">Submit Product</button>
         </form>
     </div>
-<!----FOOTER--->
+<!-- FOOTER -->
 <footer class="mt-5 py-5 bg-dark text-white">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-3 col-md-6 col-sm-12 text-center">
-                    <img src="assets/images/Logo.webp" alt="LaptopHaven Logo" width="70" height="100">
-                    <p class="pt-3">We are happy that you chose LaptopHaven for your second-hand laptop hunting!</p>
+    <div class="container">
+        <div class="row">
+            <!-- Logo and Description Section -->
+            <div class="col-lg-6 col-md-6 col-sm-12 text-center">
+                <img src="assets/images/Logo.webp" alt="LaptopHaven Logo" width="70" height="100">
+                <p class="pt-3">We are happy that you chose LaptopHaven for your second-hand laptop hunting!</p>
+            </div>
+
+            <!-- Contact Us Section aligned to the right -->
+            <div class="col-lg-6 col-md-6 col-sm-12 text-lg-end text-md-end">
+                <h5>Contact Us</h5>
+                <div>
+                    <h6>Cedrick Andor</h6>
+                    <p>andorced@gmail.com</p>
                 </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <h5>Categories</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#">Budget-Friendly</a></li>
-                        <li><a href="#">Low-End</a></li>
-                        <li><a href="#">Mid-End</a></li>
-                        <li><a href="#">High-End</a></li>
-                    </ul>
+                <div>
+                    <h6>Sean Del Rosario</h6>
+                    <p>seanmdelrosariogmail.com</p>
                 </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <h5>Contact Us</h5>
-                    <div>
-                        <h6> Cedrick Andor</h6>
-                        <p>andorced@gmail.com</p>
-                    </div>
-                    <div>
-                        <h6>Sean Martin Del Rosario</h6>
-                        <p>seanmdelrosariogmail.com</p>
-                    </div>
-                    <div>
-                        <h6>Romero</h6>
-                        <p>miguel_romero@myyahoo.com</p>
-                    </div>
+                <div>
+                    <h6>Miguel Romero</h6>
+                    <p>miguel_romero@myyahoo.com</p>
                 </div>
             </div>
         </div>
-    </footer>
+    </div>
+</footer>
+
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>
-

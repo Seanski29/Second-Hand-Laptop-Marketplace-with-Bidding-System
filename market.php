@@ -4,7 +4,6 @@ require_once 'server/session.php';
 
 $session = new Session();
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,9 +17,9 @@ $session = new Session();
 </head>
 <body>
 
-<!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg bg-body-tertiary bg-dark">
-    <div class="container-fluid bg-light-dark">
+    <!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
         <img src="assets/images/Logo.webp" width="45" height="55" alt="Logo">
         <a class="navbar-brand" href="#">LaptopHaven</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll">
@@ -40,16 +39,20 @@ $session = new Session();
                     <a class="button-navbar" href="login.php">Login</a>
                     <a class="button-navbar" href="register.php">Register</a>
                 <?php endif; ?>
-                
-                <input class="form-control me-2" type="search" placeholder="Search">
-                <button class="btn btn-primary" type="submit">Search</button>
+                </form>
+            <form class="d-flex" method="GET" action="search.php">
+                <input class="form-control me-2" type="search" name="query" placeholder="Search" required>
+                <button class="btn btn-outline-success" type="submit">Search</button>
             </form>
         </div>
     </div>
 </nav>
-<!-- NAVBAR -->
+<!-- END OF NAVBAR -->
 
     <!-- START OF MARKET SECTION -->
+     <div text-center>
+     <h1 class="text-center mb-4 pt-5">Laptop Market</h1>
+     </div>
     <section id="brand" class="container py-5">
     <div class="row">
         <!-- DB connection get products -->
@@ -64,12 +67,7 @@ $session = new Session();
                     <p class="product-description"><?php echo $row['product_description']; ?></p>
                     <p class="starting-price">Starting Price: $<?php echo $row['starting_price']; ?></p>
                     <p class="highest-bid">Highest Bid: $<?php echo $row['highest_bid']; ?></p>
-                    <p class="bid_deadline">Bidding Deadline: <?php echo $row['bid_deadline']; ?></p>
-                    <?php if ($session->isLoggedIn()): ?>
-                        <a href="bid.php?product_id=<?php echo $row['product_id']; ?>"><button class="btn btn-primary w-100 mt-auto">Enter Bid</button></a>
-                    <?php else: ?>
-                        <a href="login.php"><button class="btn btn-primary w-100 mt-auto">Enter Bid</button></a>
-                    <?php endif; ?>
+                    <a href="<?php echo "bid.php?product_id=" . $row['product_id']; ?>"><button class="btn btn-primary w-100 mt-auto">Enter Bid</button></a>
                 </div>
             </div>
         </div>
@@ -78,41 +76,36 @@ $session = new Session();
 </section>
     <!-- END OF MARKET SECTION -->
 
-<!----FOOTER--->
+  <!-- FOOTER -->
 <footer class="mt-5 py-5 bg-dark text-white">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-3 col-md-6 col-sm-12 text-center">
-                    <img src="assets/images/Logo.webp" alt="LaptopHaven Logo" width="70" height="100">
-                    <p class="pt-3">We are happy that you chose LaptopHaven for your second-hand laptop hunting!</p>
+    <div class="container">
+        <div class="row">
+            <!-- Logo and Description Section -->
+            <div class="col-lg-6 col-md-6 col-sm-12 text-center">
+                <img src="assets/images/Logo.webp" alt="LaptopHaven Logo" width="70" height="100">
+                <p class="pt-3">We are happy that you chose LaptopHaven for your second-hand laptop hunting!</p>
+            </div>
+
+            <!-- Contact Us Section aligned to the right -->
+            <div class="col-lg-6 col-md-6 col-sm-12 text-lg-end text-md-end">
+                <h5>Contact Us</h5>
+                <div>
+                    <h6>Cedrick Andor</h6>
+                    <p>andorced@gmail.com</p>
                 </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <h5>Categories</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#">Budget-Friendly</a></li>
-                        <li><a href="#">Low-End</a></li>
-                        <li><a href="#">Mid-End</a></li>
-                        <li><a href="#">High-End</a></li>
-                    </ul>
+                <div>
+                    <h6>Sean Del Rosario</h6>
+                    <p>seanmdelrosariogmail.com</p>
                 </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <h5>Contact Us</h5>
-                    <div>
-                        <h6> Cedrick Andor</h6>
-                        <p>andorced@gmail.com</p>
-                    </div>
-                    <div>
-                        <h6>Sean Martin Del Rosario</h6>
-                        <p>seanmdelrosariogmail.com</p>
-                    </div>
-                    <div>
-                        <h6>Romero</h6>
-                        <p>miguel_romero@myyahoo.com</p>
-                    </div>
+                <div>
+                    <h6>Miguel Romero</h6>
+                    <p>miguel_romero@myyahoo.com</p>
                 </div>
             </div>
         </div>
-    </footer>
+    </div>
+</footer>
+
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 

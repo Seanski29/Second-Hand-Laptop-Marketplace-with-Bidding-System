@@ -1,8 +1,31 @@
 <?php
-require_once 'server/connection.php';
-require_once 'server/session.php';
-
+require_once 'server/connection.php'; // Ensure your database connection is included
+require_once 'server/crud.php'; // Include your CRUD operations
+require_once 'server/session.php'; // Include the Session class file
 $session = new Session();
+
+// Check if the search query is set
+if (isset($_GET['query'])) {
+    $search_query = htmlspecialchars(trim($_GET['query']));
+
+    // Database connection
+    $database = new Database();
+    $db = $database->getConnection();
+
+    // Prepare the SQL statement
+    $query = "SELECT * FROM products WHERE product_name LIKE :search_query OR product_description LIKE :search_query";
+    $stmt = $db->prepare($query);
+    
+    // Use wildcards for searching
+    $search_param = "%" . $search_query . "%";
+    $stmt->bindParam(':search_query', $search_param);
+
+    // Execute the query
+    $stmt->execute();
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} else {
+    $results = [];
+}
 ?>
 
 <!DOCTYPE html>
@@ -10,15 +33,14 @@ $session = new Session();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home - LaptopHaven</title>
+    <title>Search Results</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="assets/css/style.css"/>
     <script src="assets/js/alert.js"></script>
 </head>
 <body>
-
-<!-- NAVBAR -->
+    <!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
         <img src="assets/images/Logo.webp" width="45" height="55" alt="Logo">
@@ -48,52 +70,33 @@ $session = new Session();
         </div>
     </div>
 </nav>
-<!-- END OF NAVBAR -->
 
-
-    <!-- HOME TEXT SECTION -->
-    <section id="home" class="text-center py-5">
-        <div class="container">
-            <h5>WELCOME TO LAPTOPHAVEN</h5>
-            <h1>Find Your Second-Hand Choices Here</h1>
-            <p>We offer the best prices and auctions</p>
-            <a href="market.php">
-                <button class="btn btn-primary">Find Now</button>
-            </a>
+    <!-- SEARCH RESULTS SECTION -->
+    <div class="container my-5">
+        <h2>Search Results for "<?php echo htmlspecialchars($search_query); ?>"</h2>
+        <div class="row">
+            <?php if (!empty($results)): ?>
+                <?php foreach ($results as $product): ?>
+                    <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+                        <div class="card h-100">
+                            <img class="card-img-top" src="assets/images/<?php echo htmlspecialchars($product['product_image']); ?>" alt="<?php echo htmlspecialchars($product['product_name']); ?>">
+                            <div class="card-body">
+                                <h5 class="card-title"><?php echo htmlspecialchars($product['product_name']); ?></h5>
+                                <p class="card-text"><?php echo htmlspecialchars($product['product_description']); ?></p>
+                                <p class="card-text">Starting Price: $<?php echo htmlspecialchars($product['starting_price']); ?></p>
+                                <p class="card-text">Highest Bid: $<?php echo htmlspecialchars($product['highest_bid']); ?></p>
+                                <a href="bid.php?product_id=<?php echo htmlspecialchars($product['product_id']); ?>" class="btn btn-primary">Enter Bid</a>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <div class="col-12">
+                    <p>No products found matching your search.</p>
+                </div>
+            <?php endif; ?>
         </div>
-    </section>
-
-    <!-- BRANDS SECTION -->
-    <section id="brands" class="py-5">
-        <div class="container">
-            <div class="row g-3">
-                <div id="brandings" class="col-lg-3 col-md-6 col-sm-12">
-                    <img class="img-fluid" src="assets/images/Asus.jpg" alt="Asus">
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <img class="img-fluid" src="assets/images/MSI.jpg" alt="MSI">
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <img class="img-fluid" src="assets/images/Lenovo.jpg" alt="Lenovo">
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <img class="img-fluid" src="assets/images/Gigabyte.jpg" alt="Gigabyte">
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <img class="img-fluid" src="assets/images/Dell.jpg" alt="Dell">
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <img class="img-fluid" src="assets/images/HP.jpg" alt="HP">
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <img class="img-fluid" src="assets/images/Acer.jpg" alt="Acer">
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <img class="img-fluid" src="assets/images/Razer.png" alt="Razer">
-                </div>
-            </div>
-        </div>
-    </section>
+    </div>
 
     <!-- FOOTER -->
 <footer class="mt-5 py-5 bg-dark text-white">
