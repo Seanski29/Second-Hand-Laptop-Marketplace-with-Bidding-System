@@ -20,8 +20,8 @@ if (!$session->isLoggedIn()) {
 <body>
 
 <!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg bg-body-tertiary bg-dark">
-    <div class="container-fluid bg-light-dark">
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
         <img src="assets/images/Logo.webp" width="45" height="55" alt="Logo">
         <a class="navbar-brand" href="#">LaptopHaven</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll">
@@ -41,14 +41,15 @@ if (!$session->isLoggedIn()) {
                     <a class="button-navbar" href="login.php">Login</a>
                     <a class="button-navbar" href="register.php">Register</a>
                 <?php endif; ?>
-                
-                <input class="form-control me-2" type="search" placeholder="Search">
-                <button class="btn btn-primary" type="submit">Search</button>
+                </form>
+            <form class="d-flex" method="GET" action="search.php">
+                <input class="form-control me-2" type="search" name="query" placeholder="Search" required>
+                <button class="btn btn-outline-success" type="submit">Search</button>
             </form>
         </div>
     </div>
 </nav>
-<!-- NAVBAR -->
+<!-- END OF NAVBAR -->
 
     <div class="container">
         <h2>Welcome, <?php echo htmlspecialchars($session->get('user_name')); ?>!</h2>
