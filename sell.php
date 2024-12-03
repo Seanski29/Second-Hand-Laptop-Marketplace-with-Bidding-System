@@ -1,47 +1,77 @@
 <?php
-require_once 'server/connection.php';
+
 require_once 'server/crud.php';
-require_once 'server/session.php';
+require_once 'server/database.php';
+require_once 'server/Session.php';
 
 $session = new Session();
 
-if (!$session->isLoggedIn()) {
-    // Redirect to the login page
+// Check if user is logged in
+if (!isset($_SESSION['user_email'])) {
     header("Location: login.php");
-    exit(); // Ensure the script stops executing
+    exit();
 }
 
+// Instantiate the Database class
+$database = new Database();
+$conn = $database->getConnection();
+
 // Check if the form is submitted
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $database = new Database();
-    $db = $database->getConnection();
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Sanitize and validate input data
+    $product_name = htmlspecialchars(trim($_POST['productName']));
+    $product_description = htmlspecialchars(trim($_POST['productDescription']));
+    $starting_price = floatval($_POST['startingPrice']);
+    $bid_deadline = htmlspecialchars(trim($_POST['biddingDeadline']));
 
-    $product = new products($db); // Assuming the Product class exists and is passed the database connection
+    // Handle file upload
+    $target_dir = "C:";  // Directory to store images
+    $file_name = basename($_FILES["productImage"]["name"]);
+    $target_file = $target_dir . uniqid() . "_" . $file_name;  // Use a unique name to avoid conflicts
 
-// Sanitizing and assigning values from POST data to product object properties
-$product->product_name = htmlspecialchars(trim($_POST['productName']));
-$product->product_description = htmlspecialchars(trim($_POST['productDescription'])); // Corrected
-$product->product_image = htmlspecialchars(trim($_FILEST['productImage'])); // Corrected
-$product->starting_price = htmlspecialchars(trim($_POST['startingPrice']));
-$product->bid_deadline = htmlspecialchars(trim($_POST['biddingDeadline']));
+    if (isset($_FILES["productImage"]) && $_FILES["productImage"]["error"] === UPLOAD_ERR_OK) {
+        // Check if the upload directory is writable
+        if (is_writable($target_dir)) {
+            // Move the uploaded file to the target directory
+            if (move_uploaded_file($_FILES["productImage"]["tmp_name"], $target_file)) {
+                // Insert product data into the database
+                $sql = "INSERT INTO products (product_name, product_description, product_image, starting_price, bid_deadline) 
+                        VALUES (?, ?, ?, ?, ?)";
 
+                if ($stmt = $conn->prepare($sql)) {
+                    // Bind parameters and execute the query
+                    $stmt->bindParam(1, $product_name);
+                    $stmt->bindParam(2, $product_description);
+                    $stmt->bindParam(3, $target_file);
+                    $stmt->bindParam(4, $starting_price);
+                    $stmt->bindParam(5, $bid_deadline);
 
-// If you're using product_id manually, you can assign it like this (e.g., auto-incrementing database, don't assign product_id directly):
-$product->product_id = null; // or $_POST['product_id'] if it's passed as part of the form (not recommended for user input)
-
-if ($product->sell()) {
-        echo "
-        <script>
-            alert('Submission Complete!');
-            window.location.href = 'market.php';  // Redirect to market page after successful selling
-        </script>";
+                    if ($stmt->execute()) {
+                        echo "
+                        <script>
+                            alert('Product has been added to the marketplace!');
+                            window.location.href = 'market.php';
+                        </script>";
+                    } else {
+                        echo "Error: " . $stmt->errorInfo()[2];
+                    }
+                    $stmt = null;
+                } else {
+                    echo "Error preparing the SQL statement.";
+                }
+            } else {
+                echo "Error uploading the image.";
+            }
+        } else {
+            echo "Error: Upload directory is not writable.";
+        }
     } else {
-        echo "<script>
-        alert('Error! Please try again.');
-            </script>";
+        echo "No file uploaded or there was an error uploading the file.";
     }
 }
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">

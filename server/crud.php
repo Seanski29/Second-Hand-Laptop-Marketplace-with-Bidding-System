@@ -76,41 +76,60 @@ class products {
     public function __construct($db) {
         $this->conn = $db;
     }
-    public function sell() {
-        // Ensure all fields are provided
-        if (empty($this->product_name) || empty($this->product_description) || empty($this->product_image) || empty($this->starting_price) || empty($this->bid_deadline)) {
-            return false; 
-        }
+
     
-        // Prepare the insert query
-        $query = "INSERT INTO " . $this->table_name . " (product_name, product_description, product_image, starting_price, bid_deadline) 
-                  VALUES (:name, :description, :image, :price, :deadline)";
-        $stmt = $this->conn->prepare($query);
-    
-        // Sanitize and bind parameters
-        $this->product_name = htmlspecialchars(strip_tags($this->product_name));
-        $this->product_description = htmlspecialchars(strip_tags($this->product_description));
-        $this->product_image = htmlspecialchars(strip_tags($this->product_image));  // Assuming $product_image is a file path or URL
-        $this->starting_price = htmlspecialchars(strip_tags($this->starting_price)); // Ensure numeric values are properly handled
-        $this->bid_deadline = htmlspecialchars(strip_tags($this->bid_deadline)); // Assuming this is in a valid date format
-    
-        // Bind parameters
-        $stmt->bindParam(":name", $this->product_name);
-        $stmt->bindParam(":description", $this->product_description);
-        $stmt->bindParam(":image", $this->product_image);
-        $stmt->bindParam(":price", $this->starting_price);
-        $stmt->bindParam(":deadline", $this->bid_deadline);
-    
-        // Execute and return success or failure
+    // Sell a product (insert into products table)
+    public function sell($product_name, $product_description, $starting_price, $bid_deadline, $file)
+{
+    // Directory for storing uploaded images
+    $target_dir = "assets/images/";
+    $file_name = basename($file["name"]);
+    $target_file = $target_dir . uniqid() . "_" . $file_name; // Unique file name
+
+    // Allowed file types and size limit
+    $allowed_types = ['image/jpeg', 'image/png', 'image/jpg'];
+    $max_file_size = 2 * 1024 * 1024; // 2MB
+
+    // Validate file
+    if (!in_array(mime_content_type($file["tmp_name"]), $allowed_types)) {
+        return "Invalid file type. Only JPG, JPEG, and PNG files are allowed.";
+    }
+    if ($file["size"] > $max_file_size) {
+        return "File size exceeds the 2MB limit.";
+    }
+    if (!is_writable($target_dir)) {
+        return "Upload directory is not writable.";
+    }
+
+    // Move uploaded file
+    if (!move_uploaded_file($file["tmp_name"], $target_file)) {
+        return "Error uploading the image.";
+    }
+
+    // Sanitize input data
+    $product_name = htmlspecialchars(strip_tags($product_name));
+    $product_description = htmlspecialchars(strip_tags($product_description));
+    $starting_price = floatval($starting_price);
+    $bid_deadline = htmlspecialchars(strip_tags($bid_deadline));
+
+    // Insert product data into the database
+    $query = "INSERT INTO products (product_name, product_description, product_image, starting_price, bid_deadline) 
+              VALUES (:product_name, :product_description, :product_image, :starting_price, :bid_deadline)";
+    $stmt = $this->conn->prepare($query);
+
+    // Bind parameters
+    $stmt->bindParam(':product_name', $product_name);
+    $stmt->bindParam(':product_description', $product_description);
+    $stmt->bindParam(':product_image', $target_file);
+    $stmt->bindParam(':starting_price', $starting_price);
+    $stmt->bindParam(':bid_deadline', $bid_deadline);
+
+        // Execute the query and check for success
         if ($stmt->execute()) {
             return true;
         }
-    
+
         return false;
     }
 }
-
-    
-
-
 ?>
