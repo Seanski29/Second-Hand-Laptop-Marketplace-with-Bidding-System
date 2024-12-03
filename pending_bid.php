@@ -44,8 +44,8 @@ if (!$product) {
 <!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-        <img src="assets/images/Logo.webp" width="45" height="55" alt="Logo">
-        <a class="navbar-brand" href="#">LaptopHaven</a>
+    <img src="assets/images/Logo.webp?v=2" width="85" height="75" alt="assets/images/Logo.webp">
+    <a class="navbar-brand" href="#">       |    LaptopHaven     |      </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -92,7 +92,7 @@ if (!$product) {
         <div class="row">
             <!-- Logo and Description Section -->
             <div class="col-lg-6 col-md-6 col-sm-12 text-center">
-                <img src="assets/images/Logo.webp" alt="LaptopHaven Logo" width="70" height="100">
+            <img src="assets/images/Logo.webp?v=2" alt="LaptopHaven Logo" width="175" height="155">
                 <p class="pt-3">We are happy that you chose LaptopHaven for your second-hand laptop hunting!</p>
             </div>
 
