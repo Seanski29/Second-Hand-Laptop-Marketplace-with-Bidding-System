@@ -85,7 +85,7 @@ if (isset($_GET['query'])) {
                                 <p class="card-text"><?php echo htmlspecialchars($product['product_description']); ?></p>
                                 <p class="card-text">Starting Price: $<?php echo htmlspecialchars($product['starting_price']); ?></p>
                                 <p class="card-text">Highest Bid: $<?php echo htmlspecialchars($product['highest_bid']); ?></p>
-                                <p class="bid_deadline">Bidding Deadline: <?php echo $row['bid_deadline']; ?></p>
+                                <p class="bid_deadline">Bidding Deadline: $<?php echo htmlspecialchars($product['bid_deadline']); ?></p>
                                 <a href="bid.php?product_id=<?php echo htmlspecialchars($product['product_id']); ?>" class="btn btn-primary">Enter Bid</a>
                             </div>
                         </div>
