@@ -50,13 +50,15 @@ $session = new Session();
 
     <div class="about-page">
         <div class="learnmore">
-            <h1 class="us">About Us</h1>
-            <div class="about-bg">
-                <img src="aboutusbg.jpg" alt="About Us Background">
+            <div class="aboutlogo">
+            <h3>About Us</h3>
+            <img src="assets/images/Logo.webp?v=2 img-center" alt="LaptopHaven Logo" width="300" height="300">
             </div>
-            <p class="about-text">Welcome to LaptopHaven, the premier online marketplace for second-hand laptops. Our platform is designed to connect buyers and sellers in a seamless, secure, and transparent environment. Looking for a budget-friendly laptop? We've got you covered!</p>
             
-            <h1 class="mission">Our Mission</h1>
+            <h2>What are we?</h2>
+            <p class="about-text">Welcome to LaptopHaven, the premier online marketplace for second-hand laptops. Our platform is designed to connect buyers and sellers in a seamless, secure, and transparent environment. Looking for a budget-friendly laptop? We've got you covered!</p>
+            <br>
+            <h2>Our Mission</h2>
             <p class="mission-text">At LaptopHaven, our mission is to provide a trusted, user-friendly platform for buying and selling second-hand laptops, empowering customers with affordable, high-quality technology options. We aim to create a transparent, competitive marketplace with our innovative bidding system, ensuring both buyers and sellers enjoy a seamless, secure experience. Through our commitment to sustainability and customer satisfaction, we strive to contribute to a smarter, more sustainable digital future.</p>
     
             <h1 class="team">Our Team</h1>

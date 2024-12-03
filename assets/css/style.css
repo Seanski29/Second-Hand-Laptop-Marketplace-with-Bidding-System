@@ -289,21 +289,7 @@ button:hover {
     color: red;
 }
 
-.learnmore {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: auto; 
-    background-image: url('../images/aboutusbg.jpg');
-    background-attachment: fixed;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    font-size: 30px;
-}
+
 
 .us, .mission {
     text-align: center; /* Center the text */
@@ -390,12 +376,7 @@ button:hover {
     margin-bottom: 20px;
 }
 
-.about-bg img {
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-    margin-bottom: 20px;
-}
+
 
 .about-text, .mission-text {
     font-size: 18px;
@@ -505,5 +486,11 @@ contributors-container li {
     }
 }
 
+.aboutlogo {
+    display: flex;
+    justify-content: center; /* Centers horizontally */
+    align-items: center; /* Centers vertically */
+    height: 100vh; /* Adjust height to your needs */
+}
     
 
