@@ -45,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
 
-    <!-- NAVBAR -->
+<!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
         <img src="assets/images/Logo.webp" width="45" height="55" alt="Logo">
@@ -56,42 +56,85 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="collapse navbar-collapse" id="navbarScroll">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="#brandings">Brands</a></li>
                 <li class="nav-item"><a class="nav-link" href="market.php">Market</a></li>
-                <li class="nav-item"><a class="nav-link" href="sell.html">Sell</a></li>
-                <li class="nav-item"><a class="nav-link" href="#footer">Contact</a></li>
-                <li class="nav-item"><a class="nav-link" href="about us.html">About us</a></li>
+                <li class="nav-item"><a class="nav-link" href="sell.php">Sell</a></li>
+                <li class="nav-item"><a class="nav-link" href="about us.php">About Us</a></li>
             </ul>
             <form class="d-flex">
-                <input class="form-control me-2" type="search" placeholder="Search">
+                <?php if ($session->isLoggedIn()): ?>
+                    <a class="button-navbar" href="dashboard.php">Logout</a>
+                <?php else: ?>
+                    <a class="button-navbar" href="login.php">Login</a>
+                    <a class="button-navbar" href="register.php">Register</a>
+                <?php endif; ?>
+                </form>
+            <form class="d-flex" method="GET" action="search.php">
+                <input class="form-control me-2" type="search" name="query" placeholder="Search" required>
                 <button class="btn btn-outline-success" type="submit">Search</button>
             </form>
         </div>
     </div>
 </nav>
+<!-- END OF NAVBAR -->
 
 <!-- LOGIN FORM -->
-<div class="container my-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <h2 class="text-center">Login</h2>
-            <form method="POST" action="login.php">
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email address</label>
-                    <input type="email" class="form-control" id="email" name="email" required>
-                </div>
-                <div class="mb-3">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" name="password" required>
-                </div>
+<section class="my-5 py-5">
+    <div class="container text-center mt-3 pt-5">
+        <h2 class="font-weight-bold">Log IN</h2>
+        <hr class="mx-auto">
+    </div>
+    <div class="mx-auto container">
+        <form id="register-form" method="POST" action="login.php">
+            <div class="mb-3">
+                <label for="login-email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="register-email" name="email" placeholder="Email" required>
+            </div>
+            <div class="mb-3">
+                <label for="register-password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="register-password" name="password" placeholder="Password" required>
+            </div>
+            <div class="mb-3">
                 <button type="submit" name="login" class="btn btn-primary">Login</button>
-                <a href="register.php" class="btn btn-link">Register</a>
-            </form>
+            </div>
+            <div class="mb-3">
+                <a href="register.php" class="btn btn-link">Don't have an account? Register!</a>
+            </div>
+        </form>
+    </div>
+</section>
+<!-- FOOTER -->
+<footer class="mt-5 py-5 bg-dark text-white">
+    <div class="container">
+        <div class="row">
+            <!-- Logo and Description Section -->
+            <div class="col-lg-6 col-md-6 col-sm-12 text-center">
+                <img src="assets/images/Logo.webp" alt="LaptopHaven Logo" width="70" height="100">
+                <p class="pt-3">We are happy that you chose LaptopHaven for your second-hand laptop hunting!</p>
+            </div>
+
+            <!-- Contact Us Section aligned to the right -->
+            <div class="col-lg-6 col-md-6 col-sm-12 text-lg-end text-md-end">
+                <h5>Contact Us</h5>
+                <div>
+                    <h6>Cedrick Andor</h6>
+                    <p>andorced@gmail.com</p>
+                </div>
+                <div>
+                    <h6>Sean Del Rosario</h6>
+                    <p>seanmdelrosariogmail.com</p>
+                </div>
+                <div>
+                    <h6>Miguel Romero</h6>
+                    <p>miguel_romero@myyahoo.com</p>
+                </div>
+            </div>
         </div>
     </div>
-</div>
+</footer>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
 

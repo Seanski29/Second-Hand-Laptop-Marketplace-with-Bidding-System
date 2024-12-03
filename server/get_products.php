@@ -2,7 +2,7 @@
 require_once('connection.php');
 
 
-$stmt = $conn->prepare("SELECT * FROM products LIMIT 8");
+$stmt = $conn->prepare("SELECT * FROM products");
 $stmt->execute();
 
 

@@ -6,11 +6,15 @@ class User {
     public $user_name;
     public $user_email;
     public $user_password;
+    
+   
+
+    
 
     public function __construct($db) {
         $this->conn = $db;
     }
-
+    
     public function create() {
         if (empty($this->user_name) || empty($this->user_email) || empty($this->user_password)) {
             return false; 
@@ -55,6 +59,77 @@ class User {
         } else {
             return false;
         }
+    }
+    
+}
+
+class products {
+    private $conn;
+    private $table_name = "users"; 
+    public $product_id;
+    public $product_name;
+    public $product_description;
+    public $product_image;
+    public $starting_price;
+    public $bid_deadline;
+   
+    public function __construct($db) {
+        $this->conn = $db;
+    }
+
+    
+    // Sell a product (insert into products table)
+    public function sell($product_name, $product_description, $starting_price, $bid_deadline, $file)
+{
+    // Directory for storing uploaded images
+    $target_dir = "assets/images/";
+    $file_name = basename($file["name"]);
+    $target_file = $target_dir . uniqid() . "_" . $file_name; // Unique file name
+
+    // Allowed file types and size limit
+    $allowed_types = ['image/jpeg', 'image/png', 'image/jpg'];
+    $max_file_size = 2 * 1024 * 1024; // 2MB
+
+    // Validate file
+    if (!in_array(mime_content_type($file["tmp_name"]), $allowed_types)) {
+        return "Invalid file type. Only JPG, JPEG, and PNG files are allowed.";
+    }
+    if ($file["size"] > $max_file_size) {
+        return "File size exceeds the 2MB limit.";
+    }
+    if (!is_writable($target_dir)) {
+        return "Upload directory is not writable.";
+    }
+
+    // Move uploaded file
+    if (!move_uploaded_file($file["tmp_name"], $target_file)) {
+        return "Error uploading the image.";
+    }
+
+    // Sanitize input data
+    $product_name = htmlspecialchars(strip_tags($product_name));
+    $product_description = htmlspecialchars(strip_tags($product_description));
+    $starting_price = floatval($starting_price);
+    $bid_deadline = htmlspecialchars(strip_tags($bid_deadline));
+
+    // Insert product data into the database
+    $query = "INSERT INTO products (product_name, product_description, product_image, starting_price, bid_deadline) 
+              VALUES (:product_name, :product_description, :product_image, :starting_price, :bid_deadline)";
+    $stmt = $this->conn->prepare($query);
+
+    // Bind parameters
+    $stmt->bindParam(':product_name', $product_name);
+    $stmt->bindParam(':product_description', $product_description);
+    $stmt->bindParam(':product_image', $target_file);
+    $stmt->bindParam(':starting_price', $starting_price);
+    $stmt->bindParam(':bid_deadline', $bid_deadline);
+
+        // Execute the query and check for success
+        if ($stmt->execute()) {
+            return true;
+        }
+
+        return false;
     }
 }
 ?>

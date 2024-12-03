@@ -1,7 +1,7 @@
 <?php
-session_start();
 require_once 'server/connection.php';
-require_once 'server/crud.php';
+require_once 'server/session.php';
+$session = new Session();
 
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -12,7 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user->user_name = htmlspecialchars(trim($_POST['name']));
     $user->user_email = htmlspecialchars(trim($_POST['email']));
     $user->user_password = htmlspecialchars(trim($_POST['password']));
-
+   
     // Create the user
     if ($user->create()) {
         echo "
@@ -21,7 +21,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             window.location.href = 'login.php';  // Redirect to login page after successful registration
         </script>";
     } else {
-        echo "<script>alert('Error! Please try again.');</script>";
+        echo "<script>
+        alert('Error! Please try again.');
+            </script>";
     }
 }
 ?>
@@ -50,19 +52,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="collapse navbar-collapse" id="navbarScroll">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="#brandings">Brands</a></li>
                 <li class="nav-item"><a class="nav-link" href="market.php">Market</a></li>
-                <li class="nav-item"><a class="nav-link" href="sell.html">Sell</a></li>
-                <li class="nav-item"><a class="nav-link" href="#footer">Contact</a></li>
-                <li class="nav-item"><a class="nav-link" href="about us.html">About Us</a></li>
+                <li class="nav-item"><a class="nav-link" href="sell.php">Sell</a></li>
+                <li class="nav-item"><a class="nav-link" href="about us.php">About Us</a></li>
             </ul>
             <form class="d-flex">
-                <input class="form-control me-2" type="search" placeholder="Search">
+                <?php if ($session->isLoggedIn()): ?>
+                    <a class="button-navbar" href="dashboard.php">Logout</a>
+                <?php else: ?>
+                    <a class="button-navbar" href="login.php">Login</a>
+                    <a class="button-navbar" href="register.php">Register</a>
+                <?php endif; ?>
+                </form>
+            <form class="d-flex" method="GET" action="search.php">
+                <input class="form-control me-2" type="search" name="query" placeholder="Search" required>
                 <button class="btn btn-outline-success" type="submit">Search</button>
             </form>
         </div>
     </div>
 </nav>
+<!-- END OF NAVBAR -->
 
 <!-- Register SECTION -->
 <section class="my-5 py-5">
@@ -102,38 +111,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <footer class="mt-5 py-5 bg-dark text-white">
     <div class="container">
         <div class="row">
-            <div class="col-lg-3 col-md-6 col-sm-12 text-center">
+            <!-- Logo and Description Section -->
+            <div class="col-lg-6 col-md-6 col-sm-12 text-center">
                 <img src="assets/images/Logo.webp" alt="LaptopHaven Logo" width="70" height="100">
                 <p class="pt-3">We are happy that you chose LaptopHaven for your second-hand laptop hunting!</p>
             </div>
-            <div class="col-lg-3 col-md-6 col-sm-12">
-                <h5>Categories</h5>
-                <ul class="list-unstyled">
-                    <li><a href="#">Budget-Friendly</a></li>
-                    <li><a href="#">Low-End</a></li>
-                    <li><a href="#">Mid-End</a></li>
-                    <li><a href="#">High-End</a></li>
-                </ul>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-12">
+
+            <!-- Contact Us Section aligned to the right -->
+            <div class="col-lg-6 col-md-6 col-sm-12 text-lg-end text-md-end">
                 <h5>Contact Us</h5>
                 <div>
-                    <h6>Andor</h6>
-                    <p>123 Lipa City Batangas</p>
+                    <h6>Cedrick Andor</h6>
+                    <p>andorced@gmail.com</p>
                 </div>
                 <div>
-                    <h6>Del Rosario</h6>
-                    <p>123 Lipa City Batangas</p>
+                    <h6>Sean Del Rosario</h6>
+                    <p>seanmdelrosariogmail.com</p>
                 </div>
                 <div>
-                    <h6>Romero</h6>
-                    <p>123 Lipa City Batangas</p>
+                    <h6>Miguel Romero</h6>
+                    <p>miguel_romero@myyahoo.com</p>
                 </div>
             </div>
         </div>
     </div>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
