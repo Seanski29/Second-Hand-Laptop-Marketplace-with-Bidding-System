@@ -6,7 +6,7 @@ Greetings! We are the BSIT | Group 6 of Batangas State University TNEU, here to 
 - [Introduction](#introduction)
 - [Features](#features)
 - [Usage](#usage)
-- [Suggestions](#suggestions for others if meddling with this code)
+- [Suggestions](#suggestions)
 - [Contact](#contact)
 - [Installation](#installation)
 ## Introduction
@@ -37,7 +37,8 @@ The purpose of this project is to create a platform that simplifies the process 
 
 
 
-## Suggestions for others if meddling with this code
+## Suggestions
+      Here is what we can say to future programmers who would like to use this
 Improve User Experience:
   Future improvements can include adding a feedback system for buyers and sellers, making the bidding process more interactive, and introducing real-time chat features for better communication between buyers and sellers.
 
