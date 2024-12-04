@@ -53,7 +53,7 @@ $session = new Session();
 
     <!-- HOME TEXT SECTION -->
     <section id="home" class="text-center py-5">
-        <div class="container">
+        <div class="container home-text">
             <h5>WELCOME TO LAPTOPHAVEN</h5>
             <h1>Find Your Second-Hand Choices Here</h1>
             <p>We offer the best prices and auctions</p>

@@ -73,31 +73,44 @@ if (isset($_GET['query'])) {
 
     <!-- SEARCH RESULTS SECTION -->
     <div class="container my-5">
-        <h2>Search Results for "<?php echo htmlspecialchars($search_query); ?>"</h2>
-        <div class="row">
-            <?php if (!empty($results)): ?>
-                <?php foreach ($results as $product): ?>
-                    <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
-                        <div class="card h-100">
-                            <img class="card-img-top" src="assets/images/<?php echo htmlspecialchars($product['product_image']); ?>" alt="<?php echo htmlspecialchars($product['product_name']); ?>">
-                            <div class="card-body">
-                                <h5 class="card-title"><?php echo htmlspecialchars($product['product_name']); ?></h5>
-                                <p class="card-text"><?php echo htmlspecialchars($product['product_description']); ?></p>
-                                <p class="card-text">Starting Price: $<?php echo htmlspecialchars($product['starting_price']); ?></p>
-                                <p class="card-text">Highest Bid: $<?php echo htmlspecialchars($product['highest_bid']); ?></p>
-                                <p class="bid_deadline">Bidding Deadline: $<?php echo htmlspecialchars($product['bid_deadline']); ?></p>
-                                <a href="bid.php?product_id=<?php echo htmlspecialchars($product['product_id']); ?>" class="btn btn-primary">Enter Bid</a>
-                            </div>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <div class="col-12">
-                    <p>No products found matching your search.</p>
+    <h2>Search Results for "<?php echo htmlspecialchars($search_query); ?>"</h2>
+    <div class="row">
+        <?php if (!empty($results)): ?>
+            
+            <?php foreach ($results as $row): ?>
+                
+                <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+                <div class="card h-100 d-flex flex-column">
+                <?php 
+            // Check the number of results
+            $result_count = count($results);
+            $col_class = ($result_count == 1) ? 'col-12' : 'col-lg-3 col-md-6 col-sm-12'; // Full width for 1 result// Use full width if only one result
+            ?>
+            <img 
+                class="card-img-top product-image" 
+                alt="LAPTOP" 
+                src="assets/images/<?php echo htmlspecialchars($row['product_image']); ?>" 
+                onerror="this.onerror=null; this.src='<?php echo htmlspecialchars($row['product_image']); ?>';"/>
+                <div class="card-body d-flex flex-column">
+                    <h3 class="product-title"><?php echo $row['product_name']; ?></h3>
+                    <p class="product-description"><?php echo $row['product_description']; ?></p>
+                    <p class="starting-price">Starting Price: $<?php echo $row['starting_price']; ?></p>
+                    <p class="highest-bid">Highest Bid: $<?php echo $row['highest_bid']; ?></p>
+                    <p class="bid_deadline">Bidding Deadline: <?php echo $row['bid_deadline']; ?></p>
+                    <a href="bid.php?product_id=<?php echo urlencode($row['product_id']); ?>">
+                        <button class="btn btn-primary w-100 mt-auto">Enter Bid</button></a>
                 </div>
-            <?php endif; ?>
+            </div>
         </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <div class="col-12">
+                <p>No products found matching your search.</p>
+            </div>
+        <?php endif; ?>
     </div>
+</div>
+
 
     <!-- FOOTER -->
 <footer class="mt-5 py-5 bg-dark text-white">

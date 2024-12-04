@@ -23,7 +23,7 @@ if (!$session->isLoggedIn()) {
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
     <img src="assets/images/Logo.webp?v=2" width="85" height="75" alt="assets/images/Logo.webp">
-    <a class="navbar-brand" href="#">       |    LaptopHaven     |      </a><
+    <a class="navbar-brand" href="#">       |    LaptopHaven     |      </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll">
             <span class="navbar-toggler-icon"></span>
         </button>

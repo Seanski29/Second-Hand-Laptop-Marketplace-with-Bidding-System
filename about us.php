@@ -51,7 +51,7 @@ $session = new Session();
     <div class="about-page">
         <div class="learnmore">
             <div class="aboutlogo">
-            <h3>About Us</h3>
+
             <img src="assets/images/Logo.webp?v=2 img-center" alt="LaptopHaven Logo" width="300" height="300">
             </div>
             

@@ -25,9 +25,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $bid_deadline = htmlspecialchars(trim($_POST['biddingDeadline']));
 
     // Handle file upload
-    $target_dir = "assets/images/";  // Directory to store images
-    $file_name = basename($_FILES["productImage"]["name"]);
-    $target_file = $target_dir . uniqid() . "_" . $file_name;  // Use a unique name to avoid conflicts
+    $target_dir = "assets/images/";  
+    $file_name = uniqid() . "_" . basename($_FILES["productImage"]["name"]);
+    $target_file = $file_name;
 
     if (isset($_FILES["productImage"]) && $_FILES["productImage"]["error"] === UPLOAD_ERR_OK) {
         // Check if the upload directory is writable
