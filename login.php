@@ -1,4 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.all.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
 <?php
+
 require_once 'server/connection.php';
 require_once 'server/crud.php';
 require_once 'server/session.php';
@@ -19,32 +31,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user->user_email = htmlspecialchars(trim($_POST['email']));
     $user->user_password = $_POST['password']; // Do not hash the password here, it will be verified against the hashed password in the database
 
-    if ($user->login()) {
+    if ($user->login()) { // If login is successful
         $session->set('user_email', $user->user_email);
         $session->set('user_name', $user->user_name);
         $session->set('logged_in', true);
+    
         echo "
         <script>
-        alert('Login successful!');
-        window.location.href = 'market.php';  // Redirect to home page after successful login
+            Swal.fire({
+                title: 'Welcome to LaptopHaven',
+                text: 'Login Successful',
+                icon: 'success'
+            }).then(function() {
+                window.location.href = 'market.php';  // Redirect after SweetAlert closes
+            });
         </script>";
-    } else {
-        echo "<script>alert('Invalid login credentials. Please try again.');</script>";
+    } else { // If login failed
+        echo "
+        <script>
+            Swal.fire({
+                title: 'Oops!',
+                text: 'Invalid login credentials. Please try again.',
+                icon: 'error'
+            }).then(function() {
+                window.location.href = 'login.php';  // Redirect after SweetAlert closes
+            });
+        </script>";
     }
 }
 ?>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.css">
-</head>
-<body>
-
 <!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
@@ -70,7 +85,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </form>
             <form class="d-flex" method="GET" action="search.php">
                 <input class="form-control me-2" type="search" name="query" placeholder="Search" required>
-                <button class="btn btn-outline-success" type="submit">Search</button>
+                <button class="btn btn-outline-success" type="submit" >Search</button>
             </form>
         </div>
     </div>
@@ -94,7 +109,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <input type="password" class="form-control" id="register-password" name="password" placeholder="Password" required>
             </div>
             <div class="mb-3">
-                <button type="submit" name="login" class="btn btn-primary">Login</button>
+                <button id="login" type="submit" name="login" class="btn btn-primary">Login</button>
             </div>
             <div class="mb-3">
                 <a href="register.php" class="btn btn-link">Don't have an account? Register!</a>

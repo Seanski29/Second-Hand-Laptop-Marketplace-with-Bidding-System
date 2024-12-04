@@ -122,12 +122,13 @@ button:hover {
     height: 100vh;
     background-size: cover;
     background-position: center;
-    display: flex;
+    display: flex;  /* Use flexbox to align content */
     justify-content: center;
     align-items: center;
+    margin-left: 150px;  /* Adds a small left margin */
     text-align: center;
-    margin: center;
 }
+
 
 .home-text {
     padding: 0 !important;

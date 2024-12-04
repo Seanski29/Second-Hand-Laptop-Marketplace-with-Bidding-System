@@ -1,3 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sell</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.all.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
 <?php
 
 require_once 'server/crud.php';
@@ -28,12 +39,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $target_dir = "assets/images/";  
     $file_name = uniqid() . "_" . basename($_FILES["productImage"]["name"]);
     $target_file = $file_name;
+    $target_files = $target_dir . $file_name;
 
     if (isset($_FILES["productImage"]) && $_FILES["productImage"]["error"] === UPLOAD_ERR_OK) {
         // Check if the upload directory is writable
         if (is_writable($target_dir)) {
             // Move the uploaded file to the target directory
-            if (move_uploaded_file($_FILES["productImage"]["tmp_name"], $target_file)) {
+            if (move_uploaded_file($_FILES["productImage"]["tmp_name"], $target_files)) {
                 // Insert product data into the database
                 $sql = "INSERT INTO products (product_name, product_description, product_image, starting_price, bid_deadline) 
                         VALUES (?, ?, ?, ?, ?)";
@@ -49,24 +61,42 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     if ($stmt->execute()) {
                         echo "
                         <script>
-                            alert('Product has been added to the marketplace!');
-                            window.location.href = 'market.php';
+                            Swal.fire({
+                                icon: 'success',
+                                     title: 'Your product is now listed in the marketplace.',
+                                    text: 'Please wait for the highest bidder',
+                                    showConfirmButton: false,
+                                    timer: 7000
+                            }).then(function() {
+                                window.location.href = 'market.php';  // Redirect after SweetAlert closes
+                            });
                         </script>";
                     } else {
                         echo "Error: " . $stmt->errorInfo()[2];
                     }
                     $stmt = null;
                 } else {
-                    echo "Error preparing the SQL statement.";
+                    echo"
+                    <script>
+                    echo Swal.fire('Error preparing the SQL statement.');
+                    </script>";
                 }
             } else {
-                echo "Error uploading the image.";
+                echo"
+                    <script>
+                    echo Swal.fire('Error Uploading Image.');
+                    </script>";
             }
         } else {
-            echo "Error: Upload directory is not writable.";
+            echo"
+                    <script>
+                    echo Swal.fire('Error: Upload Directory is not writtable');
+                    </script>";
         }
     } else {
-        echo "No file uploaded or there was an error uploading the file.";
+        echo "<script>
+                    echo Swal.fire('No file uploaded or there was an error uploading the file.');
+                    </script>";
     }
 }
 ?>

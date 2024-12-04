@@ -1,3 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.all.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
 <?php
 require_once 'server/crud.php';
 require_once 'server/connection.php';
@@ -17,37 +28,54 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Validate email format
     if (!filter_var($user->user_email, FILTER_VALIDATE_EMAIL)) {
-        echo "<script>alert('Invalid email format. Please enter a valid email address.');</script>";
+        echo "
+        <script>
+            Swal.fire({
+                title: 'Invalid Email!',
+                text: 'Please enter a valid email address.',
+                icon: 'error'
+            });
+        </script>";
     }
     // Check if passwords match
     elseif ($user->user_password !== $confirm_password) {
-        echo "<script>alert('Passwords do not match. Please try again.');</script>";
-    } else {
+        echo "
+        <script>
+            Swal.fire({
+                title: 'Password Mismatch!',
+                text: 'Passwords do not match. Please try again.',
+                icon: 'error'
+            });
+        </script>";
+    }
+    
+    else {
         // Create the user
         if ($user->create()) {
             echo "
             <script>
-                alert('Registration successful!');
-                window.location.href = 'login.php';  // Redirect to login page after successful registration
+                Swal.fire({
+                    title: 'Registration Successful!',
+                    text: 'You can now log in.',
+                    icon: 'success'
+                }).then(function() {
+                    window.location.href = 'login.php';  // Redirect to login page after SweetAlert closes
+                });
             </script>";
         } else {
-            echo "<script>alert('Error! Please try again.');</script>";
+            echo "
+            <script>
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Registration failed. Please try again.',
+                    icon: 'error'
+                });
+            </script>";
         }
+        
     }
 }
 ?>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.css">
-</head>
-<body>
-
 <!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
