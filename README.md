@@ -13,26 +13,51 @@ Greetings! We are the BSIT | Group 6 of Batangas State University TNEU, here to 
 Explain what your project does and why it exists.
 
 ## Features
-- Feature 1
-- Feature 2
-- Feature 3
+User Registration & Login:
+  Users can register an account to buy and sell laptops. Login functionality ensures that only registered users can participate in bidding.
+
+Product Listing & Bidding:
+  Sellers can list their laptops with details such as product description, starting price, and bidding deadline. Buyers can place bids on products they are interested in.
+
+Real-time Bidding Updates:
+  The bidding system updates in real-time, showing the current highest bid, allowing users to adjust their offers accordingly.
+
+Product Images:
+  Sellers can upload images of their laptops to provide a clearer view of the products they are selling.
 
 
 
 
 
 ## Usage
--purpose of the project
+The purpose of this project is to create a platform that simplifies the process of buying and selling second-hand laptops. It enables people to purchase quality laptops at competitive prices through a bidding process, while also providing a secure and reliable environment for transactions.
 
 
 
 ## Suggestions
-ikaw bahala dito kung ano man ilalagay
+Improve User Experience:
+  Future improvements can include adding a feedback system for buyers and sellers, making the bidding process more interactive, and introducing real-time chat features for better communication between buyers and sellers.
 
+Mobile Optimization:
+  The platform can be optimized for mobile devices, making it more accessible to users on the go.
+
+Payment Integration:
+  Implementing secure online payment methods, like PayPal or credit card payments, could be an additional feature to ensure safe transactions.
 
 
 ## Contact
-Palgay dito ng MGa social media natin at NUmber at email
+<div>
+                    <h6>Cedrick Andor</h6>
+                    <p>andorced@gmail.com</p>
+                </div>
+                <div>
+                    <h6>Sean Del Rosario</h6>
+                    <p>seanmdelrosariogmail.com</p>
+                </div>
+                <div>
+                    <h6>Miguel Romero</h6>
+                    <p>miguel_romero@myyahoo.com</p>
+                </div>
 
 
 
