@@ -1,8 +1,21 @@
 <?php
 require_once 'server/connection.php';
 require_once 'server/session.php';
+require_once 'server/crud.php';
 
 $session = new Session();
+
+// Database connection
+$database = new Database();
+$db = $database->getConnection();
+
+// Prepare the SQL statement to fetch products
+$query = "SELECT * FROM products"; // Adjust this query as needed
+$stmt = $db->prepare($query);
+$stmt->execute();
+$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -67,7 +80,7 @@ $session = new Session();
                     <p class="product-description"><?php echo $row['product_description']; ?></p>
                     <p class="starting-price">Starting Price: $<?php echo $row['starting_price']; ?></p>
                     <p class="highest-bid">Highest Bid: $<?php echo $row['highest_bid']; ?></p>
-                    <p class="bid_deadline">Bidding Deadline: <?php echo $row['bid_deadline']; ?></p>
+                    <p class="bid_deadline">Bidding Deadline: <?php echo htmlspecialchars($row['bid_deadline']); ?></p>
                     <a href="<?php echo "bid.php?product_id=" . $row['product_id']; ?>"><button class="btn btn-primary w-100 mt-auto">Enter Bid</button></a>
                 </div>
             </div>

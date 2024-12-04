@@ -48,11 +48,10 @@ $session = new Session();
 <!-- END OF NAVBAR -->
 
 
-    <div class="about-page">
+    <div class="about-us-page">
         <div class="learnmore">
             <h1 class="us">About Us</h1>
             <div class="about-bg">
-                <img src="aboutusbg.jpg" alt="About Us Background">
             </div>
             <p class="about-text">Welcome to LaptopHaven, the premier online marketplace for second-hand laptops. Our platform is designed to connect buyers and sellers in a seamless, secure, and transparent environment. Looking for a budget-friendly laptop? We've got you covered!</p>
             
@@ -66,11 +65,11 @@ $session = new Session();
                     <img src="assets/images/Andor.png" alt="Andor Cedrick S.">
                     <h3>Andor, Cedrick S.</h3>
                     <hr class="underline">
-                    <h4>Data Engineer</h4>
+                    <h4>Web Designer</h4>
                     <ul>
-                        <li>Designed and implemented the database structure for the marketplace.</li>
-                        <li>Ensured data integrity, keeping user and product information accurate.</li>
-                        <li>Worked with the development team to integrate the database with the website’s systems.</li>
+                        <li>Designed the Website Layout and Structure.</li>
+                        <li>Created Interactive Features.</li>
+                        <li>Improved Visual Hierarchy.</li>
                     </ul>
                 </div>
     
@@ -121,7 +120,7 @@ $session = new Session();
                 </div>
                 <div>
                     <h6>Sean Del Rosario</h6>
-                    <p>seanmdelrosariogmail.com</p>
+                    <p>seanmdelrosario@gmail.com</p>
                 </div>
                 <div>
                     <h6>Miguel Romero</h6>
