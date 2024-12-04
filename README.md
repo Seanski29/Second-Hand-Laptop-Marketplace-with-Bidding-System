@@ -10,7 +10,10 @@ Greetings! We are the BSIT | Group 6 of Batangas State University TNEU, here to 
 - [Contact](#contact)
 - [Installation](#installation)
 ## Introduction
-Explain what your project does and why it exists.
+Our project, the Second Hand Laptop Marketplace with a Bidding System, is an online platform designed to connect buyers and sellers of second-hand laptops. It provides a space where individuals can auction their used laptops, and potential buyers can place bids to secure the best deals. The marketplace is aimed at making second-hand laptops more accessible and affordable, especially for students and professionals on a budget.
+
+Why it exists:
+The project addresses the need for an accessible and efficient platform where people can buy or sell second-hand laptops. With the rise in demand for affordable tech, especially in educational settings, this platform helps bridge the gap between buyers looking for budget-friendly laptops and sellers with used devices they no longer need. The bidding system introduces a competitive element, ensuring that users get the best possible price for their purchase or sale, creating a dynamic marketplace for used laptops.
 
 ## Features
 User Registration & Login:
@@ -34,7 +37,7 @@ The purpose of this project is to create a platform that simplifies the process 
 
 
 
-## Suggestions
+## Suggestions for others if meddling with this code
 Improve User Experience:
   Future improvements can include adding a feedback system for buyers and sellers, making the bidding process more interactive, and introducing real-time chat features for better communication between buyers and sellers.
 
