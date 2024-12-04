@@ -6,7 +6,7 @@ Greetings! We are the BSIT | Group 6 of Batangas State University TNEU, here to 
 - [Introduction](#introduction)
 - [Features](#features)
 - [Usage](#usage)
-- [Suggestions](#Suggestions)
+- [Suggestions](#suggestions for others if meddling with this code)
 - [Contact](#contact)
 - [Installation](#installation)
 ## Introduction
