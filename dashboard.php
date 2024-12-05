@@ -1,3 +1,29 @@
+<?php
+require_once 'server/connection.php';
+require_once 'server/session.php';
+require_once 'server/crud.php';
+
+$session = new Session();
+
+if (!$session->isLoggedIn()) {
+    // Redirect to the login page
+    header("Location: login.php");
+    exit();
+}
+
+$database = new Database();
+$db = $database->getConnection();
+
+$user = new User($db);
+
+// Fetch user's products
+$query = "SELECT * FROM products WHERE user_id = :user_id";
+$stmt = $db->prepare($query);
+$stmt->bindParam(':user_id', $_SESSION['user_id']);
+$stmt->execute();
+$products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,12 +44,11 @@ if (!$session->isLoggedIn()) {
     exit;
 }
 ?>
-
 <!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-    <img src="assets/images/Logo.webp?v=2" width="85" height="75" alt="assets/images/Logo.webp">
-    <a class="navbar-brand" href="#">       |    LaptopHaven     |      </a>
+        <img src="assets/images/Logo.webp?v=2" width="85" height="75" alt="assets/images/Logo.webp">
+        <a class="navbar-brand" href="#">       |    LaptopHaven     |      </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -41,7 +66,7 @@ if (!$session->isLoggedIn()) {
                     <a class="button-navbar" href="login.php">Login</a>
                     <a class="button-navbar" href="register.php">Register</a>
                 <?php endif; ?>
-                </form>
+            </form>
             <form class="d-flex" method="GET" action="search.php">
                 <input class="form-control me-2" type="search" name="query" placeholder="Search" required>
                 <button class="btn btn-outline-success" type="submit">Search</button>
@@ -50,12 +75,33 @@ if (!$session->isLoggedIn()) {
     </div>
 </nav>
 <!-- END OF NAVBAR -->
-
-    <div class="container">
+<div class="container">
         <h2>Welcome, <?php echo htmlspecialchars($session->get('user_name')); ?>!</h2>
         <p>You are logged in as <?php echo htmlspecialchars($session->get('user_email')); ?>.</p>
         <a href="logout.php" class="btn btn-primary">Logout</a>
+<!-- DASHBOARD CONTENT -->
+<section class="container my-5">
+    <h2>My Products</h2>
+    <div class="row">
+        <?php foreach ($products as $product): ?>
+        <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+            <div class="card h-100 d-flex flex-column">
+                <img class="card-img-top product-image" alt="LAPTOP" src="assets/images/<?php echo $product['product_image']; ?>"/>
+                <div class="card-body d-flex flex-column">
+                    <h3 class="product-title"><?php echo $product['product_name']; ?></h3>
+                    <p class="product-description"><?php echo $product['product_description']; ?></p>
+                    <p class="starting-price">Starting Price: $<?php echo $product['starting_price']; ?></p>
+                    <p class="highest-bid">Highest Bid: $<?php echo $product['highest_bid']; ?></p>
+                    <form method="POST" action="delete_product.php">
+                        <input type="hidden" name="product_id" value="<?php echo $product['product_id']; ?>">
+                        <button type="submit" class="btn btn-danger w-100 mt-auto">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <?php endforeach; ?>
     </div>
+</section>
 
 <!-- FOOTER -->
 <footer class="mt-5 py-5 bg-dark text-white">
@@ -87,8 +133,7 @@ if (!$session->isLoggedIn()) {
     </div>
 </footer>
 
-    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>
