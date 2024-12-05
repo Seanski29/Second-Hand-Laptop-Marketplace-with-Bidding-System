@@ -125,7 +125,6 @@ button:hover {
     display: flex;  /* Use flexbox to align content */
     justify-content: center;
     align-items: center;
-    margin-left: 150px;  /* Adds a small left margin */
     text-align: center;
 }
 
@@ -137,6 +136,7 @@ button:hover {
     z-index: 1; /* Ensure text is on top */
     text-align: center;
     margin: center;
+    margin-left: 50px;
 }
 
 #home h5, #home h1, #home p {
@@ -187,6 +187,11 @@ button:hover {
     height: 200px;
     object-fit: cover;
     border-radius: 8px;
+}
+
+.card-img-wide {
+    height: 150px;
+    object-fit: cover;
 }
 
 /* EMPHASIS STYLES */

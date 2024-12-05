@@ -104,18 +104,17 @@ class User {
 
         return false;
     }
-
+    
+    
+    //crud.php
     // Delete a product
-    public function deleteProduct($product_id) {
-        $query = "DELETE FROM products WHERE product_id = :product_id";
+    public function deleteProduct($product_id, $user_id) {
+        $query = "DELETE FROM products WHERE product_id = :product_id AND user_id = :user_id";
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':product_id', $product_id);
-
-        if ($stmt->execute()) {
-            return true;
-        }
-
-        return false;
+        $stmt->bindParam(':product_id', $product_id, PDO::PARAM_INT);
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+    
+        return $stmt->execute();
     }
 }
 ?>

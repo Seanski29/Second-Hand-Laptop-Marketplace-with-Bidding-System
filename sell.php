@@ -17,11 +17,12 @@ require_once 'server/Session.php';
 
 $session = new Session();
 
-// Check if user is logged in
 if (!isset($_SESSION['user_email'])) {
     header("Location: login.php");
     exit();
 }
+
+$user_id = $_SESSION['user_id'];  // Retrieve user_id from the session
 
 // Instantiate the Database class
 $database = new Database();
@@ -46,27 +47,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (is_writable($target_dir)) {
             // Move the uploaded file to the target directory
             if (move_uploaded_file($_FILES["productImage"]["tmp_name"], $target_files)) {
-                // Insert product data into the database
-                $sql = "INSERT INTO products (product_name, product_description, product_image, starting_price, bid_deadline) 
-                        VALUES (?, ?, ?, ?, ?)";
+                // Insert product data into the database, including user_id
+                $sql = "INSERT INTO products (user_id, product_name, product_description, product_image, starting_price, bid_deadline) 
+                        VALUES (?, ?, ?, ?, ?, ?)";
 
                 if ($stmt = $conn->prepare($sql)) {
                     // Bind parameters and execute the query
-                    $stmt->bindParam(1, $product_name);
-                    $stmt->bindParam(2, $product_description);
-                    $stmt->bindParam(3, $target_file);
-                    $stmt->bindParam(4, $starting_price);
-                    $stmt->bindParam(5, $bid_deadline);
+                    $stmt->bindParam(1, $user_id);  // Bind user_id
+                    $stmt->bindParam(2, $product_name);
+                    $stmt->bindParam(3, $product_description);
+                    $stmt->bindParam(4, $target_file);
+                    $stmt->bindParam(5, $starting_price);
+                    $stmt->bindParam(6, $bid_deadline);
 
                     if ($stmt->execute()) {
                         echo "
                         <script>
                             Swal.fire({
                                 icon: 'success',
-                                     title: 'Your product is now listed in the marketplace.',
-                                    text: 'Please wait for the highest bidder',
-                                    showConfirmButton: false,
-                                    timer: 7000
+                                title: 'Your product is now listed in the marketplace.',
+                                text: 'Please wait for the highest bidder',
+                                showConfirmButton: false,
+                                timer: 7000
                             }).then(function() {
                                 window.location.href = 'market.php';  // Redirect after SweetAlert closes
                             });
@@ -78,24 +80,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 } else {
                     echo"
                     <script>
-                    echo Swal.fire('Error preparing the SQL statement.');
+                    Swal.fire('Error preparing the SQL statement.');
                     </script>";
                 }
             } else {
                 echo"
                     <script>
-                    echo Swal.fire('Error Uploading Image.');
+                    Swal.fire('Error Uploading Image.');
                     </script>";
             }
         } else {
             echo"
                     <script>
-                    echo Swal.fire('Error: Upload Directory is not writtable');
+                    Swal.fire('Error: Upload Directory is not writable');
                     </script>";
         }
     } else {
         echo "<script>
-                    echo Swal.fire('No file uploaded or there was an error uploading the file.');
+                    Swal.fire('No file uploaded or there was an error uploading the file.');
                     </script>";
     }
 }
@@ -133,7 +135,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </ul>
             <form class="d-flex">
                 <?php if ($session->isLoggedIn()): ?>
-                    <a class="button-navbar" href="dashboard.php">Logout</a>
+                    <a class="button-navbar" href="dashboard.php">Account</a>
                 <?php else: ?>
                     <a class="button-navbar" href="login.php">Login</a>
                     <a class="button-navbar" href="register.php">Register</a>

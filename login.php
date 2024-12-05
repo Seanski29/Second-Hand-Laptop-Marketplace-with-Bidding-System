@@ -32,20 +32,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user->user_password = $_POST['password']; // Do not hash the password here, it will be verified against the hashed password in the database
 
     if ($user->login()) { // If login is successful
-        $session->set('user_email', $user->user_email);
-        $session->set('user_name', $user->user_name);
-        $session->set('logged_in', true);
-    
-        echo "
-        <script>
-            Swal.fire({
-                title: 'Welcome to LaptopHaven',
-                text: 'Login Successful',
-                icon: 'success'
-            }).then(function() {
-                window.location.href = 'market.php';  // Redirect after SweetAlert closes
-            });
-        </script>";
+        
+        // Retrieve user details including user_id
+        $query = "SELECT user_id, user_name FROM users WHERE user_email = :email";
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':email', $user->user_email);
+        $stmt->execute();
+        $userDetails = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($userDetails) {
+            // Set session variables
+            $session->set('user_id', $userDetails['user_id']);
+            $session->set('user_email', $user->user_email);
+            $session->set('user_name', $userDetails['user_name']);
+            $session->set('logged_in', true);
+            
+            echo "
+            <script>
+                Swal.fire({
+                    title: 'Welcome to LaptopHaven',
+                    text: 'Login Successful',
+                    icon: 'success'
+                }).then(function() {
+                    window.location.href = 'market.php';  // Redirect after SweetAlert closes
+                });
+            </script>";
+        } else {
+            echo "
+            <script>
+                Swal.fire({
+                    title: 'Oops!',
+                    text: 'User details not found. Please try again.',
+                    icon: 'error'
+                }).then(function() {
+                    window.location.href = 'login.php';  // Redirect after SweetAlert closes
+                });
+            </script>";
+        }
     } else { // If login failed
         echo "
         <script>
@@ -60,6 +83,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
+
 <!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">

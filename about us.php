@@ -32,7 +32,7 @@ $session = new Session();
             </ul>
             <form class="d-flex">
                 <?php if ($session->isLoggedIn()): ?>
-                    <a class="button-navbar" href="dashboard.php">Logout</a>
+                    <a class="button-navbar" href="dashboard.php">Account</a>
                 <?php else: ?>
                     <a class="button-navbar" href="login.php">Login</a>
                     <a class="button-navbar" href="register.php">Register</a>
@@ -104,13 +104,13 @@ $session = new Session();
     
 
 
- <!-- FOOTER -->
+  <!-- FOOTER -->
 <footer class="mt-5 py-5 bg-dark text-white">
     <div class="container">
         <div class="row">
             <!-- Logo and Description Section -->
             <div class="col-lg-6 col-md-6 col-sm-12 text-center">
-                <img src="assets/images/Logo.webp?v=2" alt="LaptopHaven Logo" width="175" height="155">
+            <img src="assets/images/Logo.webp?v=2" alt="LaptopHaven Logo" width="175" height="155">
                 <p class="pt-3">We are happy that you chose LaptopHaven for your second-hand laptop hunting!</p>
             </div>
 
