@@ -14,6 +14,7 @@ session_start();
 require_once 'server/connection.php';
 require_once 'server/session.php';
 require_once 'server/crud.php';
+require_once 'server/win.php';
 
 $session = new Session();
 
@@ -142,7 +143,12 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <?php endif; ?>
     </div>
 </section>
-
+<div class="pt-5 pb-10">
+    <h1 class="mb-4 pt-5">My Bag</h1>
+    <a href="bids_won.php">
+                <button class="btn-primary">view bids won</button>
+            </a>
+</div>
     <script>
         function confirmDelete(form) {
             Swal.fire({

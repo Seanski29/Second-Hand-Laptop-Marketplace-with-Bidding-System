@@ -13,6 +13,7 @@
 <?php
 require_once 'server/connection.php';
 require_once 'server/Session.php';
+require_once 'server/win.php';
 
 $session = new Session();
 

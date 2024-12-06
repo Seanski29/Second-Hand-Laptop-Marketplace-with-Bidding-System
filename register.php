@@ -13,6 +13,7 @@
 require_once 'server/crud.php';
 require_once 'server/connection.php';
 require_once 'server/session.php';
+
 $session = new Session();
 
 // Check if the form is submitted

@@ -3,32 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Market</title>
+    <title>BIDS WON</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.all.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
 <?php
+session_start();
 require_once 'server/connection.php';
 require_once 'server/session.php';
+require_once 'server/crud.php';
 require_once 'server/win.php';
 
 $session = new Session();
-$user_id = $session->get('user_id');
 
-// Include the file to fetch products
-$get_products = include('server/fetch_products.php');
+if (!$session->isLoggedIn()) {
+    header("Location: login.php");
+    exit();
+}
 
-$query = "SELECT * FROM products WHERE bid_deadline > NOW() AND status != 'active' ORDER BY bid_deadline ASC";
+$database = new Database();
+$db = $database->getConnection();
+
+$user = new User($db);
+
+// Query to get all won bids for the logged-in user
+$query = "SELECT b.product_name, b.product_description, b.product_image, bw.* 
+          FROM bids_won bw 
+          JOIN products b ON bw.product_id = b.product_id
+          WHERE bw.user_id = :user_id";
 $stmt = $conn->prepare($query);
+$stmt->bindParam(':user_id', $user_id);
 $stmt->execute();
-$products = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+$bidsWon = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
-
-
-    <!-- NAVBAR -->
+<!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
     <img src="assets/images/Logo.webp?v=2" width="85" height="75" alt="assets/images/Logo.webp">
@@ -59,44 +69,27 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
 </nav>
 <!-- END OF NAVBAR -->
-
-    <!-- START OF MARKET SECTION -->
-     <div text-center>
-     <h1 class="text-center mb-4 pt-5">Laptop Market</h1>
-     </div>
-    <section id="brand" class="container py-5">
-    <div class="row">
-        <!-- DB connection get products -->
-        <?php include('server/get_products.php'); ?>
-        <?php foreach ($get_products as $row): ?>
-        <!-- Products -->
-        <div class="col-lg-3 col-md-6 col-sm-12 mb-4 product-card">
+<h1 class="mb-4 pt-5">Bids Won</h1>
+<?php if ($bidsWon): ?>
+    <ul>
+        <?php foreach ($bidsWon as $wonBid): ?>
+            <div class="col-lg-3 col-md-6 col-sm-12 mb-4 product-card">
             <div class="card h-100 d-flex flex-column">
-                <img class="card-img-top product-image" alt="LAPTOP" src="assets/images/<?php echo htmlspecialchars($row['product_image']); ?>" onerror="this.onerror=null; this.src='assets/images/default.jpg';"/>
+                <img class="card-img-top product-image" alt="LAPTOP" src="assets/images/<?php echo $wonBid['product_image']; ?>"/>
                 <div class="card-body d-flex flex-column">
-                    <h3 class="product-title"><?php echo $row['product_name']; ?></h3>
-                    <p class="product-description"><?php echo $row['product_description']; ?></p>
-                    <p class="starting-price">Starting Price: $<?php echo $row['starting_price']; ?></p>
-                    <p class="highest-bid">Highest Bid: $<?php echo $row['highest_bid']; ?></p>
-                    <p class="bid_deadline">Bidding Deadline: <?php echo $row['bid_deadline']; ?></p>
-                    <?php if ($session->isLoggedIn() && $row['user_id'] != $user_id): ?>
-                        <a href="bid.php?product_id=<?php echo urlencode($row['product_id']); ?>"><button class="btn btn-primary w-100 mt-auto">Enter Bid</button></a>
-                    <?php elseif ($session->isLoggedIn() && $row['user_id'] == $user_id): ?>
-                        <button class="btn btn-secondary w-100 mt-auto" disabled>Your Product</button>
-                        <?php elseif (!$row['user_id'] == $user_id): ?>
-                            <button class="btn btn-secondary w-100 mt-auto" disabled>Sold</button>
-                    <?php else: ?>
-                        <a href="login.php"><button class="btn btn-primary w-100 mt-auto">Enter Bid</button></a>
-                    <?php endif; ?>
+                    <h3 class="product-title"><?php echo $wonBid['product_name']; ?></h3>
+                    <p class="product-description"><?php echo $wonBid['product_description']; ?></p>
                 </div>
             </div>
         </div>
         <?php endforeach; ?>
-    </div>
-</section>
-    <!-- END OF MARKET SECTION -->
+    </ul>
+<?php else: ?>
+    <p>You haven't won any bids yet.</p>
+<?php endif; ?>
 
-  <!-- FOOTER -->
+
+<!-- FOOTER -->
 <footer class="mt-5 py-5 bg-dark text-white">
     <div class="container">
         <div class="row">
@@ -131,4 +124,3 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 </body>
 </html>
-

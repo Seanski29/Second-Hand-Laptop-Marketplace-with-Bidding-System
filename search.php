@@ -13,6 +13,7 @@
 require_once 'server/connection.php'; // Ensure your database connection is included
 require_once 'server/crud.php'; // Include your CRUD operations
 require_once 'server/session.php'; // Include the Session class file
+require_once 'server/win.php';
 $session = new Session();
 $user_id = $session->get('user_id');
 
