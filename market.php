@@ -14,6 +14,10 @@ require_once 'server/connection.php';
 require_once 'server/session.php';
 
 $session = new Session();
+$user_id = $session->get('user_id');
+
+// Include the file to fetch products
+$get_products = include('server/fetch_products.php');
 
 $query = "SELECT * FROM products WHERE bid_deadline > NOW() ORDER BY bid_deadline ASC";
 $stmt = $conn->prepare($query);
@@ -65,21 +69,22 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <?php include('server/get_products.php'); ?>
         <?php foreach ($get_products as $row): ?>
         <!-- Products -->
-        <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+        <div class="col-lg-3 col-md-6 col-sm-12 mb-4 product-card">
             <div class="card h-100 d-flex flex-column">
-            <img 
-                class="card-img-top product-image" 
-                alt="LAPTOP" 
-                src="assets/images/<?php echo htmlspecialchars($row['product_image']); ?>" 
-                onerror="this.onerror=null; this.src='<?php echo htmlspecialchars($row['product_image']); ?>';"/>
+                <img class="card-img-top product-image" alt="LAPTOP" src="assets/images/<?php echo htmlspecialchars($row['product_image']); ?>" onerror="this.onerror=null; this.src='assets/images/default.jpg';"/>
                 <div class="card-body d-flex flex-column">
                     <h3 class="product-title"><?php echo $row['product_name']; ?></h3>
                     <p class="product-description"><?php echo $row['product_description']; ?></p>
                     <p class="starting-price">Starting Price: $<?php echo $row['starting_price']; ?></p>
                     <p class="highest-bid">Highest Bid: $<?php echo $row['highest_bid']; ?></p>
                     <p class="bid_deadline">Bidding Deadline: <?php echo $row['bid_deadline']; ?></p>
-                    <a href="bid.php?product_id=<?php echo urlencode($row['product_id']); ?>">
-                        <button class="btn btn-primary w-100 mt-auto">Enter Bid</button></a>
+                    <?php if ($session->isLoggedIn() && $row['user_id'] != $user_id): ?>
+                        <a href="bid.php?product_id=<?php echo urlencode($row['product_id']); ?>"><button class="btn btn-primary w-100 mt-auto">Enter Bid</button></a>
+                    <?php elseif ($session->isLoggedIn() && $row['user_id'] == $user_id): ?>
+                        <button class="btn btn-secondary w-100 mt-auto" disabled>Your Product</button>
+                    <?php else: ?>
+                        <a href="login.php"><button class="btn btn-primary w-100 mt-auto">Enter Bid</button></a>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

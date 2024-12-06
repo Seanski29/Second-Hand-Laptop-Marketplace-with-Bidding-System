@@ -14,6 +14,10 @@ require_once 'server/connection.php'; // Ensure your database connection is incl
 require_once 'server/crud.php'; // Include your CRUD operations
 require_once 'server/session.php'; // Include the Session class file
 $session = new Session();
+$user_id = $session->get('user_id');
+
+// Include the file to fetch products
+$get_products = include('server/fetch_products.php');
 
 // Check if the search query is set
 $search_query = isset($_GET['query']) ? htmlspecialchars(trim($_GET['query'])) : '';
@@ -86,13 +90,18 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 src="assets/images/<?php echo htmlspecialchars($row['product_image']); ?>" 
                 onerror="this.onerror=null; this.src='<?php echo htmlspecialchars($row['product_image']); ?>';"/>
                 <div class="card-body d-flex flex-column">
-                    <h3 class="product-title"><?php echo $row['product_name']; ?></h3>
+                <h3 class="product-title"><?php echo $row['product_name']; ?></h3>
                     <p class="product-description"><?php echo $row['product_description']; ?></p>
                     <p class="starting-price">Starting Price: $<?php echo $row['starting_price']; ?></p>
                     <p class="highest-bid">Highest Bid: $<?php echo $row['highest_bid']; ?></p>
                     <p class="bid_deadline">Bidding Deadline: <?php echo $row['bid_deadline']; ?></p>
-                    <a href="bid.php?product_id=<?php echo urlencode($row['product_id']); ?>">
-                        <button class="btn btn-primary w-100 mt-auto">Enter Bid</button></a>
+                    <?php if ($session->isLoggedIn() && $row['user_id'] != $user_id): ?>
+                        <a href="bid.php?product_id=<?php echo urlencode($row['product_id']); ?>"><button class="btn btn-primary w-100 mt-auto">Enter Bid</button></a>
+                    <?php elseif ($session->isLoggedIn() && $row['user_id'] == $user_id): ?>
+                        <button class="btn btn-secondary w-100 mt-auto" disabled>Your Product</button>
+                    <?php else: ?>
+                        <a href="login.php"><button class="btn btn-primary w-100 mt-auto">Enter Bid</button></a>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
