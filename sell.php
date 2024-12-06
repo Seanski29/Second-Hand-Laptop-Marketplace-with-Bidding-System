@@ -1,3 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sell</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.all.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
 <?php
 
 require_once 'server/crud.php';
@@ -6,11 +17,12 @@ require_once 'server/Session.php';
 
 $session = new Session();
 
-// Check if user is logged in
 if (!isset($_SESSION['user_email'])) {
     header("Location: login.php");
     exit();
 }
+
+$user_id = $_SESSION['user_id'];  // Retrieve user_id from the session
 
 // Instantiate the Database class
 $database = new Database();
@@ -25,48 +37,68 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $bid_deadline = htmlspecialchars(trim($_POST['biddingDeadline']));
 
     // Handle file upload
-    $target_dir = "assets/images/";  // Directory to store images
-    $file_name = basename($_FILES["productImage"]["name"]);
-    $target_file = $target_dir . uniqid() . "_" . $file_name;  // Use a unique name to avoid conflicts
+    $target_dir = "assets/images/";  
+    $file_name = uniqid() . "_" . basename($_FILES["productImage"]["name"]);
+    $target_file = $file_name;
+    $target_files = $target_dir . $file_name;
 
     if (isset($_FILES["productImage"]) && $_FILES["productImage"]["error"] === UPLOAD_ERR_OK) {
         // Check if the upload directory is writable
         if (is_writable($target_dir)) {
             // Move the uploaded file to the target directory
-            if (move_uploaded_file($_FILES["productImage"]["tmp_name"], $target_file)) {
-                // Insert product data into the database
-                $sql = "INSERT INTO products (product_name, product_description, product_image, starting_price, bid_deadline) 
-                        VALUES (?, ?, ?, ?, ?)";
+            if (move_uploaded_file($_FILES["productImage"]["tmp_name"], $target_files)) {
+                // Insert product data into the database, including user_id
+                $sql = "INSERT INTO products (user_id, product_name, product_description, product_image, starting_price, bid_deadline) 
+                        VALUES (?, ?, ?, ?, ?, ?)";
 
                 if ($stmt = $conn->prepare($sql)) {
                     // Bind parameters and execute the query
-                    $stmt->bindParam(1, $product_name);
-                    $stmt->bindParam(2, $product_description);
-                    $stmt->bindParam(3, $target_file);
-                    $stmt->bindParam(4, $starting_price);
-                    $stmt->bindParam(5, $bid_deadline);
+                    $stmt->bindParam(1, $user_id);  // Bind user_id
+                    $stmt->bindParam(2, $product_name);
+                    $stmt->bindParam(3, $product_description);
+                    $stmt->bindParam(4, $target_file);
+                    $stmt->bindParam(5, $starting_price);
+                    $stmt->bindParam(6, $bid_deadline);
 
                     if ($stmt->execute()) {
                         echo "
                         <script>
-                            alert('Product has been added to the marketplace!');
-                            window.location.href = 'market.php';
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Your product is now listed in the marketplace.',
+                                text: 'Please wait for the highest bidder',
+                                showConfirmButton: false,
+                                timer: 7000
+                            }).then(function() {
+                                window.location.href = 'market.php';  // Redirect after SweetAlert closes
+                            });
                         </script>";
                     } else {
                         echo "Error: " . $stmt->errorInfo()[2];
                     }
                     $stmt = null;
                 } else {
-                    echo "Error preparing the SQL statement.";
+                    echo"
+                    <script>
+                    Swal.fire('Error preparing the SQL statement.');
+                    </script>";
                 }
             } else {
-                echo "Error uploading the image.";
+                echo"
+                    <script>
+                    Swal.fire('Error Uploading Image.');
+                    </script>";
             }
         } else {
-            echo "Error: Upload directory is not writable.";
+            echo"
+                    <script>
+                    Swal.fire('Error: Upload Directory is not writable');
+                    </script>";
         }
     } else {
-        echo "No file uploaded or there was an error uploading the file.";
+        echo "<script>
+                    Swal.fire('No file uploaded or there was an error uploading the file.');
+                    </script>";
     }
 }
 ?>
@@ -89,8 +121,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-        <img src="assets/images/Logo.webp" width="45" height="55" alt="Logo">
-        <a class="navbar-brand" href="#">LaptopHaven</a>
+    <img src="assets/images/Logo.webp?v=2" width="85" height="75" alt="assets/images/Logo.webp">
+    <a class="navbar-brand" href="#">       |    LaptopHaven     |      </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -103,7 +135,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </ul>
             <form class="d-flex">
                 <?php if ($session->isLoggedIn()): ?>
-                    <a class="button-navbar" href="dashboard.php">Logout</a>
+                    <a class="button-navbar" href="dashboard.php">Account</a>
                 <?php else: ?>
                     <a class="button-navbar" href="login.php">Login</a>
                     <a class="button-navbar" href="register.php">Register</a>
@@ -161,7 +193,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="row">
             <!-- Logo and Description Section -->
             <div class="col-lg-6 col-md-6 col-sm-12 text-center">
-                <img src="assets/images/Logo.webp" alt="LaptopHaven Logo" width="70" height="100">
+            <img src="assets/images/Logo.webp?v=2" alt="LaptopHaven Logo" width="175" height="155">
                 <p class="pt-3">We are happy that you chose LaptopHaven for your second-hand laptop hunting!</p>
             </div>
 

@@ -6,10 +6,12 @@ class User {
     public $user_name;
     public $user_email;
     public $user_password;
-    
-   
-
-    
+    public $product_id;
+    public $product_name;
+    public $product_description;
+    public $product_image;
+    public $starting_price;
+    public $bid_deadline;
 
     public function __construct($db) {
         $this->conn = $db;
@@ -60,71 +62,88 @@ class User {
             return false;
         }
     }
-    
-}
 
-class products {
-    private $conn;
-    private $table_name = "users"; 
-    public $product_id;
-    public $product_name;
-    public $product_description;
-    public $product_image;
-    public $starting_price;
-    public $bid_deadline;
-   
-    public function __construct($db) {
-        $this->conn = $db;
+    public function emailExists() {
+        $query = "SELECT * FROM " . $this->table_name . " WHERE user_email = :email LIMIT 0,1";
+        $stmt = $this->conn->prepare($query);
+
+        $this->user_email = htmlspecialchars(strip_tags($this->user_email));
+        $stmt->bindParam(":email", $this->user_email);
+
+        $stmt->execute();
+
+        if ($stmt->rowCount() > 0) {
+            return true;
+        }
+
+        return false;
     }
 
-    
     // Sell a product (insert into products table)
-    public function sell($product_name, $product_description, $starting_price, $bid_deadline, $file)
-{
-    // Directory for storing uploaded images
-    $target_dir = "assets/images/";
-    $file_name = basename($file["name"]);
-    $target_file = $target_dir . uniqid() . "_" . $file_name; // Unique file name
+    public function sell($product_name, $product_description, $starting_price, $bid_deadline, $file) {
+        // Directory for storing uploaded images
+        $target_dir = "assets/images/";
+        $file_name = basename($file["name"]);
+        $target_file = $target_dir . uniqid() . "_" . $file_name; // Unique file name
 
-    // Allowed file types and size limit
-    $allowed_types = ['image/jpeg', 'image/png', 'image/jpg'];
-    $max_file_size = 2 * 1024 * 1024; // 2MB
+        // Allowed file types and size limit
+        $allowed_types = ['image/jpeg', 'image/png', 'image/jpg'];
+        $max_file_size = 2 * 1024 * 1024; // 2MB
 
-    // Validate file
-    if (!in_array(mime_content_type($file["tmp_name"]), $allowed_types)) {
-        return "Invalid file type. Only JPG, JPEG, and PNG files are allowed.";
+        // Validate file
+        if (!in_array(mime_content_type($file["tmp_name"]), $allowed_types)) {
+            return "Invalid file type. Only JPG, JPEG, and PNG files are allowed.";
+        }
+        if ($file["size"] > $max_file_size) {
+            return "File size exceeds the 2MB limit.";
+        }
+
+        // Move the uploaded file to the target directory
+        if (!move_uploaded_file($file["tmp_name"], $target_file)) {
+            return "Failed to upload the file.";
+        }
+
+        // Insert product into the database
+        $query = "INSERT INTO products (product_name, product_description, product_image, starting_price, bid_deadline) VALUES (:product_name, :product_description, :product_image, :starting_price, :bid_deadline)";
+        $stmt = $this->conn->prepare($query);
+
+        // Bind parameters
+        $stmt->bindParam(':product_name', $product_name);
+        $stmt->bindParam(':product_description', $product_description);
+        $stmt->bindParam(':product_image', $target_file);
+        $stmt->bindParam(':starting_price', $starting_price);
+        $stmt->bindParam(':bid_deadline', $bid_deadline);
+
+        if ($stmt->execute()) {
+            return true;
+        }
+
+        return false;
     }
-    if ($file["size"] > $max_file_size) {
-        return "File size exceeds the 2MB limit.";
+    
+    
+    //crud.php
+    // Delete a product
+    public function deleteProduct($product_id, $user_id) {
+        $query = "DELETE FROM products WHERE product_id = :product_id AND user_id = :user_id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':product_id', $product_id, PDO::PARAM_INT);
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+    
+        return $stmt->execute();
     }
-    if (!is_writable($target_dir)) {
-        return "Upload directory is not writable.";
-    }
 
-    // Move uploaded file
-    if (!move_uploaded_file($file["tmp_name"], $target_file)) {
-        return "Error uploading the image.";
-    }
+    // Edit a product
+    public function editProduct($product_id, $product_name, $product_description, $starting_price, $bid_deadline) {
+        $query = "UPDATE products SET product_name = :product_name, product_description = :product_description, starting_price = :starting_price, bid_deadline = :bid_deadline WHERE product_id = :product_id";
+        $stmt = $this->conn->prepare($query);
 
-    // Sanitize input data
-    $product_name = htmlspecialchars(strip_tags($product_name));
-    $product_description = htmlspecialchars(strip_tags($product_description));
-    $starting_price = floatval($starting_price);
-    $bid_deadline = htmlspecialchars(strip_tags($bid_deadline));
+        $stmt->bindParam(':product_name', $product_name);
+        $stmt->bindParam(':product_description', $product_description);
+        $stmt->bindParam(':starting_price', $starting_price);
+        $stmt->bindParam(':bid_deadline', $bid_deadline);
+        $stmt->bindParam(':product_id', $product_id);
 
-    // Insert product data into the database
-    $query = "INSERT INTO products (product_name, product_description, product_image, starting_price, bid_deadline) 
-              VALUES (:product_name, :product_description, :product_image, :starting_price, :bid_deadline)";
-    $stmt = $this->conn->prepare($query);
-
-    // Bind parameters
-    $stmt->bindParam(':product_name', $product_name);
-    $stmt->bindParam(':product_description', $product_description);
-    $stmt->bindParam(':product_image', $target_file);
-    $stmt->bindParam(':starting_price', $starting_price);
-    $stmt->bindParam(':bid_deadline', $bid_deadline);
-
-        // Execute the query and check for success
         if ($stmt->execute()) {
             return true;
         }

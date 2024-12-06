@@ -1,7 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bid</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.all.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
 <?php
 require_once 'server/connection.php';
 require_once 'server/session.php';
-
+require_once 'server/win.php';
 $session = new Session();
 
 if (!$session->isLoggedIn()) {
@@ -27,24 +38,76 @@ $product = $stmt->fetch(PDO::FETCH_ASSOC);
 if (!$product) {
     die("Product not found.");
 }
-?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bid</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.css">
-</head>
-<body>
+// Handle form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $bid_amount = htmlspecialchars(trim($_POST['bid_amount']));
+    $user_id = $session->get('user_id'); // Get the logged-in user ID
+
+    // Ensure the bid is higher than the current highest bid
+    if ($bid_amount > $product['highest_bid']) {
+        // Update the highest bid and highest bidder in products table
+        $updateQuery = "UPDATE products SET highest_bid = :bid_amount, highest_bidder_id = :user_id WHERE product_id = :product_id";
+        $updateStmt = $conn->prepare($updateQuery);
+        $updateStmt->bindParam(':bid_amount', $bid_amount);
+        $updateStmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+        $updateStmt->bindParam(':product_id', $product_id, PDO::PARAM_INT);
+
+        if ($updateStmt->execute()) {
+            // Insert the new bid into pending_bid table
+            $insertQuery = "INSERT INTO pending_bid (product_id, user_id, high_bid_amount, bid_deadline, bid_time) 
+                            VALUES (:product_id, :user_id, :bid_amount, :bid_deadline, NOW())";
+            $insertStmt = $conn->prepare($insertQuery);
+            $insertStmt->bindParam(':product_id', $product_id);
+            $insertStmt->bindParam(':user_id', $user_id);
+            $insertStmt->bindParam(':bid_amount', $bid_amount);
+            $insertStmt->bindParam(':bid_deadline', $product['bid_deadline']); // Use the product's bid_deadline
+
+            if ($insertStmt->execute()) {
+                echo "<script>
+                    Swal.fire({
+                        title: 'Bid Submitted!',
+                        text: 'Your bid has been submitted and is now the highest bid.',
+                        icon: 'success'
+                    }).then(() => {
+                        window.location.href = 'pending_bid.php';
+                    });
+                  </script>";
+            } else {
+                echo "<script>
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Failed to place the bid. Please try again.',
+                        icon: 'error'
+                    });
+                  </script>";
+            }
+        } else {
+            echo "<script>
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Failed to submit your bid. Please try again.',
+                    icon: 'error'
+                });
+              </script>";
+        }
+    } else {
+        echo "<script>
+            Swal.fire({
+                title: 'Invalid Bid!',
+                text: 'Your bid must be higher than the current highest bid.',
+                icon: 'warning'
+            });
+          </script>";
+    }
+}
+?>
 
 <!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-        <img src="assets/images/Logo.webp" width="45" height="55" alt="Logo">
-        <a class="navbar-brand" href="#">LaptopHaven</a>
+    <img src="assets/images/Logo.webp?v=2" width="85" height="75" alt="assets/images/Logo.webp">
+    <a class="navbar-brand" href="#">       |    LaptopHaven     |      </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -57,7 +120,7 @@ if (!$product) {
             </ul>
             <form class="d-flex">
                 <?php if ($session->isLoggedIn()): ?>
-                    <a class="button-navbar" href="dashboard.php">Logout</a>
+                    <a class="button-navbar" href="dashboard.php">Account</a>
                 <?php else: ?>
                     <a class="button-navbar" href="login.php">Login</a>
                     <a class="button-navbar" href="register.php">Register</a>
@@ -84,13 +147,14 @@ if (!$product) {
             <p>Starting Price: $<?php echo htmlspecialchars($product['starting_price']); ?></p>
             <p>Highest Bid: $<?php echo htmlspecialchars($product['highest_bid']); ?></p>
             <p>Bidding Deadline: <?php echo htmlspecialchars($product['bid_deadline']);?></p>
-            <form method="POST" action="pending_bid.php">
-                <input type="hidden" name="product_id" value="<?php echo $product['product_id']; ?>">
-                <div class="mb-3">
-                    <label for="bid_amount" class="form-label">Your Bid</label>
-                    <input type="number" name="bid_amount" class="form-control" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Place Bid</button>
+            <form method="POST" action="bid.php?product_id=<?php echo $product_id; ?>"> <!-- Updated -->
+             <input type="hidden" name="product_id" value="<?php echo $product['product_id']; ?>">
+               <div class="mb-3">
+                <label for="bid_amount" class="form-label">Your Bid</label>
+                   <input type="number" name="bid_amount" class="form-control" required min="<?php echo $product['highest_bid'] + 1; ?>">
+                    </div>
+                        <button type="submit" class="btn btn-warning w-100">Send Offer</button>
+                   </form>
             </form>
         </div>
     </div>
@@ -101,7 +165,7 @@ if (!$product) {
         <div class="row">
             <!-- Logo and Description Section -->
             <div class="col-lg-6 col-md-6 col-sm-12 text-center">
-                <img src="assets/images/Logo.webp" alt="LaptopHaven Logo" width="70" height="100">
+            <img src="assets/images/Logo.webp?v=2" alt="LaptopHaven Logo" width="175" height="155">
                 <p class="pt-3">We are happy that you chose LaptopHaven for your second-hand laptop hunting!</p>
             </div>
 

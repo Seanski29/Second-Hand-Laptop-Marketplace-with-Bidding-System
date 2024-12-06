@@ -1,50 +1,49 @@
-<?php
-require_once 'server/connection.php'; // Ensure your database connection is included
-require_once 'server/crud.php'; // Include your CRUD operations
-require_once 'server/session.php'; // Include the Session class file
-$session = new Session();
-
-// Check if the search query is set
-if (isset($_GET['query'])) {
-    $search_query = htmlspecialchars(trim($_GET['query']));
-
-    // Database connection
-    $database = new Database();
-    $db = $database->getConnection();
-
-    // Prepare the SQL statement
-    $query = "SELECT * FROM products WHERE product_name LIKE :search_query OR product_description LIKE :search_query";
-    $stmt = $db->prepare($query);
-    
-    // Use wildcards for searching
-    $search_param = "%" . $search_query . "%";
-    $stmt->bindParam(':search_query', $search_param);
-
-    // Execute the query
-    $stmt->execute();
-    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} else {
-    $results = [];
-}
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search Results</title>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="assets/css/style.css"/>
-    <script src="assets/js/alert.js"></script>
+    <title>Search</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.all.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
+<?php
+require_once 'server/connection.php'; // Ensure your database connection is included
+require_once 'server/crud.php'; // Include your CRUD operations
+require_once 'server/session.php'; // Include the Session class file
+require_once 'server/win.php';
+$session = new Session();
+$user_id = $session->get('user_id');
+
+// Include the file to fetch products
+$get_products = include('server/fetch_products.php');
+
+// Check if the search query is set
+$search_query = isset($_GET['query']) ? htmlspecialchars(trim($_GET['query'])) : '';
+
+// Database connection
+$database = new Database();
+$db = $database->getConnection();
+
+// Prepare the SQL statement
+$query = "SELECT * FROM products WHERE product_name LIKE :search_query OR product_description LIKE :search_query";
+$stmt = $db->prepare($query);
+
+// Use wildcards for searching
+$search_param = "%" . $search_query . "%";
+$stmt->bindParam(':search_query', $search_param);
+
+// Execute the query
+$stmt->execute();
+$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
     <!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-        <img src="assets/images/Logo.webp" width="45" height="55" alt="Logo">
-        <a class="navbar-brand" href="#">LaptopHaven</a>
+    <img src="assets/images/Logo.webp?v=2" width="85" height="75" alt="assets/images/Logo.webp">
+    <a class="navbar-brand" href="#">       |    LaptopHaven     |      </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -57,7 +56,7 @@ if (isset($_GET['query'])) {
             </ul>
             <form class="d-flex">
                 <?php if ($session->isLoggedIn()): ?>
-                    <a class="button-navbar" href="dashboard.php">Logout</a>
+                    <a class="button-navbar" href="dashboard.php">Account</a>
                 <?php else: ?>
                     <a class="button-navbar" href="login.php">Login</a>
                     <a class="button-navbar" href="register.php">Register</a>
@@ -73,31 +72,49 @@ if (isset($_GET['query'])) {
 
     <!-- SEARCH RESULTS SECTION -->
     <div class="container my-5">
-        <h2>Search Results for "<?php echo htmlspecialchars($search_query); ?>"</h2>
-        <div class="row">
-            <?php if (!empty($results)): ?>
-                <?php foreach ($results as $product): ?>
-                    <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
-                        <div class="card h-100">
-                            <img class="card-img-top" src="assets/images/<?php echo htmlspecialchars($product['product_image']); ?>" alt="<?php echo htmlspecialchars($product['product_name']); ?>">
-                            <div class="card-body">
-                                <h5 class="card-title"><?php echo htmlspecialchars($product['product_name']); ?></h5>
-                                <p class="card-text"><?php echo htmlspecialchars($product['product_description']); ?></p>
-                                <p class="card-text">Starting Price: $<?php echo htmlspecialchars($product['starting_price']); ?></p>
-                                <p class="card-text">Highest Bid: $<?php echo htmlspecialchars($product['highest_bid']); ?></p>
-                                <p class="bid_deadline">Bidding Deadline: $<?php echo htmlspecialchars($product['bid_deadline']); ?></p>
-                                <a href="bid.php?product_id=<?php echo htmlspecialchars($product['product_id']); ?>" class="btn btn-primary">Enter Bid</a>
-                            </div>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <div class="col-12">
-                    <p>No products found matching your search.</p>
+    <h2>Search Results for "<?php echo htmlspecialchars($search_query); ?>"</h2>
+    <div class="row">
+        <?php if (!empty($results)): ?>
+            
+            <?php foreach ($results as $row): ?>
+                
+                <div class="col-lg-3 col-md-6 col-sm-12 mb-4 product-card">
+                 <div class="card h-100 d-flex flex-column">
+                <?php 
+            // Check the number of results
+            $result_count = count($results);
+            $col_class = ($result_count == 1) ? 'col-12' : 'col-lg-3 col-md-6 col-sm-12 mb-4' ; // Full width for 1 result// Use full width if only one result
+            ?>
+            <img 
+                class="card-img-top product-image" 
+                alt="LAPTOP" 
+                src="assets/images/<?php echo htmlspecialchars($row['product_image']); ?>" 
+                onerror="this.onerror=null; this.src='<?php echo htmlspecialchars($row['product_image']); ?>';"/>
+                <div class="card-body d-flex flex-column">
+                <h3 class="product-title"><?php echo $row['product_name']; ?></h3>
+                    <p class="product-description"><?php echo $row['product_description']; ?></p>
+                    <p class="starting-price">Starting Price: $<?php echo $row['starting_price']; ?></p>
+                    <p class="highest-bid">Highest Bid: $<?php echo $row['highest_bid']; ?></p>
+                    <p class="bid_deadline">Bidding Deadline: <?php echo $row['bid_deadline']; ?></p>
+                    <?php if ($session->isLoggedIn() && $row['user_id'] != $user_id): ?>
+                        <a href="bid.php?product_id=<?php echo urlencode($row['product_id']); ?>"><button class="btn btn-primary w-100 mt-auto">Enter Bid</button></a>
+                    <?php elseif ($session->isLoggedIn() && $row['user_id'] == $user_id): ?>
+                        <button class="btn btn-secondary w-100 mt-auto" disabled>Your Product</button>
+                    <?php else: ?>
+                        <a href="login.php"><button class="btn btn-primary w-100 mt-auto">Enter Bid</button></a>
+                    <?php endif; ?>
                 </div>
-            <?php endif; ?>
+            </div>
         </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <div class="col-12">
+                <p>No products found matching your search.</p>
+            </div>
+        <?php endif; ?>
     </div>
+</div>
+
 
     <!-- FOOTER -->
 <footer class="mt-5 py-5 bg-dark text-white">
@@ -105,7 +122,7 @@ if (isset($_GET['query'])) {
         <div class="row">
             <!-- Logo and Description Section -->
             <div class="col-lg-6 col-md-6 col-sm-12 text-center">
-                <img src="assets/images/Logo.webp" alt="LaptopHaven Logo" width="70" height="100">
+            <img src="assets/images/Logo.webp?v=2" alt="LaptopHaven Logo" width="175" height="155">
                 <p class="pt-3">We are happy that you chose LaptopHaven for your second-hand laptop hunting!</p>
             </div>
 

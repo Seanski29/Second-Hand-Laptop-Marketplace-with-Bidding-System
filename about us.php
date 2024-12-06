@@ -1,7 +1,7 @@
 <?php
 require_once 'server/connection.php';
 require_once 'server/session.php';
-
+require_once 'server/win.php';
 $session = new Session();
 ?>
 <!DOCTYPE html>
@@ -18,8 +18,8 @@ $session = new Session();
 <!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-        <img src="assets/images/Logo.webp" width="45" height="55" alt="Logo">
-        <a class="navbar-brand" href="#">LaptopHaven</a>
+    <img src="assets/images/Logo.webp?v=2" width="85" height="75" alt="assets/images/Logo.webp">
+    <a class="navbar-brand" href="#">       |    LaptopHaven     |      </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -32,7 +32,7 @@ $session = new Session();
             </ul>
             <form class="d-flex">
                 <?php if ($session->isLoggedIn()): ?>
-                    <a class="button-navbar" href="dashboard.php">Logout</a>
+                    <a class="button-navbar" href="dashboard.php">Account</a>
                 <?php else: ?>
                     <a class="button-navbar" href="login.php">Login</a>
                     <a class="button-navbar" href="register.php">Register</a>
@@ -50,13 +50,15 @@ $session = new Session();
 
     <div class="about-page">
         <div class="learnmore">
-            <h1 class="us">About Us</h1>
-            <div class="about-bg">
-                <img src="aboutusbg.jpg" alt="About Us Background">
+            <div class="aboutlogo">
+
+            <img src="assets/images/Logo.webp?v=2 img-center" alt="LaptopHaven Logo" width="300" height="300">
             </div>
-            <p class="about-text">Welcome to LaptopHaven, the premier online marketplace for second-hand laptops. Our platform is designed to connect buyers and sellers in a seamless, secure, and transparent environment. Looking for a budget-friendly laptop? We've got you covered!</p>
             
-            <h1 class="mission">Our Mission</h1>
+            <h2>What are we?</h2>
+            <p class="about-text">Welcome to LaptopHaven, the premier online marketplace for second-hand laptops. Our platform is designed to connect buyers and sellers in a seamless, secure, and transparent environment. Looking for a budget-friendly laptop? We've got you covered!</p>
+            <br>
+            <h2>Our Mission</h2>
             <p class="mission-text">At LaptopHaven, our mission is to provide a trusted, user-friendly platform for buying and selling second-hand laptops, empowering customers with affordable, high-quality technology options. We aim to create a transparent, competitive marketplace with our innovative bidding system, ensuring both buyers and sellers enjoy a seamless, secure experience. Through our commitment to sustainability and customer satisfaction, we strive to contribute to a smarter, more sustainable digital future.</p>
     
             <h1 class="team">Our Team</h1>
@@ -102,13 +104,13 @@ $session = new Session();
     
 
 
- <!-- FOOTER -->
+  <!-- FOOTER -->
 <footer class="mt-5 py-5 bg-dark text-white">
     <div class="container">
         <div class="row">
             <!-- Logo and Description Section -->
             <div class="col-lg-6 col-md-6 col-sm-12 text-center">
-                <img src="assets/images/Logo.webp" alt="LaptopHaven Logo" width="70" height="100">
+            <img src="assets/images/Logo.webp?v=2" alt="LaptopHaven Logo" width="175" height="155">
                 <p class="pt-3">We are happy that you chose LaptopHaven for your second-hand laptop hunting!</p>
             </div>
 
