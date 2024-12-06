@@ -48,7 +48,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             });
         </script>";
     }
-    
+    // Check if email already exists
+    elseif ($user->emailExists()) {
+        echo "<script>alert('Email is already in use. Please use a different email address.');</script>";
+    }
     else {
         // Create the user
         if ($user->create()) {

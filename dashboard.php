@@ -13,6 +13,7 @@
 session_start();
 require_once 'server/connection.php';
 require_once 'server/session.php';
+require_once 'server/crud.php';
 
 $session = new Session();
 
@@ -23,6 +24,8 @@ if (!$session->isLoggedIn()) {
 
 $database = new Database();
 $db = $database->getConnection();
+
+$user = new User($db);
 
 // Fetch products for logged-in user
 $query = "SELECT * FROM products WHERE user_id = :user_id";
@@ -82,31 +85,52 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <?php if (!empty($products)): ?>
             <?php foreach ($products as $product): ?>
                 <!-- Product Card -->
-                <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
-                    <div class="card d-flex flex-column">
-                        <!-- Product Image -->
-                        <img 
-                            class="card-img-top product-image" 
-                            alt="Product Image" 
-                            src="assets/images/<?php echo htmlspecialchars($product['product_image']); ?>" 
-                            onerror="this.onerror=null; this.src='assets/images/default.jpg';"/>
-                        
-                        <!-- Product Details -->
-                        <div class="card-body d-flex flex-column">
-                            <h3 class="product-title"><?php echo htmlspecialchars($product['product_name']); ?></h3>
-                            <p class="product-description"><?php echo htmlspecialchars($product['product_description']); ?></p>
-                            <p class="starting-price">Starting Price: $<?php echo htmlspecialchars($product['starting_price']); ?></p>
-                            <p class="highest-bid">Highest Bid: $<?php echo htmlspecialchars($product['highest_bid']); ?></p>
-                            <p class="bid_deadline">Bidding Deadline: <?php echo htmlspecialchars($product['bid_deadline']); ?></p>
-                            <!-- Delete/Edit Buttons -->
-                            <div class="text-center mt-2">
-                                <form method="POST" action="#" onsubmit=""> <!--lalagyan ng shit -->
+                
+                    <div class="col-lg-3 col-md-6 col-sm-12 mb-4 product-card">
+            <div class="card h-100 d-flex flex-column">
+                <img class="card-img-top product-image" alt="LAPTOP" src="assets/images/<?php echo $product['product_image']; ?>"/>
+                <div class="card-body d-flex flex-column">
+                    <h3 class="product-title"><?php echo $product['product_name']; ?></h3>
+                    <p class="product-description"><?php echo $product['product_description']; ?></p>
+                    <p class="starting-price">Starting Price: $<?php echo $product['starting_price']; ?></p>
+                    <p class="highest-bid">Highest Bid: $<?php echo $product['highest_bid']; ?></p>
+                    <button type="button" class="btn btn-warning w-100 mt-auto" data-bs-toggle="modal" data-bs-target="#editProductModal<?php echo $product['product_id']; ?>">Edit</button>
+                    <form method="POST" action="server/delete_product.php">
+                        <input type="hidden" name="product_id" value="<?php echo $product['product_id']; ?>">
+                        <button type="submit" class="btn btn-danger w-100 mt-auto">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+                <!-- Edit Product Modal -->
+                <div class="modal fade" id="editProductModal<?php echo $product['product_id']; ?>" tabindex="-1" aria-labelledby="editProductModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="editProductModalLabel">Edit Product</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="POST" action="edit_product.php">
                                     <input type="hidden" name="product_id" value="<?php echo $product['product_id']; ?>">
-                                    <button type="submit" class="btn btn-warning w-100">Edit</button>
-                                </form>
-                                <form method="POST" action="server/delete_product.php" onsubmit="return confirmDelete(this);">
-                                    <input type="hidden" name="product_id" value="<?php echo $product['product_id']; ?>">
-                                    <button type="submit" class="btn btn-danger w-100 mt-2">Delete</button>
+                                    <div class="mb-3">
+                                        <label for="product_name" class="form-label">Product Name</label>
+                                        <input type="text" class="form-control" id="product_name" name="product_name" value="<?php echo $product['product_name']; ?>" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="product_description" class="form-label">Product Description</label>
+                                        <textarea class="form-control" id="product_description" name="product_description" required><?php echo $product['product_description']; ?></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="starting_price" class="form-label">Starting Price</label>
+                                        <input type="number" class="form-control" id="starting_price" name="starting_price" value="<?php echo $product['starting_price']; ?>" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="bid_deadline" class="form-label">Bid Deadline</label>
+                                        <input type="datetime-local" class="form-control" id="bid_deadline" name="bid_deadline" value="<?php echo date('Y-m-d\TH:i', strtotime($product['bid_deadline'])); ?>" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Save Changes</button>
                                 </form>
                             </div>
                         </div>
@@ -118,7 +142,6 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <?php endif; ?>
     </div>
 </section>
-
 
     <script>
         function confirmDelete(form) {
@@ -141,4 +164,3 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 </body>
 </html>
-

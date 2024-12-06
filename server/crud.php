@@ -63,6 +63,22 @@ class User {
         }
     }
 
+    public function emailExists() {
+        $query = "SELECT * FROM " . $this->table_name . " WHERE user_email = :email LIMIT 0,1";
+        $stmt = $this->conn->prepare($query);
+
+        $this->user_email = htmlspecialchars(strip_tags($this->user_email));
+        $stmt->bindParam(":email", $this->user_email);
+
+        $stmt->execute();
+
+        if ($stmt->rowCount() > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
     // Sell a product (insert into products table)
     public function sell($product_name, $product_description, $starting_price, $bid_deadline, $file) {
         // Directory for storing uploaded images
@@ -115,6 +131,24 @@ class User {
         $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
     
         return $stmt->execute();
+    }
+
+    // Edit a product
+    public function editProduct($product_id, $product_name, $product_description, $starting_price, $bid_deadline) {
+        $query = "UPDATE products SET product_name = :product_name, product_description = :product_description, starting_price = :starting_price, bid_deadline = :bid_deadline WHERE product_id = :product_id";
+        $stmt = $this->conn->prepare($query);
+
+        $stmt->bindParam(':product_name', $product_name);
+        $stmt->bindParam(':product_description', $product_description);
+        $stmt->bindParam(':starting_price', $starting_price);
+        $stmt->bindParam(':bid_deadline', $bid_deadline);
+        $stmt->bindParam(':product_id', $product_id);
+
+        if ($stmt->execute()) {
+            return true;
+        }
+
+        return false;
     }
 }
 ?>

@@ -78,8 +78,8 @@ $pending_bids = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <?php if (count($pending_bids) > 0): ?>
             <?php foreach ($pending_bids as $row): ?>
         <!-- Products -->
-        <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
-                    <div class="card h-100">
+        <div class="col-lg-3 col-md-6 col-sm-12 mb-4 product-card">
+        <div class="card h-100 d-flex flex-column">
                     <img 
                         class="card-img-top product-image" 
                             alt="LAPTOP" 
