@@ -73,6 +73,9 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <!-- My Listings -->
 <div class="pt-5">
     <h1 class="mb-4 pt-5">My Listings</h1>
+    <a href="pending_bid.php">
+                <button class="btn-primary">view pending bids</button>
+            </a>
 </div>
 <section id="brand" class="container py-5">
     <div class="row">

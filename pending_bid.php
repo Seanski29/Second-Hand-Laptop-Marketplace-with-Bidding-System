@@ -9,34 +9,30 @@
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
+
 <?php
-require_once 'server/session.php';
 require_once 'server/connection.php';
+require_once 'server/Session.php';
+
 $session = new Session();
 
 if (!$session->isLoggedIn()) {
-    // Redirect to the login page
     header("Location: login.php");
-    exit(); // Ensure the script stops executing
+    exit();
 }
 
-// Check if the product_id is set
-if (!isset($_GET['product_id'])) {
-    die("Product ID is required.");
-}
+$user_id = $session->get('user_id'); // Get the logged-in user ID
 
-$product_id = htmlspecialchars(trim($_GET['product_id']));
-
-// Fetch product details
-$query = "SELECT * FROM products WHERE product_id = :product_id";
+// Fetch pending bids for the logged-in user
+$query = "SELECT pb.bid_id, p.product_id, p.product_name, p.product_image, 
+                 pb.high_bid_amount, pb.bid_time, p.bid_deadline 
+          FROM pending_bid pb 
+          JOIN products p ON pb.product_id = p.product_id 
+          WHERE pb.user_id = :user_id";
 $stmt = $conn->prepare($query);
-$stmt->bindParam(':product_id', $product_id);
+$stmt->bindParam(':user_id', $user_id);
 $stmt->execute();
-$product = $stmt->fetch(PDO::FETCH_ASSOC);
-
-if (!$product) {
-    die("Product not found.");
-}
+$pending_bids = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!-- NAVBAR -->
@@ -56,7 +52,7 @@ if (!$product) {
             </ul>
             <form class="d-flex">
                 <?php if ($session->isLoggedIn()): ?>
-                    <a class="button-navbar" href="dashboard.php">Logout</a>
+                    <a class="button-navbar" href="dashboard.php">Account</a>
                 <?php else: ?>
                     <a class="button-navbar" href="login.php">Login</a>
                     <a class="button-navbar" href="register.php">Register</a>
@@ -72,17 +68,65 @@ if (!$product) {
 <!-- END OF NAVBAR -->
 
 <!-- BID SECTION -->
-
-<section class="container my-5 py-5">
-    <h2 class="font-weight-bold">Bidding Section</h2>
+ <!-- START OF PENDING SECTION -->
+ <div text-center>
+     <h1 class="text-center mb-4 pt-5">Pending Bids</h1>
+     </div>
+    <section id="brand" class="container py-5">
     <div class="row">
-        <div class="col-lg-6">
-            <img src="assets/images/<?php echo htmlspecialchars($product['product_image']); ?>" class="img-fluid" alt="<?php echo htmlspecialchars($product['product_name']); ?>">
-        </div>
-        <div class="col-lg-6">
-            <h3><?php echo htmlspecialchars($product['product_name']); ?></h3>
-            <p><?php echo htmlspecialchars($product['product_description']); ?></p>
-        </div>
+        <!-- DB connection get products -->
+        <?php if (count($pending_bids) > 0): ?>
+            <?php foreach ($pending_bids as $row): ?>
+        <!-- Products -->
+        <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+                    <div class="card h-100">
+                    <img 
+                        class="card-img-top product-image" 
+                            alt="LAPTOP" 
+                                src="assets/images/<?php echo htmlspecialchars($row['product_image']); ?>" 
+                            onerror="this.onerror=null; this.src='<?php echo htmlspecialchars($row['product_image']); ?>';"/>
+                        <div class="card-body">
+                            <h5 class="card-title"><?php echo htmlspecialchars($row['product_name']); ?></h5>
+                            <p>Bid Amount: $<?php echo htmlspecialchars($row['high_bid_amount']); ?></p>
+                            <p>Bid Time: <?php echo htmlspecialchars($row['bid_time']); ?></p>
+                            <p>Bidding Deadline: <?php echo htmlspecialchars($row['bid_deadline']); ?></p>
+                            <form method="POST" action="server/delete_bid.php" onsubmit="return confirmDelete(this);">
+                            <input type="hidden" name="product_id" value="<?php echo htmlspecialchars($row['product_id']); ?>">
+                            <button type="submit" class="btn btn-danger w-100 mt-2">Delete Bid</button>
+                        </form>
+
+                        <script>
+                        function confirmDelete(form) {
+                            // SweetAlert for better UI
+                            Swal.fire({
+                                title: "Are you sure?",
+                                text: "You are about to delete this bid.",
+                                icon: "warning",
+                                showCancelButton: true,
+                                confirmButtonColor: "#d33",
+                                cancelButtonColor: "#3085d6",
+                                confirmButtonText: "Yes, delete it!"
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    form.submit();
+                                }
+                            });
+                            return false; // Prevent form from submitting until confirmation is handled
+                        }
+                        </script>
+
+
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p class="text-center">You have no pending bids.</p>
+        <?php endif; ?>
+    </div>
+</div>
+</section>
+
 
 <!-- FOOTER -->
 <footer class="mt-5 py-5 bg-dark text-white">

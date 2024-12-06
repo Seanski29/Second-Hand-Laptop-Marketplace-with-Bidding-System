@@ -14,6 +14,12 @@ require_once 'server/connection.php';
 require_once 'server/session.php';
 
 $session = new Session();
+
+$query = "SELECT * FROM products WHERE bid_deadline > NOW() ORDER BY bid_deadline ASC";
+$stmt = $conn->prepare($query);
+$stmt->execute();
+$products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 

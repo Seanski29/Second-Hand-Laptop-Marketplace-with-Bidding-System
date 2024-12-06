@@ -38,6 +38,69 @@ $product = $stmt->fetch(PDO::FETCH_ASSOC);
 if (!$product) {
     die("Product not found.");
 }
+
+// Handle form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $bid_amount = htmlspecialchars(trim($_POST['bid_amount']));
+    $user_id = $session->get('user_id'); // Get the logged-in user ID
+
+    // Ensure the bid is higher than the current highest bid
+    if ($bid_amount > $product['highest_bid']) {
+        // Update the highest bid and highest bidder in products table
+        $updateQuery = "UPDATE products SET highest_bid = :bid_amount, highest_bidder_id = :user_id WHERE product_id = :product_id";
+        $updateStmt = $conn->prepare($updateQuery);
+        $updateStmt->bindParam(':bid_amount', $bid_amount);
+        $updateStmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+        $updateStmt->bindParam(':product_id', $product_id, PDO::PARAM_INT);
+
+        if ($updateStmt->execute()) {
+            // Insert the new bid into pending_bid table
+            $insertQuery = "INSERT INTO pending_bid (product_id, user_id, high_bid_amount, bid_deadline, bid_time) 
+                            VALUES (:product_id, :user_id, :bid_amount, :bid_deadline, NOW())";
+            $insertStmt = $conn->prepare($insertQuery);
+            $insertStmt->bindParam(':product_id', $product_id);
+            $insertStmt->bindParam(':user_id', $user_id);
+            $insertStmt->bindParam(':bid_amount', $bid_amount);
+            $insertStmt->bindParam(':bid_deadline', $product['bid_deadline']); // Use the product's bid_deadline
+
+            if ($insertStmt->execute()) {
+                echo "<script>
+                    Swal.fire({
+                        title: 'Bid Submitted!',
+                        text: 'Your bid has been submitted and is now the highest bid.',
+                        icon: 'success'
+                    }).then(() => {
+                        window.location.href = 'pending_bid.php';
+                    });
+                  </script>";
+            } else {
+                echo "<script>
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Failed to place the bid. Please try again.',
+                        icon: 'error'
+                    });
+                  </script>";
+            }
+        } else {
+            echo "<script>
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Failed to submit your bid. Please try again.',
+                    icon: 'error'
+                });
+              </script>";
+        }
+    } else {
+        echo "<script>
+            Swal.fire({
+                title: 'Invalid Bid!',
+                text: 'Your bid must be higher than the current highest bid.',
+                icon: 'warning'
+            });
+          </script>";
+    }
+}
 ?>
 
 <!-- NAVBAR -->
@@ -84,13 +147,14 @@ if (!$product) {
             <p>Starting Price: $<?php echo htmlspecialchars($product['starting_price']); ?></p>
             <p>Highest Bid: $<?php echo htmlspecialchars($product['highest_bid']); ?></p>
             <p>Bidding Deadline: <?php echo htmlspecialchars($product['bid_deadline']);?></p>
-            <form method="POST" action="pending_bid.php">
-                <input type="hidden" name="product_id" value="<?php echo $product['product_id']; ?>">
-                <div class="mb-3">
-                    <label for="bid_amount" class="form-label">Your Bid</label>
-                    <input type="number" name="bid_amount" class="form-control" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Place Bid</button>
+            <form method="POST" action="bid.php?product_id=<?php echo $product_id; ?>"> <!-- Updated -->
+             <input type="hidden" name="product_id" value="<?php echo $product['product_id']; ?>">
+               <div class="mb-3">
+                <label for="bid_amount" class="form-label">Your Bid</label>
+                   <input type="number" name="bid_amount" class="form-control" required min="<?php echo $product['highest_bid'] + 1; ?>">
+                    </div>
+                        <button type="submit" class="btn btn-warning w-100">Send Offer</button>
+                   </form>
             </form>
         </div>
     </div>
