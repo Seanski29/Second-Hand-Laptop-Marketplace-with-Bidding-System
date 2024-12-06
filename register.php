@@ -82,19 +82,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-        <img src="assets/images/Logo.webp" width="45" height="55" alt="Logo">
-        <a class="navbar-brand" href="#">LaptopHaven</a>
+    <img src="assets/images/Logo.webp?v=2" width="85" height="75" alt="assets/images/Logo.webp">
+    <a class="navbar-brand" href="#">       |    LaptopHaven     |      </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarScroll">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="#brandings">Brands</a></li>
                 <li class="nav-item"><a class="nav-link" href="market.php">Market</a></li>
-                <li class="nav-item"><a class="nav-link" href="sell.html">Sell</a></li>
-                <li class="nav-item"><a class="nav-link" href="#footer">Contact</a></li>
-                <li class="nav-item"><a class="nav-link" href="about us.html">About us</a></li>
+                <li class="nav-item"><a class="nav-link" href="sell.php">Sell</a></li>
+                <li class="nav-item"><a class="nav-link" href="about us.php">About Us</a></li>
             </ul>
             <form class="d-flex">
                 <?php if ($session->isLoggedIn()): ?>
@@ -106,12 +104,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </form>
             <form class="d-flex" method="GET" action="search.php">
                 <input class="form-control me-2" type="search" name="query" placeholder="Search" required>
-                <button class="btn btn-outline-success" type="submit">Search</button>
+                <button class="btn btn-outline-success" type="submit" >Search</button>
             </form>
         </div>
     </div>
 </nav>
-
+<!-- END OF NAVBAR -->
 <!-- Register SECTION -->
 <section class="my-5 py-5">
     <div class="container text-center mt-3 pt-5">
