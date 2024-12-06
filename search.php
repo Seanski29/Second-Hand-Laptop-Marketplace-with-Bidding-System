@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seach</title>
+    <title>Search</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.all.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
@@ -16,27 +16,23 @@ require_once 'server/session.php'; // Include the Session class file
 $session = new Session();
 
 // Check if the search query is set
-if (isset($_GET['query'])) {
-    $search_query = htmlspecialchars(trim($_GET['query']));
+$search_query = isset($_GET['query']) ? htmlspecialchars(trim($_GET['query'])) : '';
 
-    // Database connection
-    $database = new Database();
-    $db = $database->getConnection();
+// Database connection
+$database = new Database();
+$db = $database->getConnection();
 
-    // Prepare the SQL statement
-    $query = "SELECT * FROM products WHERE product_name LIKE :search_query OR product_description LIKE :search_query";
-    $stmt = $db->prepare($query);
-    
-    // Use wildcards for searching
-    $search_param = "%" . $search_query . "%";
-    $stmt->bindParam(':search_query', $search_param);
+// Prepare the SQL statement
+$query = "SELECT * FROM products WHERE product_name LIKE :search_query OR product_description LIKE :search_query";
+$stmt = $db->prepare($query);
 
-    // Execute the query
-    $stmt->execute();
-    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} else {
-    $results = [];
-}
+// Use wildcards for searching
+$search_param = "%" . $search_query . "%";
+$stmt->bindParam(':search_query', $search_param);
+
+// Execute the query
+$stmt->execute();
+$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
     <!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -77,12 +73,12 @@ if (isset($_GET['query'])) {
             
             <?php foreach ($results as $row): ?>
                 
-                <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
-                <div class="card h-100 d-flex flex-column">
+                <div class="col-lg-3 col-md-6 col-sm-12 mb-4 product-card">
+                 <div class="card h-100 d-flex flex-column">
                 <?php 
             // Check the number of results
             $result_count = count($results);
-            $col_class = ($result_count == 1) ? 'col-12' : 'col-lg-3 col-md-6 col-sm-12'; // Full width for 1 result// Use full width if only one result
+            $col_class = ($result_count == 1) ? 'col-12' : 'col-lg-3 col-md-6 col-sm-12 mb-4' ; // Full width for 1 result// Use full width if only one result
             ?>
             <img 
                 class="card-img-top product-image" 
