@@ -24,6 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user = new User($db);
     $user->user_name = htmlspecialchars(trim($_POST['name']));
     $user->user_email = htmlspecialchars(trim($_POST['email']));
+    $user->user_address = htmlspecialchars(trim($_POST['address']));
     $user->user_password = htmlspecialchars(trim($_POST['password']));
     $confirm_password = htmlspecialchars(trim($_POST['confirm_password']));
 
@@ -126,6 +127,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="mb-3">
                 <label for="register-email" class="form-label">Email</label>
                 <input type="email" class="form-control" id="register-email" name="email" placeholder="Email" required>
+            </div>
+            <div class="mb-3">
+                <label for="register-email" class="form-label">Address</label>
+                <input type="address" class="form-control" id="register-email" name="address" placeholder="Email" required>
             </div>
             <div class="mb-3">
                 <label for="register-password" class="form-label">Password</label>
