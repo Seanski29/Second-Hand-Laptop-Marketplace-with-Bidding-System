@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search</title>
+    <title>Search Results</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.all.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
@@ -17,25 +17,19 @@ require_once 'server/win.php';
 $session = new Session();
 $user_id = $session->get('user_id');
 
-// Include the file to fetch products
-$get_products = include('server/fetch_products.php');
-
 // Check if the search query is set
 $search_query = isset($_GET['query']) ? htmlspecialchars(trim($_GET['query'])) : '';
 
-// Database connection
-$database = new Database();
-$db = $database->getConnection();
-
 // Prepare the SQL statement
-$query = "SELECT * FROM products WHERE product_name LIKE :search_query OR product_description LIKE :search_query";
-$stmt = $db->prepare($query);
-
-// Use wildcards for searching
-$search_param = "%" . $search_query . "%";
-$stmt->bindParam(':search_query', $search_param);
-
-// Execute the query
+$query = "SELECT p.*, COALESCE(MAX(pb.high_bid_amount), p.starting_price) AS highest_bid, pb.user_id AS bidder_id 
+          FROM products p 
+          LEFT JOIN pending_bid pb ON p.product_id = pb.product_id 
+          WHERE p.product_name LIKE :search_query OR p.product_description LIKE :search_query 
+          GROUP BY p.product_id 
+          ORDER BY p.bid_deadline ASC";
+$stmt = $conn->prepare($query);
+$search_term = "%$search_query%";
+$stmt->bindParam(':search_query', $search_term);
 $stmt->execute();
 $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>

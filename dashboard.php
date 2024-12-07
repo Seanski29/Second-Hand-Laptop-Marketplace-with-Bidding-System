@@ -29,7 +29,12 @@ $db = $database->getConnection();
 $user = new User($db);
 
 // Fetch products for logged-in user
-$query = "SELECT * FROM products WHERE user_id = :user_id";
+$query = "SELECT p.*, COALESCE(MAX(pb.high_bid_amount), p.starting_price) AS highest_bid, pb.user_id AS bidder_id 
+          FROM products p 
+          LEFT JOIN pending_bid pb ON p.product_id = pb.product_id 
+          WHERE p.user_id = :user_id 
+          GROUP BY p.product_id 
+          ORDER BY p.bid_deadline ASC";
 $stmt = $db->prepare($query);
 $stmt->bindParam(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
 $stmt->execute();
@@ -97,7 +102,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <p class="highest-bid">Highest Bid: $<?php echo $product['highest_bid']; ?></p>
                     <?php if ($product['status'] != 'sold'): ?>
                         <button type="button" class="btn btn-warning w-100 mt-auto" data-bs-toggle="modal" data-bs-target="#editProductModal<?php echo $product['product_id']; ?>">Edit</button>
-                        <form method="POST" action="delete_product.php">
+                        <form method="POST" action="server/delete_product.php">
                             <input type="hidden" name="product_id" value="<?php echo $product['product_id']; ?>">
                             <button type="submit" class="btn btn-danger w-100 mt-auto">Delete</button>
                         </form>
@@ -117,7 +122,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <form method="POST" action="edit_product.php">
+                                <form method="POST" action="server/edit_product.php">
                                     <input type="hidden" name="product_id" value="<?php echo $product['product_id']; ?>">
                                     <div class="mb-3">
                                         <label for="product_name" class="form-label">Product Name</label>
