@@ -12,7 +12,7 @@
 <?php
 require_once 'server/connection.php';
 require_once 'server/session.php';
-require_once 'server/win.php';
+
 $session = new Session();
 
 if (!$session->isLoggedIn()) {
@@ -39,66 +39,43 @@ if (!$product) {
     die("Product not found.");
 }
 
-// Handle form submission
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+// Handle the bid submission
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $bid_amount = htmlspecialchars(trim($_POST['bid_amount']));
-    $user_id = $session->get('user_id'); // Get the logged-in user ID
 
-    // Ensure the bid is higher than the current highest bid
-    if ($bid_amount > $product['highest_bid']) {
-        // Update the highest bid and highest bidder in products table
-        $updateQuery = "UPDATE products SET highest_bid = :bid_amount, highest_bidder_id = :user_id WHERE product_id = :product_id";
-        $updateStmt = $conn->prepare($updateQuery);
-        $updateStmt->bindParam(':bid_amount', $bid_amount);
-        $updateStmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-        $updateStmt->bindParam(':product_id', $product_id, PDO::PARAM_INT);
-
-        if ($updateStmt->execute()) {
-            // Insert the new bid into pending_bid table
-            $insertQuery = "INSERT INTO pending_bid (product_id, user_id, high_bid_amount, bid_deadline, bid_time) 
-                            VALUES (:product_id, :user_id, :bid_amount, :bid_deadline, NOW())";
-            $insertStmt = $conn->prepare($insertQuery);
-            $insertStmt->bindParam(':product_id', $product_id);
-            $insertStmt->bindParam(':user_id', $user_id);
-            $insertStmt->bindParam(':bid_amount', $bid_amount);
-            $insertStmt->bindParam(':bid_deadline', $product['bid_deadline']); // Use the product's bid_deadline
-
-            if ($insertStmt->execute()) {
-                echo "<script>
-                    Swal.fire({
-                        title: 'Bid Submitted!',
-                        text: 'Your bid has been submitted and is now the highest bid.',
-                        icon: 'success'
-                    }).then(() => {
-                        window.location.href = 'pending_bid.php';
-                    });
-                  </script>";
-            } else {
-                echo "<script>
-                    Swal.fire({
-                        title: 'Error!',
-                        text: 'Failed to place the bid. Please try again.',
-                        icon: 'error'
-                    });
-                  </script>";
-            }
-        } else {
-            echo "<script>
-                Swal.fire({
-                    title: 'Error!',
-                    text: 'Failed to submit your bid. Please try again.',
-                    icon: 'error'
-                });
-              </script>";
-        }
-    } else {
+    // Check if the bid amount is higher than the starting bid
+    if ($bid_amount <= $product['starting_price']) {
         echo "<script>
             Swal.fire({
-                title: 'Invalid Bid!',
-                text: 'Your bid must be higher than the current highest bid.',
-                icon: 'warning'
+                title: 'Error!',
+                text: 'Bid should be higher than the starting bid.',
+                icon: 'error',
+                confirmButtonText: 'OK'
             });
-          </script>";
+        </script>";
+    } else {
+        // Insert the bid into the pending_bid table
+        $query = "INSERT INTO pending_bid (product_id, user_id, high_bid_amount, bid_deadline) 
+                  VALUES (:product_id, :user_id, :high_bid_amount, :bid_deadline)";
+        $stmt = $conn->prepare($query);
+        $stmt->bindParam(':product_id', $product_id);
+        $stmt->bindParam(':user_id', $_SESSION['user_id']);
+        $stmt->bindParam(':high_bid_amount', $bid_amount);
+        $stmt->bindParam(':bid_deadline', $product['bid_deadline']);
+        $stmt->execute();
+
+        echo "<script>
+            Swal.fire({
+                title: 'Success!',
+                text: 'Your bid has been placed successfully.',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = 'market.php';
+                }
+            });
+        </script>";
     }
 }
 ?>
@@ -115,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <ul class="navbar-nav me-auto">
                 <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="market.php">Market</a></li>
-                <li class="nav-item"><a class="nav-link" href="sell.php">Sell</a></li>
+                <li class "nav-item"><a class="nav-link" href="sell.php">Sell</a></li>
                 <li class="nav-item"><a class="nav-link" href="about us.php">About Us</a></li>
             </ul>
             <form class="d-flex">

@@ -95,11 +95,15 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <p class="product-description"><?php echo $product['product_description']; ?></p>
                     <p class="starting-price">Starting Price: $<?php echo $product['starting_price']; ?></p>
                     <p class="highest-bid">Highest Bid: $<?php echo $product['highest_bid']; ?></p>
-                    <button type="button" class="btn btn-warning w-100 mt-auto" data-bs-toggle="modal" data-bs-target="#editProductModal<?php echo $product['product_id']; ?>">Edit</button>
-                    <form method="POST" action="server/delete_product.php">
-                        <input type="hidden" name="product_id" value="<?php echo $product['product_id']; ?>">
-                        <button type="submit" class="btn btn-danger w-100 mt-auto">Delete</button>
-                    </form>
+                    <?php if ($product['status'] != 'sold'): ?>
+                        <button type="button" class="btn btn-warning w-100 mt-auto" data-bs-toggle="modal" data-bs-target="#editProductModal<?php echo $product['product_id']; ?>">Edit</button>
+                        <form method="POST" action="delete_product.php">
+                            <input type="hidden" name="product_id" value="<?php echo $product['product_id']; ?>">
+                            <button type="submit" class="btn btn-danger w-100 mt-auto">Delete</button>
+                        </form>
+                    <?php else: ?>
+                        <button class="btn btn-secondary w-100 mt-auto" disabled>Sold</button>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

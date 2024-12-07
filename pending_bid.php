@@ -22,11 +22,9 @@ if (!$session->isLoggedIn()) {
     exit();
 }
 
-$user_id = $session->get('user_id'); // Get the logged-in user ID
+$user_id = $_SESSION['user_id'];
 
-// Fetch pending bids for the logged-in user
-$query = "SELECT pb.bid_id, p.product_id, p.product_name, p.product_image, 
-                 pb.high_bid_amount, pb.bid_time, p.bid_deadline 
+$query = "SELECT pb.*, p.product_name, p.product_image, p.starting_price, p.highest_bid 
           FROM pending_bid pb 
           JOIN products p ON pb.product_id = p.product_id 
           WHERE pb.user_id = :user_id";
@@ -91,10 +89,14 @@ $pending_bids = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <p>Bid Amount: $<?php echo htmlspecialchars($row['high_bid_amount']); ?></p>
                             <p>Bid Time: <?php echo htmlspecialchars($row['bid_time']); ?></p>
                             <p>Bidding Deadline: <?php echo htmlspecialchars($row['bid_deadline']); ?></p>
-                            <form method="POST" action="server/delete_bid.php" onsubmit="return confirmDelete(this);">
-                            <input type="hidden" name="product_id" value="<?php echo htmlspecialchars($row['product_id']); ?>">
-                            <button type="submit" class="btn btn-danger w-100 mt-2">Delete Bid</button>
-                        </form>
+                            <?php if (isset($row['status']) && $row['status'] == 'won'): ?>
+                                <button class="btn btn-success w-100 mt-auto" disabled>Won</button>
+                            <?php else: ?>
+                                <form method="POST" action="server/delete_bid.php" onsubmit="return confirmDelete(this);">
+                                    <input type="hidden" name="product_id" value="<?php echo htmlspecialchars($row['product_id']); ?>">
+                                    <button type="submit" class="btn btn-danger w-100 mt-2">Delete Bid</button>
+                                </form>
+                            <?php endif; ?>
 
                         <script>
                         function confirmDelete(form) {

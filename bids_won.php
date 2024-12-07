@@ -69,24 +69,26 @@ $bidsWon = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
 </nav>
 <!-- END OF NAVBAR -->
-<h1 class="mb-4 pt-5">Bids Won</h1>
-<?php if ($bidsWon): ?>
-    <ul>
-        <?php foreach ($bidsWon as $wonBid): ?>
-            <div class="col-lg-3 col-md-6 col-sm-12 mb-4 product-card">
-            <div class="card h-100 d-flex flex-column">
-                <img class="card-img-top product-image" alt="LAPTOP" src="assets/images/<?php echo $wonBid['product_image']; ?>"/>
-                <div class="card-body d-flex flex-column">
-                    <h3 class="product-title"><?php echo $wonBid['product_name']; ?></h3>
-                    <p class="product-description"><?php echo $wonBid['product_description']; ?></p>
+<div class="container my-5">
+    <h1 class="mb-4 pt-5">Bids Won</h1>
+    <?php if ($bidsWon): ?>
+        <div class="row">
+            <?php foreach ($bidsWon as $wonBid): ?>
+                <div class="col-lg-3 col-md-6 col-sm-12 mb-4 product-card">
+                    <div class="card h-100 d-flex flex-column">
+                        <img class="card-img-top product-image" alt="LAPTOP" src="assets/images/<?php echo $wonBid['product_image']; ?>"/>
+                        <div class="card-body d-flex flex-column">
+                            <h3 class="product-title"><?php echo $wonBid['product_name']; ?></h3>
+                            <p class="product-description"><?php echo $wonBid['product_description']; ?></p>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            <?php endforeach; ?>
         </div>
-        <?php endforeach; ?>
-    </ul>
-<?php else: ?>
-    <p>You haven't won any bids yet.</p>
-<?php endif; ?>
+    <?php else: ?>
+        <p>You haven't won any bids yet.</p>
+    <?php endif; ?>
+</div>
 
 
 <!-- FOOTER -->

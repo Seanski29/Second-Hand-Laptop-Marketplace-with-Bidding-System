@@ -17,7 +17,7 @@ if (session_status() == PHP_SESSION_NONE) {
 require_once 'server/connection.php';
 require_once 'server/session.php';
 require_once 'server/crud.php';
-require_once 'server/win.php';
+
 
 $session = new Session();
 
@@ -42,7 +42,7 @@ function checkAndProcessExpiredBids($conn, $user_id) {
 
     foreach ($expiredBids as $bid) {
         // Check if the user's bid was the highest
-        if ($bid['high_bid_amount'] >= $bid['bid_amount']) {
+        if ($bid['high_bid_amount'] >= $bid['high_bid_amount']) {
             // Insert the winning bid into bids_won table
             $insertQuery = "INSERT INTO bids_won (product_id, user_id, bid_amount) 
                             VALUES (:product_id, :user_id, :bid_amount)";
@@ -57,6 +57,12 @@ function checkAndProcessExpiredBids($conn, $user_id) {
             $updateStmt = $conn->prepare($updateQuery);
             $updateStmt->bindParam(':bid_id', $bid['bid_id']);
             $updateStmt->execute();
+
+            // Update the status of the product to 'sold' in products table
+            $updateProductQuery = "UPDATE products SET status = 'sold' WHERE product_id = :product_id";
+            $updateProductStmt = $conn->prepare($updateProductQuery);
+            $updateProductStmt->bindParam(':product_id', $bid['product_id']);
+            $updateProductStmt->execute();
 
             // Return a success message to trigger the SweetAlert
             return [
