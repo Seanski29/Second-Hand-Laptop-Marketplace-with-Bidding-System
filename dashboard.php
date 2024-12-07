@@ -28,7 +28,7 @@ $db = $database->getConnection();
 
 $user = new User($db);
 
-// Fetch products for logged-in user
+// Fetch productslogged-in user
 $query = "SELECT p.*, COALESCE(MAX(pb.high_bid_amount), p.starting_price) AS highest_bid, pb.user_id AS bidder_id 
           FROM products p 
           LEFT JOIN pending_bid pb ON p.product_id = pb.product_id 
@@ -81,10 +81,17 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <a href="logout.php" class="btn btn-primary">Logout</a>
 <!-- My Listings -->
 <div class="pt-5">
-    <h1 class="mb-4 pt-5">My Listings</h1>
     <a href="pending_bid.php">
                 <button class="btn-primary">view pending bids</button>
             </a>
+</div>
+<div class="pt-5 pb-10">
+    <a href="bids_won.php">
+                <button class="btn-primary">view bids won</button>
+            </a>
+</div>
+<div class="pt-5">
+    <h1 class="mb-4 pt-5">My Listings</h1>
 </div>
 <section id="brand" class="container py-5">
     <div class="row">
@@ -152,12 +159,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <?php endif; ?>
     </div>
 </section>
-<div class="pt-5 pb-10">
-    <h1 class="mb-4 pt-5">My Bag</h1>
-    <a href="bids_won.php">
-                <button class="btn-primary">view bids won</button>
-            </a>
-</div>
+
     <script>
         function confirmDelete(form) {
             Swal.fire({

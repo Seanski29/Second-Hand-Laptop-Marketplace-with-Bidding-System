@@ -22,12 +22,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $user = new User($db);
 
-    // Registration Logic
+    // REGISTER LOGIC IS LOGICING
     if (isset($_POST['register'])) {
 
         $user->user_name = htmlspecialchars(trim($_POST['name']));
         $user->user_email = htmlspecialchars(trim($_POST['email']));
-        $user->user_password = password_hash($_POST['password'], PASSWORD_BCRYPT); // Hash the password for security
+        $user->user_password = password_hash($_POST['password'], PASSWORD_BCRYPT); // Hash PASSWORD
 
         if ($user->create()) {
             echo "
@@ -56,7 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-    // Login Logic
+    // Login LOIGIGIBGLogic
     if (isset($_POST['login'])) {
 
         $user->user_email = htmlspecialchars(trim($_POST['email']));

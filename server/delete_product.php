@@ -33,12 +33,12 @@ if (!$session->isLoggedIn()) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['product_id'])) {
     $product_id = intval($_POST['product_id']);
-    $user_id = $_SESSION['user_id']; // Get logged-in user ID
+    $user_id = $_SESSION['user_id']; // Get  user ID
 
     $database = new Database();
     $db = $database->getConnection();
 
-    // Check if the product exists and belongs to the logged-in user
+    // if may nag aari na ng product checker
     $checkQuery = "SELECT product_id FROM products WHERE product_id = :product_id AND user_id = :user_id";
     $checkStmt = $db->prepare($checkQuery);
     $checkStmt->bindParam(':product_id', $product_id, PDO::PARAM_INT);
@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['product_id'])) {
     $checkStmt->execute();
 
     if ($checkStmt->rowCount() > 0) {
-        // Product found, delete it
+        // if Product found, delete it
         $deleteQuery = "DELETE FROM products WHERE product_id = :product_id";
         $deleteStmt = $db->prepare($deleteQuery);
         $deleteStmt->bindParam(':product_id', $product_id, PDO::PARAM_INT);

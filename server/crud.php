@@ -82,7 +82,7 @@ class User {
         return false;
     }
 
-    // Sell a product (insert into products table)
+    // Sell LAPTOP
     public function sell($product_name, $product_description, $starting_price, $bid_deadline, $file) {
         // Directory for storing uploaded images
         $target_dir = "assets/images/";
@@ -101,12 +101,12 @@ class User {
             return "File size exceeds the 2MB limit.";
         }
 
-        // Move the uploaded file to the target directory
+        // Move the uploaded file to the FILES
         if (!move_uploaded_file($file["tmp_name"], $target_file)) {
             return "Failed to upload the file.";
         }
 
-        // Insert product into the database
+        // Insert product into DB
         $query = "INSERT INTO products (product_name, product_description, product_image, starting_price, bid_deadline) VALUES (:product_name, :product_description, :product_image, :starting_price, :bid_deadline)";
         $stmt = $this->conn->prepare($query);
 
@@ -125,8 +125,8 @@ class User {
     }
     
     
-    //crud.php
-    // Delete a product
+    
+    // Delete
     public function deleteProduct($product_id, $user_id) {
         $query = "DELETE FROM products WHERE product_id = :product_id AND user_id = :user_id";
         $stmt = $this->conn->prepare($query);
@@ -136,7 +136,7 @@ class User {
         return $stmt->execute();
     }
 
-    // Edit a product
+    // Edit
     public function editProduct($product_id, $product_name, $product_description, $starting_price, $bid_deadline) {
         $query = "UPDATE products SET product_name = :product_name, product_description = :product_description, starting_price = :starting_price, bid_deadline = :bid_deadline WHERE product_id = :product_id";
         $stmt = $this->conn->prepare($query);

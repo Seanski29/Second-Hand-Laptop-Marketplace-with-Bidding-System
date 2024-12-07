@@ -3,16 +3,16 @@ require_once 'connection.php';
 
 $sort_option = isset($_GET['sort']) ? $_GET['sort'] : 'latest';
 
-// Modify the SQL query based on the sorting option
+// Modify the SQL query 
 switch ($sort_option) {
     case 'latest':
-        $order_by = 'ORDER BY product_id DESC'; // Use an existing column for sorting
+        $order_by = 'ORDER BY product_id DESC'; 
         break;
     case 'oldest':
         $order_by = 'ORDER BY product_id ASC'; // Use an existing column for sorting
         break;
     default:
-        $order_by = 'ORDER BY product_id DESC'; // Use an existing column for sorting
+        $order_by = 'ORDER BY product_id DESC'; 
         break;
 }
 

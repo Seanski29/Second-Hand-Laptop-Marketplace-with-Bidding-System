@@ -68,11 +68,11 @@ $session = new Session();
                     <img src="assets/images/Andor.png" alt="Andor Cedrick S.">
                     <h3>Andor, Cedrick S.</h3>
                     <hr class="underline">
-                    <h4>Data Engineer</h4>
+                    <h4>Front-End Developer</h4>
                     <ul>
-                        <li>Designed and implemented the database structure for the marketplace.</li>
-                        <li>Ensured data integrity, keeping user and product information accurate.</li>
-                        <li>Worked with the development team to integrate the database with the website’s systems.</li>
+                        <li>Designed the overall layout of the website, ensuring an intuitive and user-friendly interface.</li>
+                        <li>Organized content sections, navigation, and footers for easy accessibility.</li>
+                        <li>Ensured the design is lightweight and doesn’t slow down page loading.</li>
                     </ul>
                 </div>
     

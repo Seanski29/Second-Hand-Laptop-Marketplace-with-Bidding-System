@@ -18,17 +18,17 @@ $session = new Session();
 if (!$session->isLoggedIn()) {
     // Redirect to the login page
     header("Location: login.php");
-    exit(); // Ensure the script stops executing
+    exit(); 
 }
 
-// Check if the product_id is set
+
 if (!isset($_GET['product_id'])) {
     die("Product ID is required.");
 }
 
 $product_id = htmlspecialchars(trim($_GET['product_id']));
 
-// Fetch product details
+
 $query = "SELECT * FROM products WHERE product_id = :product_id";
 $stmt = $conn->prepare($query);
 $stmt->bindParam(':product_id', $product_id);
@@ -39,11 +39,11 @@ if (!$product) {
     die("Product not found.");
 }
 
-// Handle the bid submission
+// Handle bid submits
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $bid_amount = htmlspecialchars(trim($_POST['bid_amount']));
 
-    // Check if the bid amount is higher than the starting bid
+    // Check if the bid amount is higher
     if ($bid_amount <= $product['starting_price']) {
         echo "<script>
             Swal.fire({
@@ -54,7 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             });
         </script>";
     } else {
-        // Insert the bid into the pending_bid table
+        // Insert the bid into the pending_bid
         $query = "INSERT INTO pending_bid (product_id, user_id, high_bid_amount, bid_deadline) 
                   VALUES (:product_id, :user_id, :high_bid_amount, :bid_deadline)";
         $stmt = $conn->prepare($query);

@@ -28,14 +28,14 @@ if (isset($_POST['product_id'])) {
     $user_id = $session->get('user_id');
 
     try {
-        // Delete the bid from pending_bid table
+        // Delete the bid 
         $deleteQuery = "DELETE FROM pending_bid WHERE product_id = :product_id AND user_id = :user_id";
         $stmt = $conn->prepare($deleteQuery);
         $stmt->bindParam(':product_id', $product_id, PDO::PARAM_INT);
         $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
 
         if ($stmt->execute()) {
-            // Update the products table
+            // Update 
             $updateProductQuery = "UPDATE products 
                 SET highest_bid = IFNULL((SELECT MAX(high_bid_amount) FROM pending_bid WHERE product_id = :product_id), starting_price),
                     highest_bidder_id = (SELECT user_id FROM pending_bid WHERE product_id = :product_id ORDER BY high_bid_amount DESC LIMIT 1)

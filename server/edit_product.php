@@ -22,7 +22,7 @@ require_once 'crud.php';
 $session = new Session();
 
 if (!$session->isLoggedIn()) {
-    // Redirect to the login page
+    // Redirect to login 
     header("Location: login.php");
     exit();
 }

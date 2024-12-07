@@ -62,7 +62,7 @@ if ($session->isLoggedIn()) {
     // Call the function to process expired bids
     $result = checkAndProcessExpiredBids($db, $user_id);
 
-    // Fetch winning bids for the logged-in user
+    // Fetch winning bids 
     $query = "SELECT bw.*, p.product_name, p.product_image, p.starting_price, p.highest_bid 
               FROM bids_won bw 
               JOIN products p ON bw.product_id = p.product_id 
