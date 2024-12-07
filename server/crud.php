@@ -5,6 +5,7 @@ class User {
 
     public $user_name;
     public $user_email;
+    public $user_address;
     public $user_password;
     public $product_id;
     public $product_name;
@@ -18,19 +19,21 @@ class User {
     }
     
     public function create() {
-        if (empty($this->user_name) || empty($this->user_email) || empty($this->user_password)) {
+        if (empty($this->user_name) || empty($this->user_address) || empty($this->user_email) || empty($this->user_password)) {
             return false; 
         }
 
-        $query = "INSERT INTO " . $this->table_name . " (user_name, user_email, user_password) VALUES (:name, :email, :password)";
+        $query = "INSERT INTO " . $this->table_name . " (user_name, user_email, address, user_password) VALUES (:name, :email, :address, :password)";
         $stmt = $this->conn->prepare($query);
 
         $this->user_name = htmlspecialchars(strip_tags($this->user_name));
         $this->user_email = htmlspecialchars(strip_tags($this->user_email));
+        $this->user_address = htmlspecialchars(strip_tags($this->user_address));
         $this->user_password = password_hash($this->user_password, PASSWORD_BCRYPT); 
         
         $stmt->bindParam(":name", $this->user_name);
         $stmt->bindParam(":email", $this->user_email);
+        $stmt->bindParam(":address", $this->user_address);
         $stmt->bindParam(":password", $this->user_password);
 
         if ($stmt->execute()) {
