@@ -28,10 +28,11 @@ $db = $database->getConnection();
 
 $user = new User($db);
 
-// Query to get all won bids for the logged-in user
-$query = "SELECT b.product_name, b.product_description, b.product_image, bw.* 
+$user_id = $_SESSION['user_id'];
+
+$query = "SELECT bw.*, p.product_name, p.product_image, p.product_description 
           FROM bids_won bw 
-          JOIN products b ON bw.product_id = b.product_id
+          JOIN products p ON bw.product_id = p.product_id 
           WHERE bw.user_id = :user_id";
 $stmt = $conn->prepare($query);
 $stmt->bindParam(':user_id', $user_id);
