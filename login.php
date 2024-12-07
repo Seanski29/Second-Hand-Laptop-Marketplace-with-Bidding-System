@@ -10,7 +10,7 @@
 </head>
 <body>
 <?php
-
+session_start();
 require_once 'server/connection.php';
 require_once 'server/crud.php';
 require_once 'server/session.php';
@@ -29,9 +29,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $user = new User($db);
     $user->user_email = htmlspecialchars(trim($_POST['email']));
-    $user->user_password = $_POST['password']; // Do not hash the password here, it will be verified against the hashed password in the database
+    $user_password = htmlspecialchars(trim($_POST['password'])); // Store the password in a local variable
 
-    if ($user->login()) { // If login is successful
+    if ($user->login($user_password)) { // Pass the password to the login method
         
         // Retrieve user details including user_id
         $query = "SELECT user_id, user_name FROM users WHERE user_email = :email";
@@ -176,4 +176,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 </body>
 </html>
-

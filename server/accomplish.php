@@ -22,52 +22,77 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $user = new User($db);
 
-    // REGISTER LOGIC IS LOGICING
+    // Registration Logic
     if (isset($_POST['register'])) {
 
         $user->user_name = htmlspecialchars(trim($_POST['name']));
         $user->user_email = htmlspecialchars(trim($_POST['email']));
-        $user->user_password = password_hash($_POST['password'], PASSWORD_BCRYPT); // Hash PASSWORD
+        $password = htmlspecialchars(trim($_POST['password']));
+        $confirm_password = htmlspecialchars(trim($_POST['confirm_password']));
 
-        if ($user->create()) {
+        // Check if passwords match
+        if ($password !== $confirm_password) {
             echo "
             <script>
                 Swal.fire({
-                    title: 'Success!',
-                    text: 'Registration successful!',
-                    icon: 'success',
-                    confirmButtonText: 'Proceed to Login'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = 'login.php';  // Redirect to login after confirmation
-                    }
-                });
-            </script>";
-        } else {
-            echo "
-            <script>
-                Swal.fire({
-                    title: 'Error!',
-                    text: 'Registration failed. Please try again.',
-                    icon: 'error',
-                    confirmButtonText: 'OK'
+                    title: 'Password Mismatch!',
+                    text: 'Passwords do not match. Please try again.',
+                    icon: 'error'
                 });
             </script>";
         }
+        // Check if email already exists
+        elseif ($user->emailExists()) {
+            echo "<script>
+                Swal.fire({
+                    title: 'Email In Use!',
+                    text: 'Email is already in use. Please use a different email address.',
+                    icon: 'error'
+                });
+            </script>";
+        }
+        else {
+            // Set the password using the setter method
+            $user->setUserPassword($password);
+
+            // Create the user
+            if ($user->create()) {
+                echo "
+                <script>
+                    Swal.fire({
+                        title: 'Registration Successful!',
+                        text: 'You can now log in.',
+                        icon: 'success'
+                    }).then(function() {
+                        window.location.href = 'login.php';  // Redirect to login page after SweetAlert closes
+                    });
+                </script>";
+            } else {
+                echo "
+                <script>
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Registration failed. Please try again.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                </script>";
+            }
+        }
     }
 
-    // Login LOIGIGIBGLogic
+    // Login Logic
     if (isset($_POST['login'])) {
 
         $user->user_email = htmlspecialchars(trim($_POST['email']));
-        $user->user_password = htmlspecialchars(trim($_POST['password']));
+        $user_password = htmlspecialchars(trim($_POST['password'])); // Store the password in a local variable
 
-        if ($user->login()) {
+        if ($user->login($user_password)) { // Pass the password to the login method
             $_SESSION['user_email'] = $user->user_email;
             $_SESSION['user_name'] = $user->user_name;
+            $_SESSION['logged_in'] = true;
 
             echo "
-            
             <script>
                 Swal.fire({
                     title: 'Welcome!',
@@ -84,14 +109,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "
             <script>
                 Swal.fire({
-                    title: 'Invalid Credentials',
-                    text: 'Incorrect email or password. Please try again.',
+                    title: 'Error!',
+                    text: 'Invalid credentials. Please try again.',
                     icon: 'error',
                     confirmButtonText: 'Try Again'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = '../login.php';  // Redirect back to login page
-                    }
                 });
             </script>";
         }

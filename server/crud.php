@@ -5,8 +5,8 @@ class User {
 
     public $user_name;
     public $user_email;
-    public $user_address;
-    public $user_password;
+    public $address;
+    private $user_password; // Make password private
     public $product_id;
     public $product_name;
     public $product_description;
@@ -18,8 +18,17 @@ class User {
         $this->conn = $db;
     }
     
+    // Getter and Setter methods for user_password
+    public function getUserPassword() {
+        return $this->user_password;
+    }
+
+    public function setUserPassword($user_password) {
+        $this->user_password = password_hash($user_password, PASSWORD_BCRYPT);
+    }
+
     public function create() {
-        if (empty($this->user_name) || empty($this->user_address) || empty($this->user_email) || empty($this->user_password)) {
+        if (empty($this->user_name) || empty($this->user_email) || empty($this->address) || empty($this->user_password)) {
             return false; 
         }
 
@@ -28,12 +37,11 @@ class User {
 
         $this->user_name = htmlspecialchars(strip_tags($this->user_name));
         $this->user_email = htmlspecialchars(strip_tags($this->user_email));
-        $this->user_address = htmlspecialchars(strip_tags($this->user_address));
-        $this->user_password = password_hash($this->user_password, PASSWORD_BCRYPT); 
+        $this->address = htmlspecialchars(strip_tags($this->address));
         
         $stmt->bindParam(":name", $this->user_name);
         $stmt->bindParam(":email", $this->user_email);
-        $stmt->bindParam(":address", $this->user_address);
+        $stmt->bindParam(":address", $this->address);
         $stmt->bindParam(":password", $this->user_password);
 
         if ($stmt->execute()) {
@@ -43,36 +51,29 @@ class User {
         return false;
     }
 
-    public function login() {
-        $query = "SELECT * FROM " . $this->table_name . " WHERE user_email = :email LIMIT 0,1";
+    public function login($password) {
+        $query = "SELECT user_name, user_email, user_password FROM " . $this->table_name . " WHERE user_email = :email";
         $stmt = $this->conn->prepare($query);
-
-        $this->user_email = htmlspecialchars(strip_tags($this->user_email));
-        $stmt->bindParam(":email", $this->user_email);
-
+        $stmt->bindParam(':email', $this->user_email);
         $stmt->execute();
 
-        if ($stmt->rowCount() > 0) {
-            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if (password_verify($this->user_password, $row['user_password'])) {
+        if ($row) {
+            if (password_verify($password, $row['user_password'])) {
                 $this->user_name = $row['user_name'];
+                $this->user_email = $row['user_email'];
                 return true;
-            } else {
-                return false;
             }
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     public function emailExists() {
-        $query = "SELECT * FROM " . $this->table_name . " WHERE user_email = :email LIMIT 0,1";
+        $query = "SELECT user_id FROM " . $this->table_name . " WHERE user_email = :email";
         $stmt = $this->conn->prepare($query);
-
-        $this->user_email = htmlspecialchars(strip_tags($this->user_email));
-        $stmt->bindParam(":email", $this->user_email);
-
+        $stmt->bindParam(':email', $this->user_email);
         $stmt->execute();
 
         if ($stmt->rowCount() > 0) {
@@ -82,7 +83,7 @@ class User {
         return false;
     }
 
-    // Sell LAPTOP
+    // Sell a product (insert into products table)
     public function sell($product_name, $product_description, $starting_price, $bid_deadline, $file) {
         // Directory for storing uploaded images
         $target_dir = "assets/images/";
@@ -101,12 +102,12 @@ class User {
             return "File size exceeds the 2MB limit.";
         }
 
-        // Move the uploaded file to the FILES
+        // Move the uploaded file to the target directory
         if (!move_uploaded_file($file["tmp_name"], $target_file)) {
             return "Failed to upload the file.";
         }
 
-        // Insert product into DB
+        // Insert product into the database
         $query = "INSERT INTO products (product_name, product_description, product_image, starting_price, bid_deadline) VALUES (:product_name, :product_description, :product_image, :starting_price, :bid_deadline)";
         $stmt = $this->conn->prepare($query);
 
@@ -125,8 +126,8 @@ class User {
     }
     
     
-    
-    // Delete
+    //crud.php
+    // Delete a product
     public function deleteProduct($product_id, $user_id) {
         $query = "DELETE FROM products WHERE product_id = :product_id AND user_id = :user_id";
         $stmt = $this->conn->prepare($query);
@@ -136,7 +137,7 @@ class User {
         return $stmt->execute();
     }
 
-    // Edit
+    // Edit a product
     public function editProduct($product_id, $product_name, $product_description, $starting_price, $bid_deadline) {
         $query = "UPDATE products SET product_name = :product_name, product_description = :product_description, starting_price = :starting_price, bid_deadline = :bid_deadline WHERE product_id = :product_id";
         $stmt = $this->conn->prepare($query);
@@ -152,6 +153,22 @@ class User {
         }
 
         return false;
+    }
+
+    public function read($user_id) {
+        $query = "SELECT user_name, user_email, address, user_password FROM " . $this->table_name . " WHERE user_id = :user_id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':user_id', $user_id);
+        $stmt->execute();
+
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($row) {
+            $this->user_name = $row['user_name'];
+            $this->user_email = $row['user_email'];
+            $this->address = $row['address'];
+            $this->user_password = $row['user_password']; // Assuming password is already hashed
+        }
     }
 }
 ?>

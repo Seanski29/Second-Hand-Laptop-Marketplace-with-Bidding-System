@@ -10,74 +10,78 @@
 </head>
 <body>
 <?php
-require_once 'server/crud.php';
+session_start();
 require_once 'server/connection.php';
+require_once 'server/crud.php';
 require_once 'server/session.php';
 
 $session = new Session();
 
-// Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
     $database = new Database();
     $db = $database->getConnection();
 
     $user = new User($db);
-    $user->user_name = htmlspecialchars(trim($_POST['name']));
-    $user->user_email = htmlspecialchars(trim($_POST['email']));
-    $user->user_address = htmlspecialchars(trim($_POST['address']));
-    $user->user_password = htmlspecialchars(trim($_POST['password']));
-    $confirm_password = htmlspecialchars(trim($_POST['confirm_password']));
 
-    // Validate email format
-    if (!filter_var($user->user_email, FILTER_VALIDATE_EMAIL)) {
-        echo "
-        <script>
-            Swal.fire({
-                title: 'Invalid Email!',
-                text: 'Please enter a valid email address.',
-                icon: 'error'
-            });
-        </script>";
-    }
-    // Check if passwords match
-    elseif ($user->user_password !== $confirm_password) {
-        echo "
-        <script>
-            Swal.fire({
-                title: 'Password Mismatch!',
-                text: 'Passwords do not match. Please try again.',
-                icon: 'error'
-            });
-        </script>";
-    }
-    // Check if email already exists
-    elseif ($user->emailExists()) {
-        echo "<script>alert('Email is already in use. Please use a different email address.');</script>";
-    }
-    else {
-        // Create the user
-        if ($user->create()) {
+    // Registration Logic
+    if (isset($_POST['register'])) {
+
+        $user->user_name = htmlspecialchars(trim($_POST['name']));
+        $user->user_email = htmlspecialchars(trim($_POST['email']));
+        $user->address = htmlspecialchars(trim($_POST['address'])); // Add this line to handle the address
+        $password = htmlspecialchars(trim($_POST['password']));
+        $confirm_password = htmlspecialchars(trim($_POST['confirm_password']));
+
+        // Check if passwords match
+        if ($password !== $confirm_password) {
             echo "
             <script>
                 Swal.fire({
-                    title: 'Registration Successful!',
-                    text: 'You can now log in.',
-                    icon: 'success'
-                }).then(function() {
-                    window.location.href = 'login.php';  // Redirect to login page after SweetAlert closes
-                });
-            </script>";
-        } else {
-            echo "
-            <script>
-                Swal.fire({
-                    title: 'Error!',
-                    text: 'Registration failed. Please try again.',
+                    title: 'Password Mismatch!',
+                    text: 'Passwords do not match. Please try again.',
                     icon: 'error'
                 });
             </script>";
         }
-        
+        // Check if email already exists
+        elseif ($user->emailExists()) {
+            echo "<script>
+                Swal.fire({
+                    title: 'Email In Use!',
+                    text: 'Email is already in use. Please use a different email address.',
+                    icon: 'error'
+                });
+            </script>";
+        }
+        else {
+            // Set the password using the setter method
+            $user->setUserPassword($password);
+
+            // Create the user
+            if ($user->create()) {
+                echo "
+                <script>
+                    Swal.fire({
+                        title: 'Registration Successful!',
+                        text: 'You can now log in.',
+                        icon: 'success'
+                    }).then(function() {
+                        window.location.href = 'login.php';  // Redirect to login page after SweetAlert closes
+                    });
+                </script>";
+            } else {
+                echo "
+                <script>
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Registration failed. Please try again.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                </script>";
+            }
+        }
     }
 }
 ?>
@@ -141,7 +145,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <input type="password" class="form-control" id="confirm-password" name="confirm_password" placeholder="Confirm Password" required>
             </div>
             <div class="mb-3">
-                <button type="submit" class="btn btn-primary" id="register-btn">Register</button>
+                <button type="submit" class="btn btn-primary" id="register-btn" name="register">Register</button>
             </div>
             <div class="mb-3">
                 <a href="login.php" class="btn btn-link">Do you have an account? Login!</a>
