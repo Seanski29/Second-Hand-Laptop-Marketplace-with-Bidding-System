@@ -30,21 +30,15 @@ $user = new User($db);
 
 $user_id = $_SESSION['user_id'];
 
-$query = "SELECT bw.*, p.product_name, p.product_image, p.product_description 
+$query = "SELECT bw.*, p.product_name, p.product_image, p.product_description, u.address 
           FROM bids_won bw 
           JOIN products p ON bw.product_id = p.product_id 
+          JOIN users u ON bw.user_id = u.user_id 
           WHERE bw.user_id = :user_id";
 $stmt = $conn->prepare($query);
 $stmt->bindParam(':user_id', $user_id);
 $stmt->execute();
 $bidsWon = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-$query = "SELECT * FROM products WHERE user_id = :user_id";
-$stmt = $db->prepare($query);
-$stmt->bindParam(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
-$stmt->execute();
-
-$products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -78,36 +72,34 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </nav>
 <!-- END OF NAVBAR -->
 
-<h1 class="mb-4 pt-5">Bids Won</h1>
-
-<?php if (!empty($products)): ?>
-    <?php foreach ($products as $product): ?>
-        <?php if (isset($product['address'])): ?>
-            <p>Your purchased products will be shipped to this address from our Warehouse: <?php echo htmlspecialchars($product['address']); ?></p>
+<div class="container my-5">
+    <h1 class="mb-4 pt-5">Bids Won</h1>
+    <?php if (!empty($bidsWon)): ?>
+        <?php if (isset($bidsWon[0]['address'])): ?>
+            <p>Your purchased products will be shipped to this address from our Warehouse: <?php echo htmlspecialchars($bidsWon[0]['address']); ?></p>
         <?php else: ?>
             <p>Address not available.</p>
         <?php endif; ?>
-    <?php endforeach; ?>
-<?php endif; ?>
+    <?php endif; ?>
 
-<?php if ($bidsWon): ?>
-    <ul>
-        <?php foreach ($bidsWon as $wonBid): ?>
-            <div class="col-lg-3 col-md-6 col-sm-12 mb-4 product-card">
-                <div class="card h-100 d-flex flex-column">
-                    <img class="card-img-top product-image" alt="LAPTOP" src="assets/images/<?php echo $wonBid['product_image']; ?>"/>
-                    <div class="card-body d-flex flex-column">
-                        <h3 class="product-title"><?php echo $wonBid['product_name']; ?></h3>
-                        <p class="product-description"><?php echo $wonBid['product_description']; ?></p>
+    <?php if ($bidsWon): ?>
+        <div class="row">
+            <?php foreach ($bidsWon as $wonBid): ?>
+                <div class="col-lg-3 col-md-6 col-sm-12 mb-4 product-card">
+                    <div class="card h-100 d-flex flex-column">
+                        <img class="card-img-top product-image" alt="LAPTOP" src="assets/images/<?php echo $wonBid['product_image']; ?>"/>
+                        <div class="card-body d-flex flex-column">
+                            <h3 class="product-title"><?php echo $wonBid['product_name']; ?></h3>
+                            <p class="product-description"><?php echo $wonBid['product_description']; ?></p>
+                        </div>
                     </div>
                 </div>
-            </div>
-        <?php endforeach; ?>
-    </ul>
-<?php else: ?>
-    <p>You haven't won any bids yet.</p>
-<?php endif; ?>
-
+            <?php endforeach; ?>
+        </div>
+    <?php else: ?>
+        <p>You haven't won any bids yet.</p>
+    <?php endif; ?>
+</div>
 
 <!-- FOOTER -->
 <footer class="mt-5 py-5 bg-dark text-white">
