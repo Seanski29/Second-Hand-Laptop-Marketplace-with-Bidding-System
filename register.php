@@ -130,7 +130,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <div class="mb-3">
                 <label for="register-email" class="form-label">Address</label>
-                <input type="address" class="form-control" id="register-email" name="address" placeholder="Email" required>
+                <input type="address" class="form-control" id="register-email" name="address" placeholder="Shipping Address" required>
             </div>
             <div class="mb-3">
                 <label for="register-password" class="form-label">Password</label>
