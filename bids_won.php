@@ -79,9 +79,13 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <h1 class="mb-4 pt-5">Bids Won</h1>
 
-<?php if ($products): ?>
+<?php if (!empty($products)): ?>
     <?php foreach ($products as $product): ?>
-        <p>Your purchased products will be shipped to this address from our Warehouse: <?php echo $product['address']; ?></p>
+        <?php if (isset($product['address'])): ?>
+            <p>Your purchased products will be shipped to this address from our Warehouse: <?php echo htmlspecialchars($product['address']); ?></p>
+        <?php else: ?>
+            <p>Address not available.</p>
+        <?php endif; ?>
     <?php endforeach; ?>
 <?php endif; ?>
 
